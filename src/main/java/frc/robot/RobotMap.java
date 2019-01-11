@@ -33,7 +33,21 @@ public WPI_VictorSPX leftMiniCim2, leftMiniCim3, rightMiniCim2, rightMiniCim3;
 public DifferentialDrive drive;
 
     public RobotMap() {
-        drive = new DifferentialDrive(PWMVictorSPX(0), PWMVictorSPX(1));
+
+        leftMiniCim1 = new WPI_TalonSRX(leftTalonID);
+        rightMiniCim1 = new WPI_TalonSRX(rightTalonID);
+        
+        leftMiniCim2 = new WPI_VictorSPX(leftVictorID_1);
+        leftMiniCim3 = new WPI_VictorSPX(leftVictorID_2);
+        rightMiniCim2 = new WPI_VictorSPX(rightVictorID_1);
+        rightMiniCim3 = new WPI_VictorSPX(rightVictorID_2);
+
+        leftMiniCim2.follow(leftMiniCim1);
+	    leftMiniCim3.follow(leftMiniCim1);	
+	    rightMiniCim2.follow(rightMiniCim1);
+	    rightMiniCim3.follow(rightMiniCim1);
+
+        drive = new DifferentialDrive(leftMiniCim1, rightMiniCim1);
     }
 
 }
