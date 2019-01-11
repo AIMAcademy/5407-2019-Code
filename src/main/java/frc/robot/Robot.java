@@ -13,14 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
+
 public class Robot extends TimedRobot {
+
+	OI oi;
+	RobotMap robotmap;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -35,6 +33,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+		oi = new OI();
+    robotmap = new RobotMap();
+    
+    robotmap.leftMiniCim1.setNeutralMode(NeutralMode.Brake);
+		robotmap.leftMiniCim2.setNeutralMode(NeutralMode.Brake);
+		robotmap.leftMiniCim3.setNeutralMode(NeutralMode.Brake);
+		
+		robotmap.rightMiniCim1.setNeutralMode(NeutralMode.Brake);
+		robotmap.rightMiniCim2.setNeutralMode(NeutralMode.Brake);
+		robotmap.rightMiniCim3.setNeutralMode(NeutralMode.Brake);
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -95,7 +105,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
+    oi.readValues();
+    
+		robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+
   }
 
   /**
