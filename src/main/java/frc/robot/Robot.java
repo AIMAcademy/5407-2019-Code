@@ -23,9 +23,6 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private DifferentialDrive m_myRobot;
-  private Joystick m_leftStick;
-  private Joystick m_rightStick;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -36,21 +33,11 @@ public class Robot extends TimedRobot {
 
 		oi = new OI();
     robotmap = new RobotMap();
-    
-    robotmap.leftMiniCim1.setNeutralMode(NeutralMode.Brake);
-		robotmap.leftMiniCim2.setNeutralMode(NeutralMode.Brake);
-		robotmap.leftMiniCim3.setNeutralMode(NeutralMode.Brake);
-		
-		robotmap.rightMiniCim1.setNeutralMode(NeutralMode.Brake);
-		robotmap.rightMiniCim2.setNeutralMode(NeutralMode.Brake);
-		robotmap.rightMiniCim3.setNeutralMode(NeutralMode.Brake);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_myRobot = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
-    m_leftStick = new Joystick(0);
-    m_rightStick = new Joystick(1);
+
   }
 
   /**
