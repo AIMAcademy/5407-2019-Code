@@ -94,8 +94,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     oi.readValues();
     
-		robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+    robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+    
+    System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature());
 
+    robotmap.motorSafetyCheck();
   }
 
   /**
@@ -104,4 +107,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
 }
