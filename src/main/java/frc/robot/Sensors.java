@@ -24,8 +24,8 @@ public class Sensors {
   
     public final AnalogGyro gyro = new AnalogGyro(kGyroPort);
   
-    public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
-    public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
+    //public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
+   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
     public void sensors() {
     }

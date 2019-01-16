@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
 
 		oi = new OI();
     robotmap = new RobotMap();
+    sensors = new Sensors();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
