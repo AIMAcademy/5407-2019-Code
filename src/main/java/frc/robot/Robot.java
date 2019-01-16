@@ -10,19 +10,19 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Robot extends TimedRobot {
 
 	OI oi;
-	RobotMap robotmap;
+  RobotMap robotmap;
+  Sensors sensors;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  public double direction = oi.driveStick.getY(); //temp using for drive straight
 
   /**
    * This function is run when the robot is first started up and should be
@@ -37,6 +37,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    sensors.gyro.setSensitivity(sensors.kVoltsPerDegreePerSecond);
+
 
   }
 
@@ -93,12 +96,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     oi.readValues();
-    
     robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
     
-    System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature());
-
-    robotmap.motorSafetyCheck();
+    System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature()); //testing the sensors on brushless motor
+    System.out.println("angle read out " + sensors.gyro.getAngle()); //to test test gyro
+    robotmap.motorSafetyCheck(); //stupid... prob doesent work
   }
 
   /**
@@ -106,6 +108,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void driveStraight() { //edited version from example code
+    double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) * sensors.kP;
+    turn = Math.copySign(turn, direction);
+    robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
   }
 
 }

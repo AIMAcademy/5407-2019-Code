@@ -7,29 +7,20 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANError;
-
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.SpeedController;
-import java.lang.AutoCloseable;
 
 public class RobotMap {
 
 //Left Side Speed Controlers
-int leftMotorID_1 = 1;
+int leftMotorID_1 = 0;
 int leftMotorID_2 = 1;
-int leftMotorID_3 = 1;
+//int leftMotorID_3 = 1;
 
 //Right Side Speed Controlers
 int rightMotorID_1 = 1;
 int rightMotorID_2 = 1;
-int rightMotorID_3 = 1;
+//int rightMotorID_3 = 1;
 
 public CANSparkMax leftMotor_1;
 public CANSparkMax leftMotor_2;
@@ -49,17 +40,19 @@ public DifferentialDrive drive;
 
         leftMotor_2.follow(leftMotor_1);
         rightMotor_2.follow(rightMotor_1);
-
         drive = new DifferentialDrive(leftMotor_1, rightMotor_1);
 
     }
 
-    public void motorSafetyCheck() {
+    public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
+                                         mabey this will help save the motor if someone messes with it... 
+                                         or just waste bandwith */
         if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
         rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
             System.out.println("Brushed motor selected");
             System.exit(0);
         }
+    }
+
       }
 
-}
