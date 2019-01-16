@@ -11,8 +11,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Robot extends TimedRobot {
 
@@ -24,8 +25,9 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private DifferentialDrive m_myRobot;
-  private Joystick m_leftStick;
-  private Joystick m_rightStick;
+  private Joystick driveStick;
+  private WPI_VictorSPX leftSlave, rightSlave;
+  private WPI_TalonSRX leftDrive, rightDrive;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -34,23 +36,28 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-		oi = new OI();
-    robotmap = new RobotMap();
-    
-    robotmap.leftMiniCim1.setNeutralMode(NeutralMode.Brake);
-		robotmap.leftMiniCim2.setNeutralMode(NeutralMode.Brake);
-		robotmap.leftMiniCim3.setNeutralMode(NeutralMode.Brake);
-		
-		robotmap.rightMiniCim1.setNeutralMode(NeutralMode.Brake);
-		robotmap.rightMiniCim2.setNeutralMode(NeutralMode.Brake);
-		robotmap.rightMiniCim3.setNeutralMode(NeutralMode.Brake);
+		// oi = new OI();
+    // robotmap = new RobotMap();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_myRobot = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
-    m_leftStick = new Joystick(0);
-    m_rightStick = new Joystick(1);
+
+    driveStick = new Joystick(0);
+
+    // Declare motors
+    leftDrive = new WPI_TalonSRX(15);
+    rightDrive = new WPI_TalonSRX(12);
+    leftSlave = new WPI_VictorSPX(17);
+    rightSlave = new WPI_VictorSPX(18);
+    
+    // Make slave motors follow master motor controllers
+    leftSlave.follow(leftDrive);
+    rightSlave.follow(rightDrive);
+
+    // m_myRobot = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
+    m_myRobot = new DifferentialDrive(leftDrive, rightDrive);
+
   }
 
   /**
@@ -105,10 +112,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    oi.readValues();
-    
-		robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
-
+    // oi.readValues();
+    // robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+    m_myRobot.arcadeDrive(driveStick.getY(), driveStick.getX());
+    // m_myRobot.tankDrive(driveStick.getX(), driveStick.getY());
   }
 
   /**
