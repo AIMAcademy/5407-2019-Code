@@ -13,13 +13,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class RobotMap {
 
 //Left Side Speed Controlers
-int leftMotorID_1 = 0;
-int leftMotorID_2 = 1;
+int leftMotorID_1 = 3;
+int leftMotorID_2 = 2;
 //int leftMotorID_3 = 1;
 
 //Right Side Speed Controlers
 int rightMotorID_1 = 1;
-int rightMotorID_2 = 1;
+int rightMotorID_2 = 0;
 //int rightMotorID_3 = 1;
 
 public CANSparkMax leftMotor_1;

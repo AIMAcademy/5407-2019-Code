@@ -15,10 +15,10 @@ public class Sensors {
 
     RobotMap robotmap;
 
-    public static final double kAngleSetpoint = 0.0;
-    public static final double kP = 0.005; // propotional turning constant
+    public final double kAngleSetpoint = 0.0;
+    public final double kP = 0.005; // propotional turning constant
   
-    public static final double kVoltsPerDegreePerSecond = 0.0128; //adjust
+    public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
   
     private static final int kGyroPort = 0;
   
