@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  public double direction = oi.driveStick.getY(); //temp using for drive straight
+  //public double direction = oi.driveStick.getY(); //temp using for drive straight
 
   /**
    * This function is run when the robot is first started up and should be
@@ -109,11 +109,12 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-
+/*
   public void driveStraight() { //edited version from example code
     double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) * sensors.kP;
     turn = Math.copySign(turn, direction);
     robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
   }
+*/
 
 }

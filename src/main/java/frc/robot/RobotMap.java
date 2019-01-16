@@ -22,6 +22,8 @@ int rightMotorID_1 = 1;
 int rightMotorID_2 = 0;
 //int rightMotorID_3 = 1;
 
+
+
 public CANSparkMax leftMotor_1;
 public CANSparkMax leftMotor_2;
 
@@ -32,7 +34,7 @@ public DifferentialDrive drive;
 
     public RobotMap() {
 
-        leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
+        leftMotor_1 = new CANSparkMax(1, MotorType.kBrushless);
         leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
 
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
