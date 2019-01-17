@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     oi.readValues();
-    robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+    robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
     
     System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature()); //testing the sensors on brushless motor
     System.out.println("angle read out " + sensors.gyro.getAngle()); //to test test gyro

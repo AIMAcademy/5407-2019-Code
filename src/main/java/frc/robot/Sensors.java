@@ -19,10 +19,8 @@ public class Sensors {
     public final double kP = 0.005; // propotional turning constant
   
     public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
-  
-    private static final int kGyroPort = 0;
-  
-    public final AnalogGyro gyro = new AnalogGyro(kGyroPort);
+    
+    public final AnalogGyro gyro = new AnalogGyro(0);
   
     //public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
    // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
