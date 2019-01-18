@@ -29,7 +29,7 @@ public class Sensors {
     //public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
    // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
-    public void Sensors() {
+    public Sensors() {
       try {
         ahrs = new AHRS(SPI.Port.kMXP);
     } catch (RuntimeException ex ) {
