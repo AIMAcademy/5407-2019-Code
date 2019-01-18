@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
+		SmartDashboard.updateValues();
   }
 
   /**
@@ -84,6 +86,9 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
+        sensors.setFollowAngleNAVX(0);
+        robotmap.drive.arcadeDrive(0,
+        (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
         break;
     }
   }
@@ -107,12 +112,12 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-/*
-  public void driveStraight() { //edited version from example code
-    double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) * sensors.kP;
-    turn = Math.copySign(turn, direction);
-    robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
-  }
-*/
+
+  // public void driveStraight() {
+  //   double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) * sensors.kP;
+  //   turn = Math.copySign(turn, direction);
+  //   robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
+  // }
+
 
 }
