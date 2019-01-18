@@ -39,9 +39,6 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    sensors.gyro.setSensitivity(sensors.kVoltsPerDegreePerSecond);
-
-
   }
 
   /**
@@ -99,8 +96,8 @@ public class Robot extends TimedRobot {
     oi.readValues();
     robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
     
-    System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature()); //testing the sensors on brushless motor
-    System.out.println("angle read out " + sensors.gyro.getAngle()); //to test test gyro
+    //System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature()); //testing the sensors on brushless motor
+    System.out.println(sensors.getPresentAngleNAVX());
     robotmap.motorSafetyCheck(); //stupid... prob doesent work
   }
 

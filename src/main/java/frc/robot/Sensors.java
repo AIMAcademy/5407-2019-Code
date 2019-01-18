@@ -8,10 +8,13 @@
 package frc.robot;
 
 import com.revrobotics.CANEncoder;
-
-import edu.wpi.first.wpilibj.AnalogGyro;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Sensors {
+
+    AHRS ahrs;
 
     RobotMap robotmap;
 
@@ -20,12 +23,32 @@ public class Sensors {
   
     public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
     
-    public final AnalogGyro gyro = new AnalogGyro(0);
+    double followAngle;
+    double rotateToAngleRate;
   
     //public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
    // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
-    public void sensors() {
+    public void Sensors() {
+      try {
+        ahrs = new AHRS(SPI.Port.kMXP);
+    } catch (RuntimeException ex ) {
+        DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
     }
+  }
+
+  public void setFollowAngleNAVX(double offset){
+		this.followAngle = this.ahrs.getAngle() + offset;
+	}
+	
+	// Makes public and gets the follow angle
+	public double getFollowAngleNAVX() {
+		return this.followAngle;
+	}
+	
+	// Makes public and gets the present angles
+	public double getPresentAngleNAVX(){
+		return this.ahrs.getAngle();
+	}
 
   }
