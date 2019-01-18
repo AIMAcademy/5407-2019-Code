@@ -9,6 +9,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.Spark;
 
 public class RobotMap {
 
@@ -30,6 +31,9 @@ public CANSparkMax leftMotor_2;
 public CANSparkMax rightMotor_1;
 public CANSparkMax rightMotor_2;
 
+public Spark climberArm;
+public Spark climberLegs;
+
 public DifferentialDrive drive;
 
     public RobotMap() {
@@ -39,6 +43,9 @@ public DifferentialDrive drive;
 
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
         rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
+
+        climberArm = new Spark(1);
+        climberArm = new Spark(5);
 
         leftMotor_2.follow(leftMotor_1);
         rightMotor_2.follow(rightMotor_1);

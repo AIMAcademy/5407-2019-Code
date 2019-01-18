@@ -14,12 +14,21 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 
-	public Joystick driveStick;
+	private Joystick driveStick;
 	private double throttle;
-    private double turn;
-    
+	private double turn;
+
+	private Joystick opStick;
+	private boolean op_yButton;
+	private boolean op_bButton;
+	private boolean op_aButton;
+	private boolean op_xButton;
+	private double op_leftStick;
+	private double op_rightStick;
+	
     public OI() {
-        driveStick = new Joystick(0);
+		driveStick = new Joystick(0);
+		opStick = new Joystick(1);
     }
 
     public void readValues() {
@@ -35,7 +44,11 @@ public class OI {
 		} else {
 			turn = 0;
 		}
-				
+		op_yButton = opStick.getRawButton(4);
+		op_bButton = opStick.getRawButton(2);
+		op_aButton = opStick.getRawButton(1);
+		op_xButton = opStick.getRawButton(3);
+		op_rightStick = opStick.getRawAxis(5);
 	}
 	
 	public double getThrottle() {

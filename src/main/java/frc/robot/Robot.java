@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
     //System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature()); //testing the sensors on brushless motor
     System.out.println(sensors.getPresentAngleNAVX());
     robotmap.motorSafetyCheck(); //stupid... prob doesent work
+
   }
 
   /**
