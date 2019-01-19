@@ -13,17 +13,22 @@ import edu.wpi.first.wpilibj.Spark;
 
 public class RobotMap {
 
+//Difference between power of climb motors to the brushless (needs to be adjusted or removed)
+double climbVsDrive = 0.5;
+
 //Left Side Speed Controlers
 int leftMotorID_1 = 1;
 int leftMotorID_2 = 2;
-//int leftMotorID_3 = 1;
 
 //Right Side Speed Controlers
 int rightMotorID_1 = 0;
 int rightMotorID_2 = 3;
-//int rightMotorID_3 = 1;
 
-
+//Climber Sparks
+int dartSpark_ID = 1;
+int climberLegs_ID = 2;
+int leftClimberWheel_ID = 3;
+int rightClimberWheel_ID = 4;
 
 public CANSparkMax leftMotor_1;
 public CANSparkMax leftMotor_2;
@@ -33,8 +38,11 @@ public CANSparkMax rightMotor_2;
 
 public Spark climberArm;
 public Spark climberLegs;
+public Spark leftClimberWheel;
+public Spark rightClimberWheel;
 
 public DifferentialDrive drive;
+public DifferentialDrive climbDrive;
 
     public RobotMap() {
 
@@ -44,13 +52,16 @@ public DifferentialDrive drive;
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
         rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
-        climberArm = new Spark(1);
-        climberArm = new Spark(5);
+        climberArm = new Spark(dartSpark_ID);
+        climberLegs = new Spark(climberLegs_ID);
+        leftClimberWheel = new Spark(leftClimberWheel_ID);
+        rightClimberWheel = new Spark(rightClimberWheel_ID);
 
         leftMotor_2.follow(leftMotor_1);
         rightMotor_2.follow(rightMotor_1);
-        drive = new DifferentialDrive(leftMotor_1, rightMotor_1);
 
+        drive = new DifferentialDrive(leftMotor_1, rightMotor_1);
+        climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
     }
 
     public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...

@@ -19,12 +19,13 @@ public class OI {
 	private double turn;
 
 	private Joystick opStick;
+	private double climbThrottle;
+	private double climbTurn;
+	private boolean op_Control;
 	private boolean op_yButton;
 	private boolean op_bButton;
 	private boolean op_aButton;
 	private boolean op_xButton;
-	private double op_leftStick;
-	private double op_rightStick;
 	
     public OI() {
 		driveStick = new Joystick(0);
@@ -34,29 +35,34 @@ public class OI {
     public void readValues() {
 		if (driveStick.getY() < -0.1 || driveStick.getY() > 0.1) {
 			throttle = driveStick.getY();
-		} 
-		else {
-			throttle = 0;
-		}
-		
+		} else {throttle = 0;}
 		if (driveStick.getX() < -0.1  || driveStick.getX() > 0.1) {
 			turn = driveStick.getX();
-		} else {
-			turn = 0;
-		}
+		} else {turn = 0;}
+
+		if (opStick.getRawAxis(5) < -0.1 || opStick.getRawAxis(5) > 0.1) { //Right Stick Y Axis
+			climbThrottle = opStick.getRawAxis(5);
+		} else {climbThrottle = 0;}
+		if (opStick.getRawAxis(4) < -0.1  || opStick.getRawAxis(4) > 0.1) { //Right Stick X Axis
+			climbTurn = opStick.getRawAxis(4);
+		} else {climbTurn = 0;}
+
 		op_yButton = opStick.getRawButton(4);
 		op_bButton = opStick.getRawButton(2);
 		op_aButton = opStick.getRawButton(1);
 		op_xButton = opStick.getRawButton(3);
-		op_rightStick = opStick.getRawAxis(5);
+		op_Control = opStick.getRawButton(7);
 	}
 	
-	public double getThrottle() {
-		return throttle;
-	}
-	
-	public double getTurn() {
-		return turn;
-	}
+	public double getThrottle() {return throttle;}
+	public double getTurn() {return turn;}
 
+	public double getClimbThrottle() {return climbThrottle;}
+	public double getClimbTurn() {return climbTurn;}
+
+	public boolean getRetractLegsButton() {return op_yButton;}
+	public boolean getExtendArmButton() {return op_bButton;};
+	public boolean getExtendLegsButton() {return op_aButton;};
+	public boolean getRetractArmButton() {return op_xButton;};
+	public boolean getOPControlButton() {return op_Control;}
 }

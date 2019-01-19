@@ -22,8 +22,6 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  //public double direction = oi.driveStick.getY(); //temp using for drive straight
-
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -52,6 +50,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
+    SmartDashboard.putNumber("left motor 1 temp", robotmap.leftMotor_1.getMotorTemperature());
+    SmartDashboard.putNumber("left motor 2 temp", robotmap.leftMotor_2.getMotorTemperature());
+    SmartDashboard.putNumber("right motor 1 temp", robotmap.rightMotor_1.getMotorTemperature());
+    SmartDashboard.putNumber("right motor 2 temp", robotmap.rightMotor_2.getMotorTemperature());
 		SmartDashboard.updateValues();
   }
 
@@ -99,11 +101,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     oi.readValues();
-    robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
-    
-    //System.out.println("left motor #1 temp: "  + robotmap.leftMotor_1.getMotorTemperature()); //testing the sensors on brushless motor
-    System.out.println(sensors.getPresentAngleNAVX());
-    robotmap.motorSafetyCheck(); //stupid... prob doesent work
+
+    if (oi.getOPControlButton() == true) {
+      climbTime();
+    } else {
+      robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn()); 
+    }
+
+    robotmap.motorSafetyCheck();
 
   }
 
@@ -112,6 +117,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void climbTime() {
+    robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
+    robotmap.drive.arcadeDrive(oi.getClimbThrottle()*robotmap.climbVsDrive,oi.getClimbTurn());
+
+    if (oi.getExtendArmButton() == true) {robotmap.climberArm.set(0.5);} //TODO: Check if, ".setSpeed" or ".set" works
+    if (oi.getRetractArmButton() == true) {robotmap.climberArm.set(-0.5);}
+    if (oi.getExtendLegsButton() == true) {robotmap.climberLegs.set(0.5);}
+    if (oi.getRetractLegsButton() == true) {robotmap.climberLegs.set(-0.5);}
   }
 
   // public void driveStraight() {

@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANEncoder;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation;
