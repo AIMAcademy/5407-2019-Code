@@ -124,9 +124,12 @@ public class Robot extends TimedRobot {
     robotmap.drive.arcadeDrive(oi.getClimbThrottle()*robotmap.climbVsDrive,oi.getClimbTurn());
 
     if (oi.getExtendArmButton() == true) {robotmap.climberArm.set(0.5);} //TODO: Check if, ".setSpeed" or ".set" works
-    if (oi.getRetractArmButton() == true) {robotmap.climberArm.set(-0.5);}
+    else if (oi.getRetractArmButton() == true) {robotmap.climberArm.set(-0.5);}
+    else {robotmap.climberArm.set(0);}
+
     if (oi.getExtendLegsButton() == true) {robotmap.climberLegs.set(0.5);}
-    if (oi.getRetractLegsButton() == true) {robotmap.climberLegs.set(-0.5);}
+    else if (oi.getRetractLegsButton() == true) {robotmap.climberLegs.set(-0.5);}
+    else {robotmap.climberLegs.set(0);}
   }
 
   // public void driveStraight() {
