@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class RobotMap {
 
@@ -41,6 +42,8 @@ public Spark climberLegs;
 public Spark leftClimberWheel;
 public Spark rightClimberWheel;
 
+public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
+
 public DifferentialDrive drive;
 public DifferentialDrive climbDrive;
 
@@ -57,22 +60,26 @@ public DifferentialDrive climbDrive;
         leftClimberWheel = new Spark(leftClimberWheel_ID);
         rightClimberWheel = new Spark(rightClimberWheel_ID);
 
-        leftMotor_2.follow(leftMotor_1);
-        rightMotor_2.follow(rightMotor_1);
+        // leftMotor_2.follow(leftMotor_1);
+        // rightMotor_2.follow(rightMotor_1);
 
-       // drive = new DifferentialDrive(leftMotor_1, rightMotor_1);
-       // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_1, leftMotor_2);
+        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
+
+        drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
+        // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+
     }
 
-    public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
-                                         mabey this will help save the motor if someone messes with it... 
-                                         or just waste bandwith */
-        if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
-        rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
-            System.out.println("Brushed motor selected");
-            System.exit(0);
-        }
-    }
+    // public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
+    //                                      mabey this will help save the motor if someone messes with it... 
+    //                                      or just waste bandwith */
+    //     if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
+    //     rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
+    //         System.out.println("Brushed motor selected");
+    //         System.exit(0);
+    //     }
+    // }
 
       }
 

@@ -110,8 +110,8 @@ public class Robot extends TimedRobot {
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn()); 
     }
-
-    robotmap.motorSafetyCheck();
+    
+    // robotmap.motorSafetyCheck();
 
   }
 
