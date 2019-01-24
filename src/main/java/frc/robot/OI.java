@@ -22,7 +22,7 @@ public class OI {
 	private double climbThrottle;
 	private double climbTurn;
 	private boolean op_Control;
-	private boolean op_yButton;
+	public boolean op_yButton;
 	private boolean op_bButton;
 	private boolean op_aButton;
 	private boolean op_xButton;

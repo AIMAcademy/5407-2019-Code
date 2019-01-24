@@ -98,17 +98,30 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
-  @Override
+  //@Override
   public void teleopPeriodic() {
-    oi.readValues();
 
-    if (oi.getOPControlButton() == true) {
-      climbTime();
-    } else {
-      robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn()); 
-    }
+    //Only here to test the button inputs on Xbox controler
+    if (oi.getExtendArmButton() == true){System.out.println("B");}
+    if (oi.getRetractArmButton() == true){System.out.println("X");}
+    if (oi.getExtendLegsButton() == true){System.out.println("A");}
+    if (oi.getRetractLegsButton() == true){System.out.println("Y");}
+    if (oi.getOPControlButton() == true){System.out.println("Left Play");}
+    if (oi.op_yButton == true) {System.out.println("Y");}
 
-    robotmap.motorSafetyCheck();
+    //System.out.println("throttle " + oi.getClimbThrottle());
+    //System.out.println("turn " + oi.getClimbTurn());
+
+    // PUT BACK WHEN DONE TESTING CONTROLS ABOVE
+    // oi.readValues();
+
+    // if (oi.getOPControlButton() == true) {
+    //   climbTime();
+    // } else {
+    //   robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn()); 
+    // }
+
+    // robotmap.motorSafetyCheck();
 
   }
 

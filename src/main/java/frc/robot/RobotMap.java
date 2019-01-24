@@ -25,10 +25,10 @@ int rightMotorID_1 = 0;
 int rightMotorID_2 = 3;
 
 //Climber Sparks
-int dartSpark_ID = 1;
-int climberLegs_ID = 2;
-int leftClimberWheel_ID = 3;
-int rightClimberWheel_ID = 4;
+int dartSpark_ID = 0;
+int climberLegs_ID = 3;
+int leftClimberWheel_ID = 2;
+int rightClimberWheel_ID = 1;
 
 public CANSparkMax leftMotor_1;
 public CANSparkMax leftMotor_2;
@@ -60,19 +60,19 @@ public DifferentialDrive climbDrive;
         leftMotor_2.follow(leftMotor_1);
         rightMotor_2.follow(rightMotor_1);
 
-        drive = new DifferentialDrive(leftMotor_1, rightMotor_1);
-        climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+       // drive = new DifferentialDrive(leftMotor_1, rightMotor_1);
+       // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
     }
 
-    public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
-                                         mabey this will help save the motor if someone messes with it... 
-                                         or just waste bandwith */
-        if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
-        rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
-            System.out.println("Brushed motor selected");
-            System.exit(0);
-        }
-    }
+    // public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
+    //                                      mabey this will help save the motor if someone messes with it... 
+    //                                      or just waste bandwith */
+    //     if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
+    //     rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
+    //         System.out.println("Brushed motor selected");
+    //         System.exit(0);
+    //     }
+    //}
 
       }
 
