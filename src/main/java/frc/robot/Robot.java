@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
       robotmap.climbDrive.arcadeDrive(0, 0);
     }
     
-    // robotmap.motorSafetyCheck();
+    robotmap.motorSafetyCheck();
 
   }
 

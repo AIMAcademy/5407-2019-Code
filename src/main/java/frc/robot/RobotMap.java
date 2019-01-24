@@ -71,15 +71,15 @@ public DifferentialDrive climbDrive;
 
     }
 
-    // public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
-    //                                      mabey this will help save the motor if someone messes with it... 
-    //                                      or just waste bandwith */
-    //     if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
-    //     rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
-    //         System.out.println("Brushed motor selected");
-    //         System.exit(0);
-    //     }
-    // }
+    public void motorSafetyCheck() { /*Brushed motor setting can be selected manualy on the controlers...
+                                         mabey this will help save the motor if someone messes with it... 
+                                         or just waste bandwith */
+        if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed ||
+        rightMotor_1.getMotorType() == MotorType.kBrushed || rightMotor_2.getMotorType() == MotorType.kBrushed) {
+            System.out.println("Brushed motor selected");
+            System.exit(0);
+        }
+    }
 
       }
 
