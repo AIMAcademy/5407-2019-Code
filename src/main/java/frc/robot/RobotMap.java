@@ -67,7 +67,7 @@ public DifferentialDrive climbDrive;
         speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
 
         drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
-        // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+        climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
 
     }
 

@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
       climbTime();
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn()); 
+      robotmap.climbDrive.arcadeDrive(0, 0);
     }
     
     // robotmap.motorSafetyCheck();
@@ -124,7 +125,7 @@ public class Robot extends TimedRobot {
 
   public void climbTime() {
     robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
-    robotmap.drive.arcadeDrive(oi.getClimbThrottle()*robotmap.climbVsDrive,oi.getClimbTurn());
+    robotmap.drive.arcadeDrive(oi.getClimbThrottle()*robotmap.climbVsDrive, oi.getClimbTurn());
 
     if (oi.getExtendArmButton() == true) {robotmap.climberArm.set(0.5);} //TODO: Check if, ".setSpeed" or ".set" works
     else if (oi.getRetractArmButton() == true) {robotmap.climberArm.set(-0.5);}
