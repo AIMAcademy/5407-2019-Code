@@ -19,6 +19,9 @@ public class Robot extends TimedRobot {
   RobotMap robotmap;
   Sensors sensors;
 
+  private boolean opToggle;
+  private boolean lastVal;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -69,6 +72,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putBoolean("opToggle", opToggle);
   }
 
   /**
@@ -122,6 +126,8 @@ public class Robot extends TimedRobot {
       robotmap.climbDrive.arcadeDrive(0, 0);
     }
 
+    limelightLEDtoggle();
+
     robotmap.motorSafetyCheck();
   }
 
@@ -153,6 +159,25 @@ public class Robot extends TimedRobot {
       robotmap.climberLegs.set(0);
     }
   }
+
+  public void limelightLEDtoggle() {
+    if (oi.getOPStart() && opToggle) {
+      NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
+      ledModeEntry.setNumber(0);
+      update(opToggle);
+    } else if (!oi.getOPStart()) {
+      NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
+      ledModeEntry.setNumber(1);
+      update(opToggle);
+    }
+  }
+
+  public boolean update(boolean newVal) {
+      boolean result = newVal && !lastVal;
+      lastVal = newVal;
+      return result;
+  }
+
 
   // public void driveStraight() {
   // double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) *

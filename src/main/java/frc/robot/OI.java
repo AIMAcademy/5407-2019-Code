@@ -25,6 +25,7 @@ public class OI {
 	private boolean op_bButton;
 	private boolean op_aButton;
 	private boolean op_xButton;
+	private boolean op_Start;
 
 	public OI() {
 		driveStick = new Joystick(0);
@@ -63,6 +64,7 @@ public class OI {
 		op_aButton = opStick.getRawButton(1);
 		op_xButton = opStick.getRawButton(3);
 		op_Control = opStick.getRawButton(7);
+		op_Start = opStick.getRawButton(8);
 	}
 
 	public double getThrottle() { return throttle; }
@@ -74,4 +76,5 @@ public class OI {
 	public boolean getExtendLegsButton() { return op_aButton; }
 	public boolean getRetractArmButton() { return op_xButton; }
 	public boolean getOPControlButton() { return op_Control; }
+	public boolean getOPStart() { return op_Start; }
 }
