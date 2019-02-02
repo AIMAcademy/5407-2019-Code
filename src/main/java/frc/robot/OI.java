@@ -8,11 +8,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * Add your docs here.
  */
 public class OI {
+
+	Robot robot;
+
+	public boolean ledToggle = true;
+
 	private Joystick driveStick;
 	private double throttle;
 	private double turn;
@@ -26,6 +34,8 @@ public class OI {
 	private boolean op_aButton;
 	private boolean op_xButton;
 	private boolean op_Start;
+
+	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
 	public OI() {
 		driveStick = new Joystick(0);
@@ -65,6 +75,12 @@ public class OI {
 		op_xButton = opStick.getRawButton(3);
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
+
+		if(opStick.getRawButtonPressed(8)) {
+			// System.out.println("toggle pressed");
+			ledToggle = !ledToggle;
+			ledToggleButton();
+		}
 	}
 
 	public double getThrottle() { return throttle; }
@@ -77,4 +93,15 @@ public class OI {
 	public boolean getRetractArmButton() { return op_xButton; }
 	public boolean getOPControlButton() { return op_Control; }
 	public boolean getOPStart() { return op_Start; }
+
+	public void ledToggleButton() {
+		NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
+		if (ledToggle) {
+			ledModeEntry.setNumber(0);
+			// System.out.println(ledToggle);
+		} else if (!ledToggle) {
+			ledModeEntry.setNumber(1);
+			// System.out.println(ledToggle);
+		}
+	}
 }
