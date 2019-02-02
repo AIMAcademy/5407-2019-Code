@@ -48,10 +48,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
-    SmartDashboard.putNumber("left motor 1 temp", robotmap.leftMotor_1.getMotorTemperature());
-    SmartDashboard.putNumber("left motor 2 temp", robotmap.leftMotor_2.getMotorTemperature());
-    SmartDashboard.putNumber("right motor 1 temp", robotmap.rightMotor_1.getMotorTemperature());
-    SmartDashboard.putNumber("right motor 2 temp", robotmap.rightMotor_2.getMotorTemperature());
     SmartDashboard.updateValues();
   }
 
