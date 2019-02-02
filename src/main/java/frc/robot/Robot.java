@@ -31,6 +31,9 @@ public class Robot extends TimedRobot {
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");
 
+  double distance;
+
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -69,6 +72,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+
+    SmartDashboard.putNumber("Distance", distance);
   }
 
   /**
@@ -113,6 +118,10 @@ public class Robot extends TimedRobot {
   // @Override
   public void teleopPeriodic() {
     // Only here to test the button inputs on Xbox controler
+
+    NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
+    ledModeEntry.setNumber(0);
+
     oi.readValues();
 
     if (oi.getOPControlButton() == true) {
@@ -123,6 +132,8 @@ public class Robot extends TimedRobot {
     }
 
     robotmap.motorSafetyCheck();
+
+    getRange();
   }
 
   /**
@@ -130,6 +141,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void getRange() {
+
+    double radians = Math.toRadians(ty.getDouble(0.0)); // 39 may change
+    distance=((39-23.375)/Math.tan(radians))*0.889149582;
+
   }
 
   public void climbTime() {
