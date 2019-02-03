@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Limelight.LightMode;
 
 /**
  * Add your docs here.
  */
 public class OI {
-
-	Robot robot;
-
 	public boolean ledToggle = true;
 
 	private Joystick driveStick;
@@ -36,9 +34,13 @@ public class OI {
 	private boolean op_leftBumper;
 	private boolean op_Start;
 
+	private Limelight limelight;
+
 	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-	public OI() {
+	public OI(Limelight limelight) {
+		this.limelight = limelight;
+
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
 	}
@@ -100,8 +102,13 @@ public class OI {
 	public void ledToggleButton() {
 		NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
 		if (ledToggle) {
-			ledModeEntry.setNumber(0);
+			// ledModeEntry.setNumber(0);
 			// System.out.println(ledToggle);
+			try {
+				limelight.setLedMode(LightMode.eOff);
+			} catch (Exception ex) {
+				System.out.println("Limelight is being a jerkface: " + ex.toString());
+			}
 		} else if (!ledToggle) {
 			ledModeEntry.setNumber(1);
 			// System.out.println(ledToggle);

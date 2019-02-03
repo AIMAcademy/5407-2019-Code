@@ -1,0 +1,194 @@
+[1mdiff --git a/src/main/java/frc/robot/Limelight.java b/src/main/java/frc/robot/Limelight.java[m
+[1mindex de5e051..50d9bb9 100644[m
+[1m--- a/src/main/java/frc/robot/Limelight.java[m
+[1m+++ b/src/main/java/frc/robot/Limelight.java[m
+[36m@@ -16,14 +16,14 @@[m [mimport edu.wpi.first.networktables.NetworkTableInstance;[m
+  * @author Dan Waxman[m
+  */[m
+ public class Limelight {[m
+[31m-	private static NetworkTableInstance table = null;[m
+[32m+[m	[32mprivate NetworkTableInstance table = null;[m[41m[m
+ [m
+ 	/**[m
+ 	 * Light modes for Limelight.[m
+ 	 * [m
+ 	 * @author Dan Waxman[m
+ 	 */[m
+[31m-	public static enum LightMode {[m
+[32m+[m	[32mpublic enum LightMode {[m[41m[m
+ 		eOn, eOff, eBlink[m
+ 	}[m
+ [m
+[36m@@ -32,7 +32,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @author Dan Waxman[m
+ 	 */[m
+[31m-	public static enum CameraMode {[m
+[32m+[m	[32mpublic enum CameraMode {[m[41m[m
+ 		eVision, eDriver[m
+ 	}[m
+ [m
+[36m@@ -41,7 +41,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @return true if a target is detected, false otherwise.[m
+ 	 */[m
+[31m-	public static boolean isTarget() {[m
+[32m+[m	[32mpublic boolean isTarget() {[m[41m[m
+ 		return getValue("tv").getDouble(0) == 1;[m
+ 	}[m
+ [m
+[36m@@ -50,7 +50,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @return tx as reported by the Limelight.[m
+ 	 */[m
+[31m-	public static double getTx() {[m
+[32m+[m	[32mpublic double getTx() {[m[41m[m
+ 		return getValue("tx").getDouble(0.00);[m
+ 	}[m
+ [m
+[36m@@ -59,7 +59,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @return ty as reported by the Limelight.[m
+ 	 */[m
+[31m-	public static double getTy() {[m
+[32m+[m	[32mpublic double getTy() {[m[41m[m
+ 		return getValue("ty").getDouble(0.00);[m
+ 	}[m
+ [m
+[36m@@ -68,7 +68,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @return Area of target.[m
+ 	 */[m
+[31m-	public static double getTa() {[m
+[32m+[m	[32mpublic double getTa() {[m[41m[m
+ 		return getValue("ta").getDouble(0.00);[m
+ 	}[m
+ [m
+[36m@@ -77,7 +77,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @return Target skew.[m
+ 	 */[m
+[31m-	public static double getTs() {[m
+[32m+[m	[32mpublic double getTs() {[m[41m[m
+ 		return getValue("ts").getDouble(0.00);[m
+ 	}[m
+ [m
+[36m@@ -86,7 +86,7 @@[m [mpublic class Limelight {[m
+ 	 * [m
+ 	 * @return Target latency.[m
+ 	 */[m
+[31m-	public static double getTl() {[m
+[32m+[m	[32mpublic double getTl() {[m[41m[m
+ 		return getValue("tl").getDouble(0.00);[m
+ 	}[m
+ [m
+[36m@@ -96,7 +96,7 @@[m [mpublic class Limelight {[m
+ 	 * @param mode[m
+ 	 *            Light mode for Limelight.[m
+ 	 */[m
+[31m-	public static void setLedMode(LightMode mode) {[m
+[32m+[m	[32mpublic void setLedMode(LightMode mode) {[m[41m[m
+         getValue("ledMode").setNumber(mode.ordinal());[m
+ 	}[m
+ [m
+[36m@@ -106,7 +106,7 @@[m [mpublic class Limelight {[m
+ 	 * @param mode[m
+ 	 *            Camera mode for Limelight.[m
+ 	 */[m
+[31m-	public static void setCameraMode(CameraMode mode) {[m
+[32m+[m	[32mpublic void setCameraMode(CameraMode mode) {[m[41m[m
+ 		getValue("camMode").setNumber(mode.ordinal());[m
+ 	}[m
+ [m
+[36m@@ -116,7 +116,7 @@[m [mpublic class Limelight {[m
+ 	 * @param number[m
+ 	 *            Pipeline number (0-9).[m
+ 	 */[m
+[31m-	public static void setPipeline(int number) {[m
+[32m+[m	[32mpublic void setPipeline(int number) {[m[41m[m
+ 		getValue("pipeline").setNumber(number);[m
+ 	}[m
+ [m
+[36m@@ -127,7 +127,7 @@[m [mpublic class Limelight {[m
+ 	 *            Key for entry.[m
+ 	 * @return NetworkTableEntry of given entry.[m
+ 	 */[m
+[31m-	private static NetworkTableEntry getValue(String key) {[m
+[32m+[m	[32mprivate NetworkTableEntry getValue(String key) {[m[41m[m
+ 		if (table == null) {[m
+ 			table = NetworkTableInstance.getDefault();[m
+ 		}[m
+[1mdiff --git a/src/main/java/frc/robot/OI.java b/src/main/java/frc/robot/OI.java[m
+[1mindex ae85d49..a6361f7 100644[m
+[1m--- a/src/main/java/frc/robot/OI.java[m
+[1m+++ b/src/main/java/frc/robot/OI.java[m
+[36m@@ -8,6 +8,7 @@[m
+ package frc.robot;[m
+ [m
+ import edu.wpi.first.wpilibj.Joystick;[m
+[32m+[m[32mimport frc.robot.Limelight.LightMode;[m[41m[m
+ import edu.wpi.first.networktables.NetworkTable;[m
+ import edu.wpi.first.networktables.NetworkTableEntry;[m
+ import edu.wpi.first.networktables.NetworkTableInstance;[m
+[36m@@ -16,9 +17,6 @@[m [mimport edu.wpi.first.networktables.NetworkTableInstance;[m
+  * Add your docs here.[m
+  */[m
+ public class OI {[m
+[31m-[m
+[31m-	Robot robot;[m
+[31m-[m
+ 	public boolean ledToggle = true;[m
+ [m
+ 	private Joystick driveStick;[m
+[36m@@ -36,9 +34,13 @@[m [mpublic class OI {[m
+ 	private boolean op_leftBumper;[m
+ 	private boolean op_Start;[m
+ [m
+[32m+[m	[32mprivate Limelight limelight;[m[41m[m
+[32m+[m[41m[m
+ 	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");[m
+ [m
+[31m-	public OI() {[m
+[32m+[m	[32mpublic OI(Limelight limelight) {[m[41m[m
+[32m+[m		[32mthis.limelight = limelight;[m[41m[m
+[32m+[m[41m[m
+ 		driveStick = new Joystick(0);[m
+ 		opStick = new Joystick(1);[m
+ 	}[m
+[36m@@ -100,8 +102,13 @@[m [mpublic class OI {[m
+ 	public void ledToggleButton() {[m
+ 		NetworkTableEntry ledModeEntry = table.getEntry("ledMode");[m
+ 		if (ledToggle) {[m
+[31m-			ledModeEntry.setNumber(0);[m
+[32m+[m			[32m// ledModeEntry.setNumber(0);[m[41m[m
+ 			// System.out.println(ledToggle);[m
+[32m+[m			[32mtry {[m[41m[m
+[32m+[m				[32mlimelight.setLedMode(LightMode.eOff);[m[41m[m
+[32m+[m			[32m} catch (Exception ex) {[m[41m[m
+[32m+[m				[32mSystem.out.println("Limelight is being a jerkface: " + ex.toString());[m[41m[m
+[32m+[m			[32m}[m[41m[m
+ 		} else if (!ledToggle) {[m
+ 			ledModeEntry.setNumber(1);[m
+ 			// System.out.println(ledToggle);[m
+[1mdiff --git a/src/main/java/frc/robot/Robot.java b/src/main/java/frc/robot/Robot.java[m
+[1mindex fe1bbc3..7748d8e 100644[m
+[1m--- a/src/main/java/frc/robot/Robot.java[m
+[1m+++ b/src/main/java/frc/robot/Robot.java[m
+[36m@@ -15,6 +15,7 @@[m [mimport edu.wpi.first.networktables.NetworkTableEntry;[m
+ import edu.wpi.first.networktables.NetworkTableInstance;[m
+ [m
+ public class Robot extends TimedRobot {[m
+[32m+[m[32m  Limelight limelight;[m
+   OI oi;[m
+   RobotMap robotmap;[m
+   Sensors sensors;[m
+[36m@@ -47,7 +48,8 @@[m [mpublic class Robot extends TimedRobot {[m
+    */[m
+   @Override[m
+   public void robotInit() {[m
+[31m-    oi = new OI();[m
+[32m+[m[32m    limelight = new Limelight();[m
+[32m+[m[32m    oi = new OI(limelight);[m
+     robotmap = new RobotMap();[m
+     sensors = new Sensors();[m
+ [m

@@ -15,6 +15,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TimedRobot {
+  Limelight limelight;
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
@@ -47,7 +48,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    oi = new OI();
+    limelight = new Limelight();
+    oi = new OI(limelight);
     robotmap = new RobotMap();
     sensors = new Sensors();
 
