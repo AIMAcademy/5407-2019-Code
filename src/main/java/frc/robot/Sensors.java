@@ -12,27 +12,24 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class Sensors {
+  private AHRS ahrs;
+  private RobotMap robotmap;
+  private double followAngle;
+  // private double rotateToAngleRate;
 
-    AHRS ahrs;
+  public final double kAngleSetpoint = 0.0;
+  public final double kP = 0.005; // propotional turning constant
+  public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
-    RobotMap robotmap;
+  // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
+  // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
-    public final double kAngleSetpoint = 0.0;
-    public final double kP = 0.005; // propotional turning constant
-  
-    public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
-    
-    double followAngle;
-    double rotateToAngleRate;
-  
-    //public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
-   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
+  public Sensors() {
 
-    public Sensors() {
-      try {
-        ahrs = new AHRS(SPI.Port.kMXP);
+    try {
+      ahrs = new AHRS(SPI.Port.kMXP);
     } catch (RuntimeException ex ) {
-        DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+      DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
     }
   }
 
@@ -48,6 +45,6 @@ public class Sensors {
 	// Makes public and gets the present angles
 	public double getPresentAngleNAVX(){
 		return this.ahrs.getAngle();
-	}
-
   }
+  
+}

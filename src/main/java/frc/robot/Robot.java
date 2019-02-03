@@ -31,8 +31,15 @@ public class Robot extends TimedRobot {
   NetworkTableEntry ty = table.getEntry("ty");
   NetworkTableEntry ta = table.getEntry("ta");
 
+  //For Range
   double distance;
 
+  //For Aim
+  private double left_command;
+  private double right_command;
+  private double Kp = -0.1f;
+  private double min_command = 0.05f;
+  double steering_adjust = 0.0f;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -94,9 +101,6 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + m_autoSelected);
   }
 
-  /**
-   * This function is called periodically during autonomous.
-   */
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
@@ -112,42 +116,48 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /**
-   * This function is called periodically during operator control.
-   */
   // @Override
   public void teleopPeriodic() {
-    // Only here to test the button inputs on Xbox controler
 
     NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
-    ledModeEntry.setNumber(0);
+    ledModeEntry.setNumber(0); //Turn Limelight LED on
 
     oi.readValues();
+    getRange();
+    getAim();
 
     if (oi.getOPControlButton() == true) {
       climbTime();
+    } else if (oi.getOpLeftBumper() == true) {
+      robotmap.drive.tankDrive(left_command, right_command);
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
       robotmap.climbDrive.arcadeDrive(0, 0);
     }
 
     robotmap.motorSafetyCheck();
-
-    getRange();
   }
 
-  /**
-   * This function is called periodically during test mode.
-   */
   @Override
   public void testPeriodic() {
   }
 
   public void getRange() {
-
     double radians = Math.toRadians(ty.getDouble(0.0)); // 39 may change
     distance=((39-23.375)/Math.tan(radians))*0.889149582; //TODO: Camera is not level. This will be a2
+  }
 
+  public void getAim() {
+    double heading_error = -tx.getDouble(0.0);
+
+    if (-heading_error > 1.0) {
+      steering_adjust = Kp * heading_error - min_command;
+    }
+    else if (-heading_error < 1.0) {
+     steering_adjust = Kp * heading_error + min_command;
+    }
+    left_command += steering_adjust;
+    right_command -= steering_adjust;
   }
 
   public void climbTime() {

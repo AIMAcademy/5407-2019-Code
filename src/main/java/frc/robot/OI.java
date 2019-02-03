@@ -25,6 +25,7 @@ public class OI {
 	private boolean op_bButton;
 	private boolean op_aButton;
 	private boolean op_xButton;
+	private boolean op_leftBumper;
 
 	public OI() {
 		driveStick = new Joystick(0);
@@ -62,6 +63,7 @@ public class OI {
 		op_bButton = opStick.getRawButton(2);
 		op_aButton = opStick.getRawButton(1);
 		op_xButton = opStick.getRawButton(3);
+		op_leftBumper = opStick.getRawButton(5);
 		op_Control = opStick.getRawButton(7);
 	}
 
@@ -74,4 +76,5 @@ public class OI {
 	public boolean getExtendLegsButton() { return op_aButton; }
 	public boolean getRetractArmButton() { return op_xButton; }
 	public boolean getOPControlButton() { return op_Control; }
+	public boolean getOpLeftBumper() { return op_leftBumper; }
 }
