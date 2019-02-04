@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Distance", distance);
-    SmartDashboard.putBoolean("oi.ledToggle", oi.ledToggle);
+    SmartDashboard.putBoolean("oi.ledStatus", oi.ledStatus);
   }
 
   /**

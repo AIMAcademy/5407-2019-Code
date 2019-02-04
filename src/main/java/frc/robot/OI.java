@@ -14,7 +14,7 @@ import frc.robot.Limelight.LightMode;
  * Add your docs here.
  */
 public class OI {
-	public boolean ledToggle = true;
+	private Toggle ledToggle;
 
 	private Joystick driveStick;
 	private double throttle;
@@ -31,10 +31,13 @@ public class OI {
 	private boolean op_leftBumper;
 	private boolean op_Start;
 
+	public boolean ledStatus;
+
 	private Limelight limelight;
 
 	public OI(Limelight limelight) {
 		this.limelight = limelight;
+		ledToggle = new Toggle();
 
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
@@ -75,9 +78,9 @@ public class OI {
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
 
-		if(opStick.getRawButtonPressed(8)) {
-			ledToggle = !ledToggle;
-			ledToggleButton();
+		if (opStick.getRawButtonPressed(8)) {
+			boolean isLedOn = ledToggle.toggle();
+			setLed(isLedOn);
 		}
 	}
 
@@ -93,11 +96,15 @@ public class OI {
 	public boolean getOpLeftBumper() { return op_leftBumper; }
 	public boolean getOPStart() { return op_Start; }
 
-	public void ledToggleButton() {
-		if (ledToggle) {
+	public void setLed(boolean isLedOn) {
+
+		if (isLedOn) {
 			limelight.setLedMode(LightMode.eOff);
-		} else if (!ledToggle) {
-			limelight.setLedMode(LightMode.eOn);
+			ledStatus = false;
+			return;
 		}
+
+		limelight.setLedMode(LightMode.eOn);
+		ledStatus = true;
 	}
 }
