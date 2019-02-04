@@ -8,9 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Limelight.LightMode;
 
 /**
@@ -35,8 +32,6 @@ public class OI {
 	private boolean op_Start;
 
 	private Limelight limelight;
-
-	NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
 	public OI(Limelight limelight) {
 		this.limelight = limelight;
@@ -81,7 +76,6 @@ public class OI {
 		op_Start = opStick.getRawButton(8);
 
 		if(opStick.getRawButtonPressed(8)) {
-			// System.out.println("toggle pressed");
 			ledToggle = !ledToggle;
 			ledToggleButton();
 		}
@@ -100,18 +94,10 @@ public class OI {
 	public boolean getOPStart() { return op_Start; }
 
 	public void ledToggleButton() {
-		NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
 		if (ledToggle) {
-			// ledModeEntry.setNumber(0);
-			// System.out.println(ledToggle);
-			try {
-				limelight.setLedMode(LightMode.eOff);
-			} catch (Exception ex) {
-				System.out.println("Limelight is being a jerkface: " + ex.toString());
-			}
+			limelight.setLedMode(LightMode.eOff);
 		} else if (!ledToggle) {
-			ledModeEntry.setNumber(1);
-			// System.out.println(ledToggle);
+			limelight.setLedMode(LightMode.eOn);
 		}
 	}
 }

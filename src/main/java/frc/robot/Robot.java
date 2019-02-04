@@ -120,10 +120,7 @@ public class Robot extends TimedRobot {
 
   // @Override
   public void teleopPeriodic() {
-
-    NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
-    ledModeEntry.setNumber(0); //Turn Limelight LED on
-
+    
     oi.readValues();
     getRange();
     getAim();
