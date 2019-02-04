@@ -4,14 +4,14 @@ package frc.robot;
  * Toggles a boolean. Defaults to "off" when instantiated.
  */
 public class Toggle {
-    private boolean isOnOrOff;
+    private boolean isOn;
 
     public boolean get() {
-        return isOnOrOff;
+        return isOn;
     }
 
     public boolean toggle() {
-        isOnOrOff = !isOnOrOff;
-        return isOnOrOff;
+        isOn = !isOn;
+        return isOn;
     }
 }

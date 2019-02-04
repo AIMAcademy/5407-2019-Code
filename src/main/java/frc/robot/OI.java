@@ -17,7 +17,7 @@ import frc.robot.Limelight.LightMode;
  * Add your docs here.
  */
 public class OI {
-	public boolean ledToggle = true;
+	private Toggle ledToggle;
 
 	private Joystick driveStick;
 	private double throttle;
@@ -40,6 +40,7 @@ public class OI {
 
 	public OI(Limelight limelight) {
 		this.limelight = limelight;
+		ledToggle = new Toggle();
 
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
@@ -80,10 +81,9 @@ public class OI {
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
 
-		if(opStick.getRawButtonPressed(8)) {
-			// System.out.println("toggle pressed");
-			ledToggle = !ledToggle;
-			ledToggleButton();
+		if (opStick.getRawButtonPressed(8)) {
+			boolean isLedOn = ledToggle.toggle();
+			setLed(isLedOn);
 		}
 	}
 
@@ -99,19 +99,19 @@ public class OI {
 	public boolean getOpLeftBumper() { return op_leftBumper; }
 	public boolean getOPStart() { return op_Start; }
 
-	public void ledToggleButton() {
+	public void setLed(boolean isLedOn) {
 		NetworkTableEntry ledModeEntry = table.getEntry("ledMode");
-		if (ledToggle) {
-			// ledModeEntry.setNumber(0);
-			// System.out.println(ledToggle);
+
+		if (isLedOn) {
 			try {
 				limelight.setLedMode(LightMode.eOff);
 			} catch (Exception ex) {
 				System.out.println("Limelight is being a jerkface: " + ex.toString());
 			}
-		} else if (!ledToggle) {
-			ledModeEntry.setNumber(1);
-			// System.out.println(ledToggle);
+
+			return;
 		}
+
+		ledModeEntry.setNumber(1);
 	}
 }
