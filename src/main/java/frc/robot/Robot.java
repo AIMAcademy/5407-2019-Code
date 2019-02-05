@@ -37,11 +37,10 @@ public class Robot extends TimedRobot {
   double heading_error;
 
   //For Aim
-  private double left_command;
-  private double right_command;
-  private double Kp = -0.1f;
-  private double min_command = 0.05f;
+  private double Kp = -0.15f;
+  private double min_command = 0.2f;
   double steering_adjust = 0.0f;
+  private double kSteeringSpeed = 0.3;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -133,10 +132,10 @@ public class Robot extends TimedRobot {
       climbTime();
     } else if (oi.getOpLeftBumper() == true) {
       getAim();
-      robotmap.drive.arcadeDrive(oi.getClimbThrottle(), steering_adjust/2);
+      robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steering_adjust);
     } else {
-      robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
-      robotmap.climbDrive.arcadeDrive(0, 0);
+      robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
+      robotmap.climbDrive.arcadeDrive(0,0);
     }
 
     robotmap.motorSafetyCheck();
@@ -148,7 +147,7 @@ public class Robot extends TimedRobot {
 
   public void getRange() {
     double radians = Math.toRadians(ty.getDouble(0.0)); // 39 may change
-    distance=((39-23.375)/Math.tan(radians))*0.889149582; //TODO: Camera is not level. This will be a2
+    distance=((39-23.375)/Math.tan(radians+5)); //TODO: Camera is not level. This will be a2
   }
 
   public void getAim() {
@@ -160,8 +159,8 @@ public class Robot extends TimedRobot {
     else if (-heading_error < 1.0) {
      steering_adjust = Kp * heading_error + min_command;
     }
-    // left_command =  steering_adjust;
-    // right_command = - steering_adjust;
+    steering_adjust = steering_adjust * kSteeringSpeed;
+
   }
 
   public void climbTime() {
