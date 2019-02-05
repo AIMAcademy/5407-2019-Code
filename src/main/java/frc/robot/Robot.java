@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
 
   //For Range
   double distance;
+  double heading_error;
 
   //For Aim
   private double left_command;
@@ -82,6 +83,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Distance", distance);
+
+    SmartDashboard.putNumber("Heading Error", heading_error);
+    SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+
     SmartDashboard.putBoolean("oi.ledStatus", oi.ledStatus);
   }
 
@@ -123,12 +128,12 @@ public class Robot extends TimedRobot {
     
     oi.readValues();
     getRange();
-    getAim();
 
     if (oi.getOPControlButton() == true) {
       climbTime();
     } else if (oi.getOpLeftBumper() == true) {
-      robotmap.drive.tankDrive(left_command, right_command);
+      getAim();
+      robotmap.drive.arcadeDrive(oi.getClimbThrottle(), steering_adjust/2);
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
       robotmap.climbDrive.arcadeDrive(0, 0);
@@ -147,7 +152,7 @@ public class Robot extends TimedRobot {
   }
 
   public void getAim() {
-    double heading_error = -tx.getDouble(0.0);
+    heading_error = -tx.getDouble(0.0);
 
     if (-heading_error > 1.0) {
       steering_adjust = Kp * heading_error - min_command;
@@ -155,8 +160,8 @@ public class Robot extends TimedRobot {
     else if (-heading_error < 1.0) {
      steering_adjust = Kp * heading_error + min_command;
     }
-    left_command += steering_adjust;
-    right_command -= steering_adjust;
+    // left_command =  steering_adjust;
+    // right_command = - steering_adjust;
   }
 
   public void climbTime() {
