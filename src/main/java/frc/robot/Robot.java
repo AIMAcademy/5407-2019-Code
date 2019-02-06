@@ -155,8 +155,7 @@ public class Robot extends TimedRobot {
   }
 
   public void getRange() {
-    double radians = Math.toRadians(cameraTargetYAxis.getDouble(0.0)); // 39 may change
-    distance=((39-23.375)/Math.tan(radians+5)); //TODO: Camera is not level. This will be a2
+    distance = Calculations.getRange(cameraTargetYAxis);
   }
 
   public void getAim() {
