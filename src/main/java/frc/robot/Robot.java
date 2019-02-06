@@ -32,17 +32,14 @@ public class Robot extends TimedRobot {
   NetworkTableEntry cameraTargetYAxis = limelightTable.getEntry("ty");
   NetworkTableEntry cameraTargetArea = limelightTable.getEntry("ta");
 
-  //For Range
+  // For Range
   double distance;
   double heading_error;
 
-  //For Aim
-  private double Kp = -0.15f;
-  private double min_command = 0.2f;
-  double steering_adjust = 0.0f;
-  private double kSteeringSpeed = 0.3;
+  // For Aim
+  private double steering_adjust = 0.0;
 
-  //For AimAndRange
+  // For AimAndRange
   double steeringAdjust;
   double drivingAdjust;
 
@@ -159,23 +156,15 @@ public class Robot extends TimedRobot {
   }
 
   public void getAim() {
-    heading_error = -cameraTargetXAxis.getDouble(0.0);
-
-    if (-heading_error > 1.0) {
-      steering_adjust = Kp * heading_error - min_command;
-    }
-    else if (-heading_error < 1.0) {
-     steering_adjust = Kp * heading_error + min_command;
-    }
-    steering_adjust = steering_adjust * kSteeringSpeed;
-
+    heading_error = Calculations.getHeadingError(cameraTargetXAxis);
+    steering_adjust = Calculations.getAim(heading_error);
   }
 
   public void getAimAndRange() {
     // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
     // Get limelight table for reading tracking data
     double KpAim = 0.045;
-    double KpDist = 0.09; //0.09;
+    double KpDist = 0.09;
     double AimMinCmd = 0.095;
 
     double targetX = cameraTargetXAxis.getDouble(0.0);
@@ -187,12 +176,15 @@ public class Robot extends TimedRobot {
     double dist_error = targetY;
 
     // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
-    steeringAdjust = KpAim*aim_error;
-    if (targetX > .2) { steeringAdjust = steeringAdjust + AimMinCmd; }
-    else if (targetX < -.2f) { steeringAdjust = steeringAdjust - AimMinCmd; }
+    steeringAdjust = KpAim * aim_error;
+    if (targetX > .2) {
+      steeringAdjust = steeringAdjust + AimMinCmd;
+    } else if (targetX < -.2f) {
+      steeringAdjust = steeringAdjust - AimMinCmd;
+    }
 
     // Distance adjust, drive to the correct distance from the goal
-    drivingAdjust = KpDist*dist_error;
+    drivingAdjust = KpDist * dist_error;
   }
 
   public void climbTime() {
