@@ -29,6 +29,7 @@ public class OI {
 	private boolean op_aButton;
 	private boolean op_xButton;
 	private boolean op_leftBumper;
+	private boolean op_rightBumper;
 	private boolean op_Start;
 
 	public boolean ledStatus;
@@ -75,6 +76,7 @@ public class OI {
 		op_aButton = opStick.getRawButton(1);
 		op_xButton = opStick.getRawButton(3);
 		op_leftBumper = opStick.getRawButton(5);
+		op_rightBumper = opStick.getRawButton(5);
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
 
@@ -94,6 +96,7 @@ public class OI {
 	public boolean getRetractArmButton() { return op_xButton; }
 	public boolean getOPControlButton() { return op_Control; }
 	public boolean getOpLeftBumper() { return op_leftBumper; }
+	public boolean getOpRightBumper() { return op_rightBumper; }
 	public boolean getOPStart() { return op_Start; }
 
 	public void setLed(boolean isLedOn) {

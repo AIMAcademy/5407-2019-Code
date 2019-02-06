@@ -42,6 +42,10 @@ public class Robot extends TimedRobot {
   double steering_adjust = 0.0f;
   private double kSteeringSpeed = 0.3;
 
+  //For AimAndRange
+  double steeringAdjust;
+  double drivingAdjust;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -128,11 +132,16 @@ public class Robot extends TimedRobot {
     oi.readValues();
     getRange();
 
-    if (oi.getOPControlButton() == true) {
+    if (oi.getOPControlButton()) {
       climbTime();
-    } else if (oi.getOpLeftBumper() == true) {
+    } else if (oi.getOpLeftBumper()) {
       getAim();
-      robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steering_adjust);
+      robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steeringAdjust);
+      robotmap.climbDrive.arcadeDrive(0,0);
+    } else if (oi.getOpRightBumper()) {
+      getAimAndRange();
+      robotmap.drive.arcadeDrive(drivingAdjust,steeringAdjust);
+      robotmap.climbDrive.arcadeDrive(0,0);
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
       robotmap.climbDrive.arcadeDrive(0,0);
@@ -161,6 +170,30 @@ public class Robot extends TimedRobot {
     }
     steering_adjust = steering_adjust * kSteeringSpeed;
 
+  }
+
+  public void getAimAndRange() {
+    // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
+    // Get limelight table for reading tracking data
+    double KpAim = 0.045;
+    double KpDist = 0.09; //0.09;
+    double AimMinCmd = 0.095;
+
+    double targetX = tx.getDouble(0.0);
+    double targetY = -ty.getDouble(0.0);
+    // double targetA = ta.getDouble(0.0); // Might need this if we start using area instead
+
+    // Aim error and distance error based on calibrated limelight cross-hair
+    double aim_error = targetX;
+    double dist_error = targetY;
+
+    // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
+    steeringAdjust = KpAim*aim_error;
+    if (targetX > .2) { steeringAdjust = steeringAdjust + AimMinCmd; }
+    else if (targetX < -.2f) { steeringAdjust = steeringAdjust - AimMinCmd; }
+
+    // Distance adjust, drive to the correct distance from the goal
+    drivingAdjust = KpDist*dist_error;
   }
 
   public void climbTime() {
