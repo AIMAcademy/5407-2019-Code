@@ -20,7 +20,7 @@ public class OI {
 	private double throttle;
 	private double turn;
 
-	private Joystick opStick;
+	private Joystick opStick; //TODO: these names need to be changed to better ones
 	private double climbThrottle;
 	private double climbTurn;
 	private boolean op_Control;
@@ -99,9 +99,9 @@ public class OI {
 	public double getTurn() { return turn; }
 	public double getClimbThrottle() { return climbThrottle; }
 	public double getClimbTurn() { return climbTurn; }
-	public boolean getRetractLegsButton() { return op_yButton; }
+	public boolean getOpYButton() { return op_yButton; }
 	public boolean getExtendArmButton() { return op_bButton; }
-	public boolean getExtendLegsButton() { return op_aButton; }
+	public boolean getOpAButton() { return op_aButton; }
 	public boolean getRetractArmButton() { return op_xButton; }
 	public boolean getOPControlButton() { return op_Control; }
 	public boolean getOpLeftBumper() { return op_leftBumper; }

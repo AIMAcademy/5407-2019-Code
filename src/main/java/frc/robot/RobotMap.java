@@ -19,21 +19,23 @@ public class RobotMap {
     double climbVsDrive = 0.5;
 
     // Left Side Speed Controlers
-    int leftMotorID_1 = 1;
-    int leftMotorID_2 = 2;
+    private int leftMotorID_1 = 1;
+    private int leftMotorID_2 = 2;
 
     // Right Side Speed Controlers
-    int rightMotorID_1 = 0;
-    int rightMotorID_2 = 3;
+    private int rightMotorID_1 = 0;
+    private int rightMotorID_2 = 3;
 
     // Climber Sparks
-    int dartSpark_ID = 0;
-    int climberLegs_ID = 3;
-    int leftClimberWheel_ID = 2;
-    int rightClimberWheel_ID = 1;
+    private int dartSpark_ID = 0;
+    private int climberLegs_ID = 3;
+    private int leftClimberWheel_ID = 2;
+    private int rightClimberWheel_ID = 1;
 
     //More
-    int arm_ID = 4;
+    private int arm_ID = 4;
+    private int leftPickupWheel_ID = 5;
+    private int rightPickupWheel_ID = 6;
 
     public CANSparkMax leftMotor_1;
     public CANSparkMax leftMotor_2;
@@ -47,6 +49,8 @@ public class RobotMap {
     public Spark rightClimberWheel;
 
     public Spark arm;
+    public Spark leftPickupWheel;
+    public Spark rightPickupWheel;
 
     public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
 
@@ -64,6 +68,8 @@ public class RobotMap {
         climberLegs = new Spark(climberLegs_ID);
 
         arm = new Spark(arm_ID);
+        leftPickupWheel = new Spark(leftPickupWheel_ID);
+        rightPickupWheel = new Spark(rightPickupWheel_ID);
 
         leftClimberWheel = new Spark(leftClimberWheel_ID);
         rightClimberWheel = new Spark(rightClimberWheel_ID);

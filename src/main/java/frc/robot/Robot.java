@@ -151,6 +151,18 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
+  public void basicOp() {
+    robotmap.arm.set(oi.getBothTriggers());
+
+    if (oi.getOpYButton()) {
+      robotmap.leftPickupWheel.set(1);
+      robotmap.rightPickupWheel.set(1);
+    } else { 
+      robotmap.leftPickupWheel.set(0);
+      robotmap.rightPickupWheel.set(0);
+    }
+  }
+
   public void getRange() {
     distance = Calculations.getRange(cameraTargetYAxis);
   }
@@ -200,14 +212,13 @@ public class Robot extends TimedRobot {
       robotmap.climberArm.set(0);
     }
 
-    if (oi.getExtendLegsButton() == true) {
+    if (oi.getOpAButton() == true) {
       robotmap.climberLegs.set(0.5);
-    } else if (oi.getRetractLegsButton() == true) {
+    } else if (oi.getOpYButton() == true) {
       robotmap.climberLegs.set(-0.5);
     } else {
       robotmap.climberLegs.set(0);
     }
-
     robotmap.arm.set(oi.getBothTriggers());
   }
 
