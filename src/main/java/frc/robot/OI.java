@@ -31,6 +31,7 @@ public class OI {
 	private boolean op_leftBumper;
 	private boolean op_rightBumper;
 	private boolean op_Start;
+	private double op_BothTriggers;
 
 	public boolean ledStatus;
 
@@ -71,6 +72,14 @@ public class OI {
 			climbTurn = 0;
 		}
 
+		if (opStick.getRawAxis(3) >= 0.2) {
+			op_BothTriggers = opStick.getRawAxis(3);
+		} else if (opStick.getRawAxis(2) >= 0.2) {
+			op_BothTriggers = -opStick.getRawAxis(2);
+		} else {
+			op_BothTriggers = 0;
+		}
+			
 		op_yButton = opStick.getRawButton(4);
 		op_bButton = opStick.getRawButton(2);
 		op_aButton = opStick.getRawButton(1);
@@ -98,6 +107,7 @@ public class OI {
 	public boolean getOpLeftBumper() { return op_leftBumper; }
 	public boolean getOpRightBumper() { return op_rightBumper; }
 	public boolean getOPStart() { return op_Start; }
+	public double getBothTriggers() { return op_BothTriggers; }
 
 	public void setLed(boolean isLedOn) {
 

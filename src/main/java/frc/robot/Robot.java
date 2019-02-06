@@ -207,6 +207,8 @@ public class Robot extends TimedRobot {
     } else {
       robotmap.climberLegs.set(0);
     }
+
+    robotmap.arm.set(oi.getBothTriggers());
   }
 
   // public void driveStraight() {

@@ -32,6 +32,9 @@ public class RobotMap {
     int leftClimberWheel_ID = 2;
     int rightClimberWheel_ID = 1;
 
+    //More
+    int arm_ID = 4;
+
     public CANSparkMax leftMotor_1;
     public CANSparkMax leftMotor_2;
 
@@ -42,6 +45,8 @@ public class RobotMap {
     public Spark climberLegs;
     public Spark leftClimberWheel;
     public Spark rightClimberWheel;
+
+    public Spark arm;
 
     public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
 
@@ -57,6 +62,8 @@ public class RobotMap {
 
         climberArm = new Spark(dartSpark_ID);
         climberLegs = new Spark(climberLegs_ID);
+
+        arm = new Spark(arm_ID);
 
         leftClimberWheel = new Spark(leftClimberWheel_ID);
         rightClimberWheel = new Spark(rightClimberWheel_ID);
