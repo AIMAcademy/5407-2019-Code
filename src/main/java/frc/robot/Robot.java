@@ -42,6 +42,8 @@ public class Robot extends TimedRobot {
   // For AimAndRange
   double steeringAdjust;
   double drivingAdjust;
+  double left_command;
+  double right_command;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -133,11 +135,12 @@ public class Robot extends TimedRobot {
       climbTime();
     } else if (oi.getOpLeftBumper()) {
       getAim();
-      robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steeringAdjust);
+      robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steering_adjust);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {
       getAimAndRange();
-      robotmap.drive.arcadeDrive(drivingAdjust,steeringAdjust);
+      //robotmap.drive.tankDrive(left_command, right_command);
+      robotmap.drive.arcadeDrive(-drivingAdjust,steeringAdjust);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
@@ -197,6 +200,9 @@ public class Robot extends TimedRobot {
 
     // Distance adjust, drive to the correct distance from the goal
     drivingAdjust = KpDist * dist_error;
+
+    left_command = drivingAdjust + steeringAdjust;
+    right_command =  -(drivingAdjust + steeringAdjust);
   }
 
   public void climbTime() {

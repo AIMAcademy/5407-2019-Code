@@ -85,7 +85,7 @@ public class OI {
 		op_aButton = opStick.getRawButton(1);
 		op_xButton = opStick.getRawButton(3);
 		op_leftBumper = opStick.getRawButton(5);
-		op_rightBumper = opStick.getRawButton(5);
+		op_rightBumper = opStick.getRawButton(6);
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
 
