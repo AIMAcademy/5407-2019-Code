@@ -27,10 +27,10 @@ public class Robot extends TimedRobot {
 
   // Talk to Limelight Network Tables
   // http://docs.limelightvision.io/en/latest/getting_started.html
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry tx = table.getEntry("tx");
-  NetworkTableEntry ty = table.getEntry("ty");
-  NetworkTableEntry ta = table.getEntry("ta");
+  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTableEntry cameraTargetXAxis = limelightTable.getEntry("tx");
+  NetworkTableEntry cameraTargetYAxis = limelightTable.getEntry("ty");
+  NetworkTableEntry cameraTargetArea = limelightTable.getEntry("ta");
 
   //For Range
   double distance;
@@ -77,9 +77,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.updateValues();
 
     // Limelight read values periodically
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
+    double x = cameraTargetXAxis.getDouble(0.0);
+    double y = cameraTargetYAxis.getDouble(0.0);
+    double area = cameraTargetArea.getDouble(0.0);
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
@@ -155,12 +155,12 @@ public class Robot extends TimedRobot {
   }
 
   public void getRange() {
-    double radians = Math.toRadians(ty.getDouble(0.0)); // 39 may change
+    double radians = Math.toRadians(cameraTargetYAxis.getDouble(0.0)); // 39 may change
     distance=((39-23.375)/Math.tan(radians+5)); //TODO: Camera is not level. This will be a2
   }
 
   public void getAim() {
-    heading_error = -tx.getDouble(0.0);
+    heading_error = -cameraTargetXAxis.getDouble(0.0);
 
     if (-heading_error > 1.0) {
       steering_adjust = Kp * heading_error - min_command;
@@ -179,8 +179,8 @@ public class Robot extends TimedRobot {
     double KpDist = 0.09; //0.09;
     double AimMinCmd = 0.095;
 
-    double targetX = tx.getDouble(0.0);
-    double targetY = -ty.getDouble(0.0);
+    double targetX = cameraTargetXAxis.getDouble(0.0);
+    double targetY = -cameraTargetYAxis.getDouble(0.0);
     // double targetA = ta.getDouble(0.0); // Might need this if we start using area instead
 
     // Aim error and distance error based on calibrated limelight cross-hair
