@@ -8,6 +8,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
  * NOTE: Do not instantiate using "new". This will cause a runtime error.
  */
 public final class Calculations {
+    // All these variables must be updated when camera is repositioned.
+    private final static double a2 = -8.9; // y angle from camera to target
+    private final static double h1 = 9; // inches from floor to camera lens
+    private final static double h2 = 28.5; // inches from floow to center of target
+
     // Constructor
     private Calculations() {}
 
@@ -17,7 +22,6 @@ public final class Calculations {
      * @return The steering adjustment
      */
     public static double getAim(double headingError) {
-        // TODO: Rename Kp to something random people would understand.
         final double Kp = -0.15;
         final double steeringSpeed = 0.3;
         final double minCommand = 0.2f;
@@ -45,18 +49,23 @@ public final class Calculations {
     }
 
     /**
+     * Calculates the current mounting angle.
+     * @param distance The distance between the camera and its current target
+     * @return The angle the camera is mounted at
+     */
+    public static double getMountingAngle(double distance) {
+        final double mountingAngle = Math.atan((h2 - h1) / distance) - a2;
+        return mountingAngle;
+    }
+
+    /**
      * Calculates the current range.
      * @param cameraTargetYAxis The Y axis of the camera's current target
      * @return The distance between the camera and its current target
      */
     public static double getRange(NetworkTableEntry cameraTargetYAxis) {
-        // The value of h2 may change as we adjust the physical camera.
-        final int h2 = 39;
-        final double h1 = 23.375;
-        final double radians = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
-        final int a2 = 5;
-
-        final double distance = ((h2 - h1) / Math.tan(radians + a2));
+        final double mountingAngle = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
+        final double distance = (h2 - h1) / Math.tan(mountingAngle + a2);
         return distance;
-      }
+    }
 }
