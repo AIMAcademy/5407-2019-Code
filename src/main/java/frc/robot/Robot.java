@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   // For Range
   double distance;
   double heading_error;
+  double mounting_angle;
 
   // For Aim
   private double steering_adjust = 0.0;
@@ -59,6 +60,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    getMountingAngle();
   }
 
   /**
@@ -85,10 +88,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Distance", distance);
-
+    SmartDashboard.putNumber("Mounting Angle", mounting_angle);
     SmartDashboard.putNumber("Heading Error", heading_error);
     SmartDashboard.putNumber("Steering Adjust", steering_adjust);
-
     SmartDashboard.putBoolean("oi.ledStatus", oi.ledStatus);
   }
 
@@ -166,10 +168,13 @@ public class Robot extends TimedRobot {
     }
   }
 
+  // Calculations
   public void getRange() {
-    distance = Calculations.getRange(cameraTargetYAxis);
+    distance = Calculations.getRange(cameraTargetYAxis, mounting_angle);
   }
-
+  public void getMountingAngle() {
+    mounting_angle = Calculations.getMountingAngle(distance);
+  }
   public void getAim() {
     heading_error = Calculations.getHeadingError(cameraTargetXAxis);
     steering_adjust = Calculations.getAim(heading_error);
