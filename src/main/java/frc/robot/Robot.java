@@ -49,14 +49,12 @@ public class Robot extends TimedRobot {
   // private double steering_adjust = 0.0;
 
   // For AimAndRange
-  double steeringAdjust;
-  double drivingAdjust;
-  double left_command;
-  double right_command;
+  double steeringAdjustBack;
+  double drivingAdjustBack;
 
   //For Aim and Range Back
-  double drivingAdjustBack;
-  double steeringAdjustBack;
+  double drivingAdjustFront;
+  double steeringAdjustFront;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -157,15 +155,14 @@ public class Robot extends TimedRobot {
     if (oi.getOPControlButton()) {
       climbTime();
     } else if (oi.getOpLeftBumper()) {
-      getAimAndRangeBack();
+      getAimAndRangeFront();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
       // steering_adjust = Calculations.getAim(heading_error);
-      robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
+      robotmap.drive.arcadeDrive(-drivingAdjustFront,steeringAdjustFront);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {
-      getAimAndRange();
-      //robotmap.drive.tankDrive(left_command, right_command);
-      robotmap.drive.arcadeDrive(-drivingAdjust,steeringAdjust);
+      getAimAndRangeBack();
+      robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else {
       robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
@@ -190,7 +187,7 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public void getAimAndRangeBack() {
+  public void getAimAndRangeFront() {
       // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
       // Get limelight table for reading tracking data
       double KpAim = 0.045;
@@ -203,21 +200,21 @@ public class Robot extends TimedRobot {
   
       // Aim error and distance error based on calibrated limelight cross-hair
       double aim_error = targetX;
-      double dist_error = Calculations.getRange(cameraTargetYAxis) - 15;
+      double dist_error = Calculations.getRange(cameraTargetYAxis) - 20;
   
       // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
-      steeringAdjustBack = KpAim * aim_error;
+      steeringAdjustFront = KpAim * aim_error;
       if (targetX > .2) {
-        steeringAdjustBack = steeringAdjustBack + AimMinCmd;
+        steeringAdjustFront = steeringAdjustFront + AimMinCmd;
       } else if (targetX < -.2f) {
-        steeringAdjustBack = steeringAdjustBack - AimMinCmd;
+        steeringAdjustFront = steeringAdjustFront - AimMinCmd;
       }
   
       // Distance adjust, drive to the correct distance from the goal
-      drivingAdjustBack = (KpDist * dist_error) + distMinCmd;
+      drivingAdjustFront = (KpDist * dist_error) + distMinCmd;
   }
 
-  public void getAimAndRange() {
+  public void getAimAndRangeBack() {
     // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
     // Get limelight table for reading tracking data
     double KpAim = 0.045;
@@ -233,18 +230,15 @@ public class Robot extends TimedRobot {
     double dist_error = targetY;
 
     // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
-    steeringAdjust = KpAim * aim_error;
+    steeringAdjustBack = KpAim * aim_error;
     if (targetX > .2) {
-      steeringAdjust = steeringAdjust + AimMinCmd;
+      steeringAdjustBack = steeringAdjustBack + AimMinCmd;
     } else if (targetX < -.2f) {
-      steeringAdjust = steeringAdjust - AimMinCmd;
+      steeringAdjustBack = steeringAdjustBack - AimMinCmd;
     }
 
     // Distance adjust, drive to the correct distance from the goal
-    drivingAdjust = KpDist * dist_error;
-
-    left_command = drivingAdjust + steeringAdjust;
-    right_command =  -(drivingAdjust + steeringAdjust);
+    drivingAdjustBack = KpDist * dist_error;
   }
 
   public void climbTime() {
