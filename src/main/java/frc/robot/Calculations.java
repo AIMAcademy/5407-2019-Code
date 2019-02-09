@@ -50,12 +50,20 @@ public final class Calculations {
     }
 
     /**
-     * Calculates the current mounting angle.
+     * Get the current, hardcoded mounting angle.
+     * @return The angle we think the camera is mounted at
+     */
+    public static double getHardMountingAngle() {
+        return a1;
+    }
+
+    /**
+     * Attempts to calculate the current mounting angle.
      * @param cameraTargetYAxis The Y axis of the camera's current target
      * @param distance The distance between the camera and its current target
-     * @return The angle the camera is mounted at
+     * @return The angle the robot believes the camera is mounted at
      */
-    public static double getMountingAngle(NetworkTableEntry cameraTargetYAxis, double distance) {
+    public static double getSoftMountingAngle(NetworkTableEntry cameraTargetYAxis, double distance) {
         final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
         final double mountingAngle = Math.atan((h2 - h1) / distance) - angleToTarget;
         return mountingAngle;

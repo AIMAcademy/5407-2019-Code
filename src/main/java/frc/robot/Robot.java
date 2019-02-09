@@ -42,7 +42,8 @@ public class Robot extends TimedRobot {
   // For Range
   double distance;
   double heading_error;
-  double mounting_angle;
+  double hard_mounting_angle;
+  double soft_mounting_angle;
 
   // For Aim
   private double steering_adjust = 0.0;
@@ -75,7 +76,9 @@ public class Robot extends TimedRobot {
 
     limelight.setLedMode(LightMode.eOff);
 
-    getMountingAngle();
+    hard_mounting_angle = Calculations.getHardMountingAngle();
+    final int threeFeet = 36; // Assume this distance from camera lens to target
+    soft_mounting_angle = Calculations.getSoftMountingAngle(cameraTargetYAxis, threeFeet);
   }
 
   /**
@@ -98,13 +101,14 @@ public class Robot extends TimedRobot {
     double area = cameraTargetArea.getDouble(0.0);
 
     // Limelight post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putNumber("limelightX", x);
+    SmartDashboard.putNumber("limelightY", y);
+    SmartDashboard.putNumber("limelightArea", area);
     SmartDashboard.putNumber("Distance", distance);
-    SmartDashboard.putNumber("Mounting Angle", mounting_angle);
-    SmartDashboard.putNumber("Heading Error", heading_error);
-    SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+    SmartDashboard.putNumber("hardMA", hard_mounting_angle);
+    SmartDashboard.putNumber("softMA", soft_mounting_angle);
+    SmartDashboard.putNumber("headingError", heading_error);
+    SmartDashboard.putNumber("steeringAdjust", steering_adjust);
     SmartDashboard.putBoolean("oi.ledStatus", oi.ledStatus);
 
     m_pipelineChoice = m_pipeline.getSelected();
@@ -145,14 +149,15 @@ public class Robot extends TimedRobot {
 
   // @Override
   public void teleopPeriodic() {
-    updatePipelineChoice();
     oi.readValues();
-    getRange();
+    distance = Calculations.getRange(cameraTargetYAxis);
 
     if (oi.getOPControlButton()) {
       climbTime();
     } else if (oi.getOpLeftBumper()) {
-      getAim();
+      heading_error = Calculations.getHeadingError(cameraTargetXAxis);
+      steering_adjust = Calculations.getAim(heading_error);
+
       robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steering_adjust);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {
@@ -169,8 +174,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 
   public void basicOp() {
     robotmap.arm.set(oi.getBothTriggers());
@@ -182,18 +186,6 @@ public class Robot extends TimedRobot {
       robotmap.leftPickupWheel.set(0);
       robotmap.rightPickupWheel.set(0);
     }
-  }
-
-  public void getRange() {
-    distance = Calculations.getRange(cameraTargetYAxis);
-  }
-  public void getMountingAngle() {
-    final int threeFeet = 36;
-    mounting_angle = Calculations.getMountingAngle(cameraTargetYAxis, threeFeet);
-  }
-  public void getAim() {
-    heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-    steering_adjust = Calculations.getAim(heading_error);
   }
 
   public void getAimAndRange() {
