@@ -50,6 +50,7 @@ public final class Calculations {
 
     /**
      * Calculates the current mounting angle.
+     * @param cameraTargetYAxis The Y axis of the camera's current target
      * @param distance The distance between the camera and its current target
      * @return The angle the camera is mounted at
      */
@@ -62,6 +63,7 @@ public final class Calculations {
     /**
      * Calculates the current range.
      * @param cameraTargetYAxis The Y axis of the camera's current target
+     * @param mountingAngle The angle at which the camera is mounted
      * @return The distance between the camera and its current target
      */
     public static double getRange(NetworkTableEntry cameraTargetYAxis, double mountingAngle) {
