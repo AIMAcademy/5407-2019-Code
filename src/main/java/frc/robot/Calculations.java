@@ -11,8 +11,8 @@ public final class Calculations {
     private final static double h2 = 28.5; // inches from floor to center of target
 
     // Update these when camera moves.
-    private final static double a1 = 0.3859; // the camera's mounting angle in radians
-    private final static double h1 = 9; // inches from floor to camera lens
+    private final static double a1 = 0.5017; // the camera's mounting angle in radians
+    private final static double h1 = 8.75; // inches from floor to camera lens
 
     // Constructor
     private Calculations() {}
