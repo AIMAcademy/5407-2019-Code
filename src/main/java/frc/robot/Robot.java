@@ -54,6 +54,10 @@ public class Robot extends TimedRobot {
   double left_command;
   double right_command;
 
+  //For Aim and Range Back
+  double drivingAdjustBack;
+  double steeringAdjustBack;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -155,10 +159,10 @@ public class Robot extends TimedRobot {
     if (oi.getOPControlButton()) {
       climbTime();
     } else if (oi.getOpLeftBumper()) {
+      getAimAndRangeBack();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
       steering_adjust = Calculations.getAim(heading_error);
-
-      robotmap.drive.arcadeDrive(oi.getClimbThrottle(),steering_adjust);
+      robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {
       getAimAndRange();
@@ -186,6 +190,33 @@ public class Robot extends TimedRobot {
       robotmap.leftPickupWheel.set(0);
       robotmap.rightPickupWheel.set(0);
     }
+  }
+
+  public void getAimAndRangeBack() {
+      // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
+      // Get limelight table for reading tracking data
+      double KpAim = 0.045;
+      double KpDist = 0.017;
+      double AimMinCmd = 0.095;
+      double distMinCmd = 0.04;
+
+      double targetX = cameraTargetXAxis.getDouble(0.0);
+      // double targetA = ta.getDouble(0.0); // Might need this if we start using area instead
+  
+      // Aim error and distance error based on calibrated limelight cross-hair
+      double aim_error = targetX;
+      double dist_error = Calculations.getRange(cameraTargetYAxis) - 15;
+  
+      // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
+      steeringAdjustBack = KpAim * aim_error;
+      if (targetX > .2) {
+        steeringAdjustBack = steeringAdjustBack + AimMinCmd;
+      } else if (targetX < -.2f) {
+        steeringAdjustBack = steeringAdjustBack - AimMinCmd;
+      }
+  
+      // Distance adjust, drive to the correct distance from the goal
+      drivingAdjustBack = (KpDist * dist_error) + distMinCmd;
   }
 
   public void getAimAndRange() {
