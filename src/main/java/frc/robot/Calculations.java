@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
  */
 public final class Calculations {
     // All these variables must be updated when camera is repositioned.
-    private final static double a1 = 0.1617; // the camera's mounting angle in radians
+    private final static double a1 = 0.3859; // the camera's mounting angle in radians
     private final static double h1 = 9; // inches from floor to camera lens
     private final static double h2 = 28.5; // inches from floow to center of target
 
@@ -54,9 +54,9 @@ public final class Calculations {
      * @return The angle the camera is mounted at
      */
     public static double getMountingAngle(NetworkTableEntry cameraTargetYAxis, double distance) {
-        final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
-        final double mountingAngle = Math.atan((h2 - h1) / distance) - angleToTarget;
-        return mountingAngle;
+        // final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
+        // final double mountingAngle = Math.atan((h2 - h1) / distance) - angleToTarget;
+        return a1;
     }
 
     /**
