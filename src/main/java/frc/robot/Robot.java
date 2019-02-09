@@ -171,12 +171,12 @@ public class Robot extends TimedRobot {
     }
   }
 
-  // Calculations
   public void getRange() {
-    distance = Calculations.getRange(cameraTargetYAxis, mounting_angle);
+    distance = Calculations.getRange(cameraTargetYAxis);
   }
   public void getMountingAngle() {
-    mounting_angle = Calculations.getMountingAngle(cameraTargetYAxis, 48);
+    final int threeFeet = 36;
+    mounting_angle = Calculations.getMountingAngle(cameraTargetYAxis, threeFeet);
   }
   public void getAim() {
     heading_error = Calculations.getHeadingError(cameraTargetXAxis);
