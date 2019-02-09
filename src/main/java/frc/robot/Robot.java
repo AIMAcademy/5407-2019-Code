@@ -173,7 +173,7 @@ public class Robot extends TimedRobot {
     distance = Calculations.getRange(cameraTargetYAxis, mounting_angle);
   }
   public void getMountingAngle() {
-    mounting_angle = Calculations.getMountingAngle(distance);
+    mounting_angle = Calculations.getMountingAngle(cameraTargetYAxis, 48);
   }
   public void getAim() {
     heading_error = Calculations.getHeadingError(cameraTargetXAxis);

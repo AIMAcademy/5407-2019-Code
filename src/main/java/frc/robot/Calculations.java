@@ -53,9 +53,10 @@ public final class Calculations {
      * @param distance The distance between the camera and its current target
      * @return The angle the camera is mounted at
      */
-    public static double getMountingAngle(double distance) {
-        // final double mountingAngle = Math.atan((h2 - h1) / distance) - a2;
-        return a1;
+    public static double getMountingAngle(NetworkTableEntry cameraTargetYAxis, double distance) {
+        final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
+        final double mountingAngle = Math.atan((h2 - h1) / distance) - angleToTarget;
+        return mountingAngle;
     }
 
     /**
