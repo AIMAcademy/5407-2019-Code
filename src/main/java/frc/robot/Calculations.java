@@ -78,7 +78,7 @@ public final class Calculations {
     public static double getRange(NetworkTableEntry cameraTargetYAxis) {
         final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
         final double distance = (h2 - h1) / Math.tan(a1 + angleToTarget);
-        final double correction = distance / 12 * 2 + 2;
+        final double correction = distance / 12 * 2;
         return distance - correction;
     }
 }
