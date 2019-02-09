@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
   double soft_mounting_angle;
 
   // For Aim
-  private double steering_adjust = 0.0;
+  // private double steering_adjust = 0.0;
 
   // For AimAndRange
   double steeringAdjust;
@@ -73,9 +73,9 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    m_pipeline.setDefaultOption("Front-Tape", kPipeline2);
     m_pipeline.addOption("Back-Tape", kPipeline0);
     m_pipeline.addOption("Ball", kPipeline1);
-    m_pipeline.addOption("Front-Tape", kPipeline2);
     SmartDashboard.putData("Pipeline", m_pipeline);
 
     limelight.setLedMode(LightMode.eOff);
@@ -111,9 +111,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", distance);
     SmartDashboard.putNumber("hardMA", hard_mounting_angle);
     SmartDashboard.putNumber("softMA", soft_mounting_angle);
-    SmartDashboard.putNumber("headingError", heading_error);
-    SmartDashboard.putNumber("steeringAdjust", steering_adjust);
-    SmartDashboard.putBoolean("oi.ledStatus", oi.ledStatus);
+    SmartDashboard.putBoolean("ledStatus", oi.ledStatus);
 
     m_pipelineChoice = m_pipeline.getSelected();
   }
@@ -161,7 +159,7 @@ public class Robot extends TimedRobot {
     } else if (oi.getOpLeftBumper()) {
       getAimAndRangeBack();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-      steering_adjust = Calculations.getAim(heading_error);
+      // steering_adjust = Calculations.getAim(heading_error);
       robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
       robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {

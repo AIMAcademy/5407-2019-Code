@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class Sensors {
   private AHRS ahrs;
-  private RobotMap robotmap;
+  // private RobotMap robotmap;
   private double followAngle;
   // private double rotateToAngleRate;
 
