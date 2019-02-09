@@ -26,6 +26,12 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private static final String kPipeline0 = "Pipeline 0";
+  private static final String kPipeline1 = "Pipeline 1";
+  private static final String kPipeline2 = "Pipeline 2";
+  private String m_pipelineChoice;
+  private final SendableChooser<String> m_pipeline = new SendableChooser<>();
+
   // Talk to Limelight Network Tables
   // http://docs.limelightvision.io/en/latest/getting_started.html
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -62,6 +68,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    m_pipeline.addOption("Back-Tape", kPipeline0);
+    m_pipeline.addOption("Ball", kPipeline1);
+    m_pipeline.addOption("Front-Tape", kPipeline2);
+    SmartDashboard.putData("Pipeline", m_pipeline);
+
     limelight.setLedMode(LightMode.eOff);
 
     getMountingAngle();
@@ -95,6 +106,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Heading Error", heading_error);
     SmartDashboard.putNumber("Steering Adjust", steering_adjust);
     SmartDashboard.putBoolean("oi.ledStatus", oi.ledStatus);
+
+    m_pipelineChoice = m_pipeline.getSelected();
   }
 
   /**
@@ -235,6 +248,20 @@ public class Robot extends TimedRobot {
     }
     robotmap.arm.set(oi.getBothTriggers());
   }
+
+  public void updatePipelineChoice() {
+    switch (m_pipelineChoice) {
+      case kPipeline0:
+        limelight.setPipeline(0);
+        break;
+      case kPipeline1:
+        limelight.setPipeline(1);
+        break;
+      case kPipeline2:
+        limelight.setPipeline(2);
+        break;
+  }
+}
 
   // public void driveStraight() {
   // double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) *
