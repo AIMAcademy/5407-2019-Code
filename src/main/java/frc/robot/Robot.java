@@ -17,9 +17,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TimedRobot {
   Limelight limelight;
+  Limelight limelight1;
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
+
+  public String hostName = "limelight";
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -62,7 +65,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    limelight = new Limelight();
+    limelight = new Limelight(hostName);
+    limelight1 = new Limelight(hostName);
     oi = new OI(limelight);
     robotmap = new RobotMap();
     sensors = new Sensors();

@@ -17,6 +17,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public class Limelight {
 	private NetworkTableInstance table = null;
+	private String hostName;
+
+	public Limelight(String hostName) {
+		this.hostName = hostName;
+	}
 
 	/**
 	 * Light modes for Limelight.
@@ -132,6 +137,6 @@ public class Limelight {
 			table = NetworkTableInstance.getDefault();
 		}
 
-        return table.getTable("limelight").getEntry(key);
+        return table.getTable(hostName).getEntry(key);
 	}
 }
