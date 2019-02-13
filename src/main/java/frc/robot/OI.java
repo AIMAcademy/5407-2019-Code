@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Limelight.CameraMode;
 import frc.robot.Limelight.LightMode;
 
 /**
@@ -15,6 +16,7 @@ import frc.robot.Limelight.LightMode;
  */
 public class OI {
 	private Toggle ledToggle;
+	private Toggle visionToggle;
 
 	private Joystick driveStick;
 	private double throttle;
@@ -34,12 +36,14 @@ public class OI {
 	private double op_BothTriggers;
 
 	public boolean ledStatus;
+	public boolean visionStatus;
 
 	private Limelight limelight;
 
 	public OI(Limelight limelight) {
 		this.limelight = limelight;
 		ledToggle = new Toggle();
+		visionToggle = new Toggle();
 
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
@@ -93,6 +97,11 @@ public class OI {
 			boolean isLedOn = ledToggle.toggle();
 			setLed(isLedOn);
 		}
+
+		if (driveStick.getRawButtonPressed(1)) {
+			boolean isDriverVisionOn = visionToggle.toggle();
+			setVision(isDriverVisionOn);
+		}
 	}
 
 	public double getThrottle() { return throttle; }
@@ -110,14 +119,22 @@ public class OI {
 	public double getBothTriggers() { return op_BothTriggers; }
 
 	public void setLed(boolean isLedOn) {
-
 		if (isLedOn) {
 			limelight.setLedMode(LightMode.eOff);
 			ledStatus = false;
 			return;
 		}
-
 		limelight.setLedMode(LightMode.eOn);
 		ledStatus = true;
+	}
+
+	public void setVision(boolean isLedOn) {
+		if (isLedOn) {
+			limelight.setCameraMode(CameraMode.eDriver);
+			visionStatus = false;
+			return;
+		}
+		limelight.setCameraMode(CameraMode.eVision);
+		visionStatus = true;
 	}
 }
