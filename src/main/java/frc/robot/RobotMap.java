@@ -67,33 +67,27 @@ public class RobotMap {
     public RobotMap() {
         flowKcap = new DigitalInput(flowKcapPort);
 
-        if (getFlowKcap()) {
-            System.out.println("Digital IO true: " + getFlowKcap());
-        } else if (!getFlowKcap()) {
-            System.out.println("Digital IO false: " + getFlowKcap());
-        }
+        // leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
+        // leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
 
-        leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
-        leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
+        // rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
+        // rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
-        rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
-        rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
+        // climberArm = new Spark(dartSpark_ID);
+        // climberLegs = new Spark(climberLegs_ID);
 
-        climberArm = new Spark(dartSpark_ID);
-        climberLegs = new Spark(climberLegs_ID);
+        // arm = new Spark(arm_ID);
+        // leftPickupWheel = new Spark(leftPickupWheel_ID);
+        // rightPickupWheel = new Spark(rightPickupWheel_ID);
 
-        arm = new Spark(arm_ID);
-        leftPickupWheel = new Spark(leftPickupWheel_ID);
-        rightPickupWheel = new Spark(rightPickupWheel_ID);
+        // leftClimberWheel = new Spark(leftClimberWheel_ID);
+        // rightClimberWheel = new Spark(rightClimberWheel_ID);
 
-        leftClimberWheel = new Spark(leftClimberWheel_ID);
-        rightClimberWheel = new Spark(rightClimberWheel_ID);
+        // speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_1, leftMotor_2);
+        // speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
 
-        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_1, leftMotor_2);
-        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
-
-        drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
-        climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+        // drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
+        // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
     }
 
     /*
@@ -110,6 +104,6 @@ public class RobotMap {
     }
 
     public boolean getFlowKcap() {
-        return flowKcap.get();
+        return !flowKcap.get();
     }
 }

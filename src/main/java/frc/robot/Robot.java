@@ -156,24 +156,34 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
-    if (oi.getOPControlButton()) {
-      climbTime();
-    } else if (oi.getOpLeftBumper()) {
-      getAimAndRangeFront();
-      heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-      // steering_adjust = Calculations.getAim(heading_error);
-      robotmap.drive.arcadeDrive(-drivingAdjustFront,steeringAdjustFront);
-      robotmap.climbDrive.arcadeDrive(0,0);
-    } else if (oi.getOpRightBumper()) {
-      getAimAndRangeBack();
-      robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
-      robotmap.climbDrive.arcadeDrive(0,0);
+    // if (oi.getOPControlButton()) {
+    //   climbTime();
+    // } else if (oi.getOpLeftBumper()) {
+    //   getAimAndRangeFront();
+    //   heading_error = Calculations.getHeadingError(cameraTargetXAxis);
+    //   // steering_adjust = Calculations.getAim(heading_error);
+    //   robotmap.drive.arcadeDrive(-drivingAdjustFront,steeringAdjustFront);
+    //   robotmap.climbDrive.arcadeDrive(0,0);
+    // } else if (oi.getOpRightBumper()) {
+    //   getAimAndRangeBack();
+    //   robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
+    //   robotmap.climbDrive.arcadeDrive(0,0);
+    // } else {
+    //   robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
+    //   robotmap.climbDrive.arcadeDrive(0,0);
+    // }
+
+    if (robotmap.getFlowKcap()) {
+        System.out.println("Digital IO true: " + robotmap.getFlowKcap());
+        return;
+    } else if (!robotmap.getFlowKcap()) {
+        System.out.println("Digital IO false: " + robotmap.getFlowKcap());
+        return;
     } else {
-      robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
-      robotmap.climbDrive.arcadeDrive(0,0);
+        System.out.println("getFlowKcap set to: " + robotmap.getFlowKcap());
     }
 
-    robotmap.motorSafetyCheck();
+    // robotmap.motorSafetyCheck();
   }
 
   @Override
