@@ -10,10 +10,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class RobotMap {
+
+    // Digital IO Port for switching between robot flow and kcap chassis
+    public DigitalInput flowKcap;
+    public static final int flowKcapPort = 0;
+
     // Difference between power of climb motors to the brushless (needs to be
     // adjusted or removed)
     double climbVsDrive = 0.5;
@@ -58,6 +65,14 @@ public class RobotMap {
     public DifferentialDrive climbDrive;
 
     public RobotMap() {
+        flowKcap = new DigitalInput(flowKcapPort);
+
+        if (getFlowKcap()) {
+            System.out.println("Digital IO true: " + getFlowKcap());
+        } else if (!getFlowKcap()) {
+            System.out.println("Digital IO false: " + getFlowKcap());
+        }
+
         leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
         leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
 
@@ -92,5 +107,9 @@ public class RobotMap {
             System.out.println("Brushed motor selected");
             System.exit(0);
         }
+    }
+
+    public boolean getFlowKcap() {
+        return flowKcap.get();
     }
 }
