@@ -183,6 +183,9 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   public void basicOp() {
+    if (robotmap.getFlowKcap()) {
+      return;
+    }
     robotmap.arm.set(oi.getBothTriggers());
 
     if (oi.getOpYButton()) {
@@ -252,6 +255,10 @@ public class Robot extends TimedRobot {
     robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
     robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
 
+    if (robotmap.getFlowKcap()) {
+      return;
+    }
+    
     if (oi.getExtendArmButton() == true) {
       robotmap.climberArm.set(0.5);
     } // TODO: Check if, ".setSpeed" or ".set" works
