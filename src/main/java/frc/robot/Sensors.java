@@ -46,5 +46,10 @@ public class Sensors {
 	public double getPresentAngleNAVX(){
 		return this.ahrs.getAngle();
   }
+
+  public void zeroNAVX() {
+    ahrs.reset();
+    // ahrs.zeroYaw();
+  }
   
 }

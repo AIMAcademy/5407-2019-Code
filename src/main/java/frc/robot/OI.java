@@ -117,7 +117,7 @@ public class OI {
 	public boolean getOpRightBumper() { return op_rightBumper; }
 	public boolean getOPStart() { return op_Start; }
 	public double getBothTriggers() { return op_BothTriggers; }
-
+	
 	public void setLed(boolean isLedOn) {
 		if (isLedOn) {
 			limelight.setLedMode(LightMode.eOff);

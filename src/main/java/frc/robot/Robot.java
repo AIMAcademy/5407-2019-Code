@@ -133,6 +133,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // Zero the NAVX before auton
+    sensors.zeroNAVX();
+
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
   }
@@ -151,6 +154,12 @@ public class Robot extends TimedRobot {
       break;
     }
   }
+
+    // @Override
+    public void teleopInit() {
+      // Zero the NAVX before teleop
+      sensors.zeroNAVX();
+    }
 
   // @Override
   public void teleopPeriodic() {
