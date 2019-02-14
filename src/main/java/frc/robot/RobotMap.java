@@ -8,6 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -64,11 +67,28 @@ public class RobotMap {
     public DifferentialDrive drive;
     public DifferentialDrive climbDrive;
 
+    public WPI_TalonSRX leftTalon;
+    public WPI_TalonSRX rightTalon;
+    public WPI_VictorSPX leftVictor;
+    public WPI_VictorSPX rightVictor;
+
+
     public RobotMap() {
         flowKcap = new DigitalInput(flowKcapPort);
 
         if (getFlowKcap()) {
             // Use Flow chassis
+
+            leftTalon = new WPI_TalonSRX(13);
+            rightTalon = new WPI_TalonSRX(16);
+            leftVictor = new WPI_VictorSPX(17);
+            rightVictor = new WPI_VictorSPX(21);
+
+            leftVictor.follow(leftTalon);
+            rightVictor.follow(rightTalon);
+
+            drive = new DifferentialDrive(leftTalon, rightTalon);
+            climbDrive = new DifferentialDrive(leftTalon, rightTalon);
 
             return;
         }
