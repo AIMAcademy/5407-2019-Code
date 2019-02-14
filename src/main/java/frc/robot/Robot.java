@@ -16,13 +16,14 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TimedRobot {
-  Limelight limelight;
-  Limelight limelight1;
+  Limelight limelight10;
+  Limelight limelight11;
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
 
-  public String hostName = "limelight";
+  public String hostNameTen = "limelight-ten";
+  public String hostNameEleven = "limelight-eleven";
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -37,7 +38,7 @@ public class Robot extends TimedRobot {
 
   // Talk to Limelight Network Tables
   // http://docs.limelightvision.io/en/latest/getting_started.html
-  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-ten");
   NetworkTableEntry cameraTargetXAxis = limelightTable.getEntry("tx");
   NetworkTableEntry cameraTargetYAxis = limelightTable.getEntry("ty");
   NetworkTableEntry cameraTargetArea = limelightTable.getEntry("ta");
@@ -65,9 +66,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    limelight = new Limelight(hostName);
-    limelight1 = new Limelight(hostName);
-    oi = new OI(limelight);
+    limelight10 = new Limelight(hostNameTen);
+    limelight11 = new Limelight(hostNameEleven);
+    oi = new OI(limelight10);
     robotmap = new RobotMap();
     sensors = new Sensors();
 
@@ -80,7 +81,7 @@ public class Robot extends TimedRobot {
     m_pipeline.addOption("Ball", kPipeline1);
     SmartDashboard.putData("Pipeline", m_pipeline);
 
-    limelight.setLedMode(LightMode.eOff);
+    limelight10.setLedMode(LightMode.eOff);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -258,7 +259,7 @@ public class Robot extends TimedRobot {
     if (robotmap.getFlowKcap()) {
       return;
     }
-    
+
     if (oi.getExtendArmButton() == true) {
       robotmap.climberArm.set(0.5);
     } // TODO: Check if, ".setSpeed" or ".set" works
@@ -281,13 +282,13 @@ public class Robot extends TimedRobot {
   public void updatePipelineChoice() {
     switch (m_pipelineChoice) {
       case kPipeline0:
-        limelight.setPipeline(0);
+        limelight10.setPipeline(0);
         break;
       case kPipeline1:
-        limelight.setPipeline(1);
+        limelight10.setPipeline(1);
         break;
       case kPipeline2:
-        limelight.setPipeline(2);
+        limelight10.setPipeline(2);
         break;
   }
 }
