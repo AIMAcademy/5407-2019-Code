@@ -67,27 +67,34 @@ public class RobotMap {
     public RobotMap() {
         flowKcap = new DigitalInput(flowKcapPort);
 
-        // leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
-        // leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
+        if (getFlowKcap()) {
+            // Use Flow chassis
 
-        // rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
-        // rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
+            return;
+        }
+        
+        // Use Kcap Chassis
+        leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
+        leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
 
-        // climberArm = new Spark(dartSpark_ID);
-        // climberLegs = new Spark(climberLegs_ID);
+        rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
+        rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
-        // arm = new Spark(arm_ID);
-        // leftPickupWheel = new Spark(leftPickupWheel_ID);
-        // rightPickupWheel = new Spark(rightPickupWheel_ID);
+        climberArm = new Spark(dartSpark_ID);
+        climberLegs = new Spark(climberLegs_ID);
 
-        // leftClimberWheel = new Spark(leftClimberWheel_ID);
-        // rightClimberWheel = new Spark(rightClimberWheel_ID);
+        arm = new Spark(arm_ID);
+        leftPickupWheel = new Spark(leftPickupWheel_ID);
+        rightPickupWheel = new Spark(rightPickupWheel_ID);
 
-        // speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_1, leftMotor_2);
-        // speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
+        leftClimberWheel = new Spark(leftClimberWheel_ID);
+        rightClimberWheel = new Spark(rightClimberWheel_ID);
 
-        // drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
-        // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_1, leftMotor_2);
+        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
+
+        drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
+        climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
     }
 
     /*
