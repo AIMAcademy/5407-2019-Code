@@ -162,22 +162,20 @@ public class Robot extends TimedRobot {
     } else if (oi.getOpLeftBumper()) {
       getAimAndRangeFront();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-      robotmap.drive.arcadeDrive(-drivingAdjustFront,steeringAdjustFront);
-      robotmap.climbDrive.arcadeDrive(0,0);
+      robotmap.drive.arcadeDrive(-drivingAdjustFront, steeringAdjustFront);
+      robotmap.climbDrive.arcadeDrive(0, 0);
     } else if (oi.getOpRightBumper()) {
       getAimAndRangeBack();
-      robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
-      robotmap.climbDrive.arcadeDrive(0,0);
+      robotmap.drive.arcadeDrive(-drivingAdjustBack, steeringAdjustBack);
+      robotmap.climbDrive.arcadeDrive(0, 0);
     } else {
-      robotmap.drive.arcadeDrive(oi.getThrottle(),oi.getTurn());
-      robotmap.climbDrive.arcadeDrive(0,0);
+      robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
+      robotmap.climbDrive.arcadeDrive(0, 0);
     }
 
     if (!robotmap.getFlowKcap()) {
       robotmap.motorSafetyCheck();
     }
-
-    // robotmap.motorSafetyCheck();
   }
 
   @Override
@@ -199,57 +197,15 @@ public class Robot extends TimedRobot {
   }
 
   public void getAimAndRangeFront() {
-      // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-      // Get limelight table for reading tracking data
-      double KpAim = 0.045;
-      double KpDist = 0.017;
-      double AimMinCmd = 0.095;
-      double distMinCmd = 0.04;
-
-      double targetX = cameraTargetXAxis.getDouble(0.0);
-      // double targetA = ta.getDouble(0.0); // Might need this if we start using area instead
-  
-      // Aim error and distance error based on calibrated limelight cross-hair
-      double aim_error = targetX;
-      double dist_error = Calculations.getRange(cameraTargetYAxis) - 20;
-  
-      // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
-      steeringAdjustFront = KpAim * aim_error;
-      if (targetX > .2) {
-        steeringAdjustFront = steeringAdjustFront + AimMinCmd;
-      } else if (targetX < -.2f) {
-        steeringAdjustFront = steeringAdjustFront - AimMinCmd;
-      }
-  
-      // Distance adjust, drive to the correct distance from the goal
-      drivingAdjustFront = (KpDist * dist_error) + distMinCmd;
+    AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
+    drivingAdjustFront = aimAndRange.getDrivingAdjust();
+    steeringAdjustFront = aimAndRange.getSteeringAdjust();
   }
 
   public void getAimAndRangeBack() {
-    // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-    // Get limelight table for reading tracking data
-    double KpAim = 0.045;
-    double KpDist = 0.09;
-    double AimMinCmd = 0.095;
-
-    double targetX = cameraTargetXAxis.getDouble(0.0);
-    double targetY = -cameraTargetYAxis.getDouble(0.0);
-    // double targetA = ta.getDouble(0.0); // Might need this if we start using area instead
-
-    // Aim error and distance error based on calibrated limelight cross-hair
-    double aim_error = targetX;
-    double dist_error = targetY;
-
-    // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
-    steeringAdjustBack = KpAim * aim_error;
-    if (targetX > .2) {
-      steeringAdjustBack = steeringAdjustBack + AimMinCmd;
-    } else if (targetX < -.2f) {
-      steeringAdjustBack = steeringAdjustBack - AimMinCmd;
-    }
-
-    // Distance adjust, drive to the correct distance from the goal
-    drivingAdjustBack = KpDist * dist_error;
+    AimAndRange aimAndRange = Calculations.getAimAndRangeBack(cameraTargetXAxis, cameraTargetYAxis);
+    drivingAdjustFront = aimAndRange.getDrivingAdjust();
+    steeringAdjustFront = aimAndRange.getSteeringAdjust();
   }
 
   public void climbTime() {
@@ -260,18 +216,18 @@ public class Robot extends TimedRobot {
       return;
     }
 
-    if (oi.getExtendArmButton() == true) {
+    if (oi.getExtendArmButton()) {
       robotmap.climberArm.set(0.5);
-    } // TODO: Check if, ".setSpeed" or ".set" works
-    else if (oi.getRetractArmButton() == true) {
+    }
+    else if (oi.getRetractArmButton()) {
       robotmap.climberArm.set(-0.5);
     } else {
       robotmap.climberArm.set(0);
     }
 
-    if (oi.getOpAButton() == true) {
+    if (oi.getOpAButton()) {
       robotmap.climberLegs.set(0.5);
-    } else if (oi.getOpYButton() == true) {
+    } else if (oi.getOpYButton()) {
       robotmap.climberLegs.set(-0.5);
     } else {
       robotmap.climberLegs.set(0);

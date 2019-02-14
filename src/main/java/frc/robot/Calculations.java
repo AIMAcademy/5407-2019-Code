@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import frc.robot.AimAndRange;
 
 /**
  * Provides essential calculations for the robot.
@@ -8,9 +9,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
  * NOTE: Do not instantiate using "new". This will cause a runtime error.
  */
 public final class Calculations {
+    // Front camera properties
     private final static double h2 = 28.5; // inches from floor to center of target
-
-    // Update these when camera moves.
+    // Update these when the front camera moves.
     private final static double a1 = 0.5017; // the camera's mounting angle in radians
     private final static double h1 = 8.75; // inches from floor to camera lens
 
@@ -80,5 +81,71 @@ public final class Calculations {
         final double distance = (h2 - h1) / Math.tan(a1 + angleToTarget);
         final double correction = distance / 12 * 2;
         return distance - correction;
+    }
+
+    /**
+     * Returns tracking data based on the back camera.
+     * @param cameraTargetXAxis The X axis of the camera's current target
+     * @param cameraTargetYAxis The Y axis of the camera's current target
+     * @return An object containing drivingAdjust and steeringAdjust
+     */
+    public static AimAndRange getAimAndRangeBack(NetworkTableEntry cameraTargetXAxis, NetworkTableEntry cameraTargetYAxis) {
+        // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
+        double KpAim = 0.045;
+        double KpDist = 0.09;
+        double AimMinCmd = 0.095;
+    
+        double targetX = cameraTargetXAxis.getDouble(0.0);
+        double targetY = -cameraTargetYAxis.getDouble(0.0);
+    
+        // Aim error and distance error based on calibrated limelight cross-hair
+        double aim_error = targetX;
+        double dist_error = targetY;
+    
+        // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
+        double steeringAdjustBack = KpAim * aim_error;
+        if (targetX > .2) {
+          steeringAdjustBack = steeringAdjustBack + AimMinCmd;
+        } else if (targetX < -.2f) {
+          steeringAdjustBack = steeringAdjustBack - AimMinCmd;
+        }
+    
+        // Distance adjust, drive to the correct distance from the goal
+        double drivingAdjustBack = KpDist * dist_error;
+
+        return new AimAndRange(drivingAdjustBack, steeringAdjustBack);
+      }
+
+    /**
+     * Returns tracking data based on the front camera.
+     * @param cameraTargetXAxis The X axis of the camera's current target
+     * @param cameraTargetYAxis The Y axis of the camera's current target
+     * @return An object containing drivingAdjust and steeringAdjust
+     */
+    public static AimAndRange getAimAndRangeFront(NetworkTableEntry cameraTargetXAxis, NetworkTableEntry cameraTargetYAxis) {
+        // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
+        double KpAim = 0.045;
+        double KpDist = 0.017;
+        double AimMinCmd = 0.095;
+        double distMinCmd = 0.04;
+  
+        double targetX = cameraTargetXAxis.getDouble(0.0);
+
+        // Aim error and distance error based on calibrated limelight cross-hair
+        double aim_error = targetX;
+        double dist_error = getRange(cameraTargetYAxis) - 20;
+
+        // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
+        double steeringAdjustFront = KpAim * aim_error;
+        if (targetX > .2) {
+          steeringAdjustFront = steeringAdjustFront + AimMinCmd;
+        } else if (targetX < -.2f) {
+          steeringAdjustFront = steeringAdjustFront - AimMinCmd;
+        }
+
+        // Distance adjust, drive to the correct distance from the goal
+        double drivingAdjustFront = (KpDist * dist_error) + distMinCmd;
+
+        return new AimAndRange(drivingAdjustFront, steeringAdjustFront);
     }
 }

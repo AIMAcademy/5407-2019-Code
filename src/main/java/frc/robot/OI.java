@@ -22,7 +22,7 @@ public class OI {
 	private double throttle;
 	private double turn;
 
-	private Joystick opStick; //TODO: these names need to be changed to better ones
+	private Joystick opStick;
 	private double climbThrottle;
 	private double climbTurn;
 	private boolean op_Control;
