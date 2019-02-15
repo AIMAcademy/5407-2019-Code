@@ -171,22 +171,20 @@ public class Robot extends TimedRobot {
     } else if (oi.getOpLeftBumper()) {
       getAimAndRangeFront();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-      robotmap.drive.arcadeDrive(-drivingAdjustFront,steeringAdjustFront);
-      robotmap.climbDrive.arcadeDrive(0,0);
+      robotmap.drive.arcadeDrive(drivingAdjustFront,steeringAdjustFront);
+      // robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {
       getAimAndRangeBack();
-      robotmap.drive.arcadeDrive(-drivingAdjustBack,steeringAdjustBack);
-      robotmap.climbDrive.arcadeDrive(0,0);
+      robotmap.drive.arcadeDrive(drivingAdjustBack,steeringAdjustBack);
+      // robotmap.climbDrive.arcadeDrive(0,0);
     } else {
       robotmap.drive.arcadeDrive(-oi.getThrottle(),oi.getTurn());
-      robotmap.climbDrive.arcadeDrive(0,0);
+      // robotmap.climbDrive.arcadeDrive(0,0);
     }
 
     if (!robotmap.getFlowKcap()) {
       robotmap.motorSafetyCheck();
     }
-
-    // robotmap.motorSafetyCheck();
   }
 
   @Override
@@ -262,7 +260,7 @@ public class Robot extends TimedRobot {
   }
 
   public void climbTime() {
-    robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
+    // robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
     robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
 
     if (robotmap.getFlowKcap()) {
