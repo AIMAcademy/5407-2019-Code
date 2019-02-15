@@ -29,12 +29,14 @@ public class RobotMap {
     double climbVsDrive = 0.5;
 
     // Left Side Speed Controlers
+    private int leftMotorID_0 = 0;
     private int leftMotorID_1 = 1;
     private int leftMotorID_2 = 2;
 
     // Right Side Speed Controlers
-    private int rightMotorID_1 = 0;
-    private int rightMotorID_2 = 3;
+    private int rightMotorID_0 = 3;
+    private int rightMotorID_1 = 4;
+    private int rightMotorID_2 = 5;
 
     // Climber Sparks
     private int dartSpark_ID = 0;
@@ -47,9 +49,11 @@ public class RobotMap {
     private int leftPickupWheel_ID = 5;
     private int rightPickupWheel_ID = 6;
 
+    public CANSparkMax leftMotor_0;
     public CANSparkMax leftMotor_1;
     public CANSparkMax leftMotor_2;
 
+    public CANSparkMax rightMotor_0;
     public CANSparkMax rightMotor_1;
     public CANSparkMax rightMotor_2;
 
@@ -94,9 +98,11 @@ public class RobotMap {
         }
         
         // Use Kcap Chassis
+        leftMotor_0 = new CANSparkMax(leftMotorID_0, MotorType.kBrushless);
         leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
         leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
 
+        rightMotor_0 = new CANSparkMax(rightMotorID_0, MotorType.kBrushless);
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
         rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
@@ -110,8 +116,8 @@ public class RobotMap {
         leftClimberWheel = new Spark(leftClimberWheel_ID);
         rightClimberWheel = new Spark(rightClimberWheel_ID);
 
-        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_1, leftMotor_2);
-        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_1, rightMotor_2);
+        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
+        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0, rightMotor_1, rightMotor_2);
 
         drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
         climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
