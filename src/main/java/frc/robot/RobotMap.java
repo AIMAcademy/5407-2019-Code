@@ -92,7 +92,7 @@ public class RobotMap {
             rightVictor.follow(rightTalon);
 
             drive = new DifferentialDrive(leftTalon, rightTalon);
-            climbDrive = new DifferentialDrive(leftTalon, rightTalon);
+            // climbDrive = new DifferentialDrive(leftTalon, rightTalon);
 
             return;
         }
@@ -120,7 +120,7 @@ public class RobotMap {
         speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0, rightMotor_1, rightMotor_2);
 
         drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
-        climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
+        // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
     }
 
     /*

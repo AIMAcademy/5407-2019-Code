@@ -171,15 +171,15 @@ public class Robot extends TimedRobot {
     } else if (oi.getOpLeftBumper()) {
       getAimAndRangeFront();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-      robotmap.drive.arcadeDrive(-drivingAdjustFront, steeringAdjustFront);
-      robotmap.climbDrive.arcadeDrive(0, 0);
+      robotmap.drive.arcadeDrive(drivingAdjustFront, steeringAdjustFront);
+      // robotmap.climbDrive.arcadeDrive(0, 0);
     } else if (oi.getOpRightBumper()) {
       getAimAndRangeBack();
-      robotmap.drive.arcadeDrive(-drivingAdjustBack, steeringAdjustBack);
-      robotmap.climbDrive.arcadeDrive(0, 0);
+      robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
+      // robotmap.climbDrive.arcadeDrive(0, 0);
     } else {
-      robotmap.drive.arcadeDrive(oi.getThrottle(), oi.getTurn());
-      robotmap.climbDrive.arcadeDrive(0, 0);
+      robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+      // robotmap.climbDrive.arcadeDrive(0, 0);
     }
 
     if (!robotmap.getFlowKcap()) {
@@ -213,12 +213,12 @@ public class Robot extends TimedRobot {
 
   public void getAimAndRangeBack() {
     AimAndRange aimAndRange = Calculations.getAimAndRangeBack(cameraTargetXAxis, cameraTargetYAxis);
-    drivingAdjustFront = aimAndRange.getDrivingAdjust();
-    steeringAdjustFront = aimAndRange.getSteeringAdjust();
+    drivingAdjustBack = aimAndRange.getDrivingAdjust();
+    steeringAdjustBack = aimAndRange.getSteeringAdjust();
   }
 
   public void climbTime() {
-    robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
+    // robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
     robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
 
     if (robotmap.getFlowKcap()) {
