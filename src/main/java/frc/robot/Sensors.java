@@ -37,7 +37,6 @@ public class Sensors {
       DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
     }
 
-    //armPot = new AnalogPotentiometer(0, 360, 30);
     AnalogInput ai = new AnalogInput(3);
     armPot = new AnalogPotentiometer(ai, 360, 0);
   }

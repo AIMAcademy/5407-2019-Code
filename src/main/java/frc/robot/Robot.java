@@ -36,6 +36,11 @@ public class Robot extends TimedRobot {
   private String m_pipelineChoice;
   private final SendableChooser<String> m_pipeline = new SendableChooser<>();
 
+  private static final String kHighHatch = "High Hatch";
+  private static final String kMidHatch = "Mid Hatch";
+  private static final String kLowHatch = "Low Hatch";
+  private String m_armControl;
+
   // Talk to Limelight Network Tables
   // http://docs.limelightvision.io/en/latest/getting_started.html
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-ten");
@@ -186,7 +191,7 @@ public class Robot extends TimedRobot {
       robotmap.motorSafetyCheck();
     }
 
-    System.out.println("armDegrees - " + sensors.getArmPotValue());
+    System.out.println(sensors.getArmPotValue());
 
   }
 
@@ -197,7 +202,8 @@ public class Robot extends TimedRobot {
     if (robotmap.getFlowKcap()) {
       return;
     }
-    robotmap.arm.set(oi.getBothTriggers());
+
+    //robotmap.arm.set(oi.getBothTriggers());
 
     if (oi.getOpYButton()) {
       robotmap.leftPickupWheel.set(1);
@@ -260,6 +266,33 @@ public class Robot extends TimedRobot {
         break;
   }
 }
+
+  // public void armControl() {
+  //   double kp = 0;
+  //   double kd = 0;
+  //   double output;
+  //   double distance;
+  //   double error;
+  //   double preError;
+  //   double dError;
+  //   switch (m_armControl) {
+  //     case kHighHatch:
+  //       //Set Distance
+  //       break;
+  //     case kMidHatch:
+  //       //Set Distance
+  //       break;
+  //     case kLowHatch:
+  //       //Set Distance
+  //       break;
+  //     }
+  //   // dError = error - pervious error
+  //   dError = error - preError
+  //   output = kp * error + kd * dError;
+  //   robotmap.arm.set(output);
+
+  //   preError = error;
+  // }
 
   // public void driveStraight() {
   // double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) *
