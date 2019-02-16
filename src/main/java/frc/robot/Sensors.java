@@ -9,6 +9,9 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class Sensors {
@@ -21,6 +24,8 @@ public class Sensors {
   public final double kP = 0.005; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
+  Potentiometer armPot;
+  double armDegrees;
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
@@ -31,6 +36,10 @@ public class Sensors {
     } catch (RuntimeException ex ) {
       DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
     }
+
+    //armPot = new AnalogPotentiometer(0, 360, 30);
+    AnalogInput ai = new AnalogInput(3);
+    armPot = new AnalogPotentiometer(ai, 360, 0);
   }
 
   public void setFollowAngleNAVX(double offset){
@@ -50,6 +59,11 @@ public class Sensors {
   public void zeroNAVX() {
     ahrs.reset();
     // ahrs.zeroYaw();
+  }
+
+  public double getArmPotValue() {
+    armDegrees = armPot.get();
+    return armDegrees;
   }
   
 }

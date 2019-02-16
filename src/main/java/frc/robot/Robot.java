@@ -185,6 +185,9 @@ public class Robot extends TimedRobot {
     if (!robotmap.getFlowKcap()) {
       robotmap.motorSafetyCheck();
     }
+
+    System.out.println("armDegrees - " + sensors.getArmPotValue());
+
   }
 
   @Override
