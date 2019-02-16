@@ -39,13 +39,13 @@ public class RobotMap {
     private int rightMotorID_2 = 5;
 
     // Climber Sparks
-    private int dartSpark_ID = 0;
-    private int climberLegs_ID = 3;
+    private int dartSpark_ID = 6;
+    private int climberLegs_ID = 7;
     private int leftClimberWheel_ID = 2;
     private int rightClimberWheel_ID = 1;
 
     //More
-    private int arm_ID = 4;
+    private int arm_ID = 8;
     private int leftPickupWheel_ID = 5;
     private int rightPickupWheel_ID = 6;
 
@@ -57,12 +57,12 @@ public class RobotMap {
     public CANSparkMax rightMotor_1;
     public CANSparkMax rightMotor_2;
 
-    public Spark climberArm;
-    public Spark climberLegs;
+    public WPI_TalonSRX climberArm;
+    public WPI_TalonSRX climberLegs;
     public Spark leftClimberWheel;
     public Spark rightClimberWheel;
 
-    public Spark arm;
+    public WPI_TalonSRX arm;
     public Spark leftPickupWheel;
     public Spark rightPickupWheel;
 
@@ -106,10 +106,10 @@ public class RobotMap {
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
         rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
-        climberArm = new Spark(dartSpark_ID);
-        climberLegs = new Spark(climberLegs_ID);
+        climberArm = new WPI_TalonSRX(dartSpark_ID);
+        climberLegs = new WPI_TalonSRX(climberLegs_ID);
 
-        arm = new Spark(arm_ID);
+        arm = new WPI_TalonSRX(arm_ID);
         leftPickupWheel = new Spark(leftPickupWheel_ID);
         rightPickupWheel = new Spark(rightPickupWheel_ID);
 
