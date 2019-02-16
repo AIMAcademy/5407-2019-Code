@@ -160,13 +160,13 @@ public class Robot extends TimedRobot {
     }
   }
 
-    // @Override
-    public void teleopInit() {
-      // Zero the NAVX before teleop
-      sensors.zeroNAVX();
-    }
+  @Override
+  public void teleopInit() {
+    // Zero the NAVX before teleop
+    sensors.zeroNAVX();
+  }
 
-  // @Override
+  @Override
   public void teleopPeriodic() {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
