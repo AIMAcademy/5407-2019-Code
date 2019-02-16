@@ -264,8 +264,8 @@ public class Robot extends TimedRobot {
       case kPipeline2:
         limelight10.setPipeline(2);
         break;
+    }
   }
-}
 
   // public void armControl() {
   //   double kp = 0;

@@ -128,7 +128,10 @@ public class RobotMap {
      * will help save the motor if someone messes with it... or just waste bandwith
      */
     public void motorSafetyCheck() {
-        if (leftMotor_1.getMotorType() == MotorType.kBrushed || leftMotor_2.getMotorType() == MotorType.kBrushed
+        if (leftMotor_0.getMotorType() == MotorType.kBrushed
+                || leftMotor_1.getMotorType() == MotorType.kBrushed
+                || leftMotor_2.getMotorType() == MotorType.kBrushed
+                || rightMotor_0.getMotorType() == MotorType.kBrushed
                 || rightMotor_1.getMotorType() == MotorType.kBrushed
                 || rightMotor_2.getMotorType() == MotorType.kBrushed) {
             System.out.println("Brushed motor selected");
@@ -136,6 +139,10 @@ public class RobotMap {
         }
     }
 
+    /**
+     * Returns which robot is being driven. True for Flow, False for Kcap.
+     * @return A boolean that checks for a jumper cable in a digital IO port
+     */
     public boolean getFlowKcap() {
         return !flowKcap.get();
     }
