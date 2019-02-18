@@ -21,6 +21,11 @@ public class OI {
 	private Joystick driveStick;
 	private double throttle;
 	private double turn;
+	private boolean ds_2Button;
+	private boolean ds_3Button;
+	private boolean ds_4Button;
+	private boolean ds_5Button;
+	private boolean ds_6Button;
 
 	private Joystick opStick;
 	private double climbThrottle;
@@ -91,7 +96,13 @@ public class OI {
 		} else {
 			basicOpThrottle = 0;
 		}
-			
+		
+		ds_2Button = driveStick.getRawButton(2);
+		ds_3Button = driveStick.getRawButton(3);
+		ds_4Button = driveStick.getRawButton(4);
+		ds_5Button = driveStick.getRawButton(5);
+		ds_6Button = driveStick.getRawButton(6);
+
 		op_yButton = opStick.getRawButton(4);
 		op_bButton = opStick.getRawButton(2);
 		op_aButton = opStick.getRawButton(1);
@@ -111,6 +122,12 @@ public class OI {
 			setVision(isDriverVisionOn);
 		}
 	}
+
+	public boolean getDSbutton2() { return ds_2Button; }
+	public boolean getDSbutton3() { return ds_3Button; }
+	public boolean getDSbutton4() { return ds_4Button; }
+	public boolean getDSbutton5() { return ds_5Button; }
+	public boolean getDSbutton6() { return ds_6Button; }
 
 	public double getBasicOpThrottle() { return basicOpThrottle; }
 

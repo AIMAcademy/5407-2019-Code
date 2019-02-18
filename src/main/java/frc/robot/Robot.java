@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
+  Air air;
 
   public String hostNameTen = "limelight-ten";
   public String hostNameEleven = "limelight-eleven";
@@ -54,9 +55,6 @@ public class Robot extends TimedRobot {
   double hard_mounting_angle;
   double soft_mounting_angle;
 
-  // For Aim
-  // private double steering_adjust = 0.0;
-
   // For AimAndRange
   double steeringAdjustBack;
   double drivingAdjustBack;
@@ -76,6 +74,7 @@ public class Robot extends TimedRobot {
     oi = new OI(limelight10);
     robotmap = new RobotMap();
     sensors = new Sensors();
+    air = new Air();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -201,26 +200,15 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   public void basicOp() {
-    // if (robotmap.getFlowKcap()) {
-    //   return;
-    // }
-
-    // if (oi.getOpYButton()) {
-    //   robotmap.rollerWheel.set(1);
-    // } else { 
-    //   robotmap.rollerWheel.set(0);
-    // }
-
-    if (oi.getOpYButton()) { // Arm
+    if (oi.getOpYButton()) { // Y Button = Arm
       robotmap.arm.set(oi.getBasicOpThrottle());
-    } else if (oi.getOpAButton()) { // Roller
+    } else if (oi.getOpAButton()) { // A Button = Roller
       robotmap.rollerWheel.set(oi.getBasicOpThrottle());
-    } else if (oi.getOpBButton()) { // S-Winch
+    } else if (oi.getOpBButton()) { // B Button = S-Winch
       robotmap.smallWinchMotor.set(oi.getBasicOpThrottle());
-    } else if (oi.getOpXButton()) { // Tung
+    } else if (oi.getOpXButton()) { // X Button = Tung // set this to 75% limit
       robotmap.tungMotor.set(oi.getBasicOpThrottle());
     }
-
   }
 
   public void getAimAndRangeFront() {
@@ -239,34 +227,18 @@ public class Robot extends TimedRobot {
     // robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
     // robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
     robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
-    if (oi.getThrottle() != 0) {
-      robotmap.leftClimberWheel.set(-oi.getThrottle());
-      robotmap.rightClimberWheel.set(oi.getThrottle());
-    } else {
+
+    if (oi.getDSbutton6()) {
+      robotmap.leftClimberWheel.set(-1.0);
+      robotmap.rightClimberWheel.set(1.0);
+    } else { 
       robotmap.leftClimberWheel.set(0.0);
       robotmap.rightClimberWheel.set(0.0);
     }
 
-    // if (robotmap.getFlowKcap()) {
-    //   return;
-    // }
-
-    // if (oi.getOpBButton()) {
-    //   robotmap.leftClimberWheel.set(0.5);
-    //   robotmap.rightClimberWheel.set(-0.5);
-    // }
-    // else if (oi.getOpXButton()) {
-    //   robotmap.leftClimberWheel.set(-0.5);
-    //   robotmap.rightClimberWheel.set(0.5);
-    // } else {
-    //   robotmap.leftClimberWheel.set(0);
-    //   robotmap.rightClimberWheel.set(0);
-    // }
-
     if (oi.getOpBButton()) {
       robotmap.climberArm.set(1);
-    }
-    else if (oi.getOpXButton()) {
+    } else if (oi.getOpXButton()) {
       robotmap.climberArm.set(-1);
     } else {
       robotmap.climberArm.set(0);
@@ -279,8 +251,6 @@ public class Robot extends TimedRobot {
     } else {
       robotmap.climberLegs.set(0);
     }
-
-
 
     robotmap.arm.set(oi.getBothTriggers());
   }
