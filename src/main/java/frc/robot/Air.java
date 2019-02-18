@@ -40,6 +40,10 @@ public class Air {
         piston4.set(false);
     }
 
+    public boolean getSol(Solenoid sol) {
+        return sol.get();
+    }
+
     public void setSol(Solenoid sol, boolean isOn) {
         sol.set(isOn);
     }
