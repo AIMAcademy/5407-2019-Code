@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Air {
-
     private int piston0_ID = 0; // Arm tri-grabber
     private int piston1_ID = 1; // Back hatch pistons // make these while held and then return
     private int piston2_ID = 2; // Back hatch pistons
@@ -23,7 +22,7 @@ public class Air {
     private Solenoid piston3;
     private Solenoid piston4;
 
-    public Air(){
+    public Air() {
         piston0 = new Solenoid(piston0_ID);
         piston1 = new Solenoid(piston1_ID);
         piston2 = new Solenoid(piston2_ID);
@@ -33,7 +32,7 @@ public class Air {
         airInit();
     }
 
-    public void airInit(){
+    public void airInit() {
         piston0.set(false);
         piston1.set(false);
         piston2.set(false);
@@ -41,8 +40,7 @@ public class Air {
         piston4.set(false);
     }
 
-    public void setSol(Solenoid sol) {
-        sol.set(false);
+    public void setSol(Solenoid sol, boolean isOn) {
+        sol.set(isOn);
     }
-
 }
