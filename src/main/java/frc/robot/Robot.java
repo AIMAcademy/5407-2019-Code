@@ -237,31 +237,50 @@ public class Robot extends TimedRobot {
 
   public void climbTime() {
     // robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
-    robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
+    // robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
+    robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+    if (oi.getThrottle() != 0) {
+      robotmap.leftClimberWheel.set(-oi.getThrottle());
+      robotmap.rightClimberWheel.set(oi.getThrottle());
+    } else {
+      robotmap.leftClimberWheel.set(0.0);
+      robotmap.rightClimberWheel.set(0.0);
+    }
 
     // if (robotmap.getFlowKcap()) {
     //   return;
     // }
 
+    // if (oi.getOpBButton()) {
+    //   robotmap.leftClimberWheel.set(0.5);
+    //   robotmap.rightClimberWheel.set(-0.5);
+    // }
+    // else if (oi.getOpXButton()) {
+    //   robotmap.leftClimberWheel.set(-0.5);
+    //   robotmap.rightClimberWheel.set(0.5);
+    // } else {
+    //   robotmap.leftClimberWheel.set(0);
+    //   robotmap.rightClimberWheel.set(0);
+    // }
+
     if (oi.getOpBButton()) {
-      robotmap.leftClimberWheel.set(0.5);
-      robotmap.rightClimberWheel.set(-0.5);
+      robotmap.climberArm.set(1);
     }
     else if (oi.getOpXButton()) {
-      robotmap.leftClimberWheel.set(-0.5);
-      robotmap.rightClimberWheel.set(0.5);
+      robotmap.climberArm.set(-1);
     } else {
-      robotmap.leftClimberWheel.set(0);
-      robotmap.rightClimberWheel.set(0);
+      robotmap.climberArm.set(0);
     }
 
     if (oi.getOpAButton()) {
-      robotmap.climberLegs.set(-0.5);
+      robotmap.climberLegs.set(-1);
     } else if (oi.getOpYButton()) {
-      robotmap.climberLegs.set(0.5);
+      robotmap.climberLegs.set(1);
     } else {
       robotmap.climberLegs.set(0);
     }
+
+
 
     robotmap.arm.set(oi.getBothTriggers());
   }
