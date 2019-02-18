@@ -86,8 +86,8 @@ public class OI {
 		}
 		
 		// Left Stick Y Axis
-		if (opStick.getRawAxis(1) < -0.1 || opStick.getRawAxis(1) > 0.1) {
-			basicOpThrottle = opStick.getRawAxis(1);
+		if (opStick.getRawAxis(1) < -0.2 || opStick.getRawAxis(1) > 0.2) {
+			basicOpThrottle = -opStick.getRawAxis(1);
 		} else {
 			basicOpThrottle = 0;
 		}

@@ -87,6 +87,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Pipeline", m_pipeline);
 
     limelight10.setLedMode(LightMode.eOff);
+    limelight11.setLedMode(LightMode.eOff);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -244,11 +245,11 @@ public class Robot extends TimedRobot {
 
     if (oi.getOpBButton()) {
       robotmap.leftClimberWheel.set(0.5);
-      robotmap.rightClimberWheel.set(0.5);
+      robotmap.rightClimberWheel.set(-0.5);
     }
     else if (oi.getOpXButton()) {
       robotmap.leftClimberWheel.set(-0.5);
-      robotmap.rightClimberWheel.set(-0.5);
+      robotmap.rightClimberWheel.set(0.5);
     } else {
       robotmap.leftClimberWheel.set(0);
       robotmap.rightClimberWheel.set(0);
