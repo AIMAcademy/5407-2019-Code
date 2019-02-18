@@ -256,9 +256,9 @@ public class Robot extends TimedRobot {
     }
 
     if (oi.getOpAButton()) {
-      robotmap.climberLegs.set(0.5);
-    } else if (oi.getOpYButton()) {
       robotmap.climberLegs.set(-0.5);
+    } else if (oi.getOpYButton()) {
+      robotmap.climberLegs.set(0.5);
     } else {
       robotmap.climberLegs.set(0);
     }
