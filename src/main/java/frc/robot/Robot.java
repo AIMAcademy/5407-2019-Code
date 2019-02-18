@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
   double steeringAdjustBack;
   double drivingAdjustBack;
 
-  //For Aim and Range Back
+  // For Aim and Range Back
   double drivingAdjustFront;
   double steeringAdjustFront;
 
@@ -183,6 +183,7 @@ public class Robot extends TimedRobot {
       robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
       // robotmap.climbDrive.arcadeDrive(0,0);
     } else {
+      basicOp();
       robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
       // robotmap.climbDrive.arcadeDrive(0,0);
     }
@@ -199,17 +200,26 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   public void basicOp() {
-    if (robotmap.getFlowKcap()) {
-      return;
-    }
+    // if (robotmap.getFlowKcap()) {
+    //   return;
+    // }
 
-    //robotmap.arm.set(oi.getBothTriggers());
+    // if (oi.getOpYButton()) {
+    //   robotmap.rollerWheel.set(1);
+    // } else { 
+    //   robotmap.rollerWheel.set(0);
+    // }
 
     if (oi.getOpYButton()) {
-      robotmap.rollerWheel.set(1);
-    } else { 
-      robotmap.rollerWheel.set(0);
+      robotmap.arm.set(oi.getClimbThrottle());
+    } else if (oi.getOpAButton()) { 
+      robotmap.rollerWheel.set(oi.getClimbThrottle());
+    } else if (oi.getOpBButton()) { 
+      robotmap.smallWinchMotor.set(oi.getClimbThrottle());
+    } else if (oi.getOpXButton()) { 
+      robotmap.tungMotor.set(oi.getClimbThrottle());
     }
+
   }
 
   public void getAimAndRangeFront() {
@@ -228,17 +238,17 @@ public class Robot extends TimedRobot {
     // robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
     robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
 
-    if (robotmap.getFlowKcap()) {
-      return;
-    }
+    // if (robotmap.getFlowKcap()) {
+    //   return;
+    // }
 
-    if (oi.getExtendArmButton()) {
-      robotmap.climberArm.set(0.5);
+    if (oi.getOpBButton()) {
+      robotmap.leftClimberWheel.set(0.5);
     }
-    else if (oi.getRetractArmButton()) {
-      robotmap.climberArm.set(-0.5);
+    else if (oi.getOpXButton()) {
+      robotmap.leftClimberWheel.set(-0.5);
     } else {
-      robotmap.climberArm.set(0);
+      robotmap.leftClimberWheel.set(0);
     }
 
     if (oi.getOpAButton()) {
@@ -248,6 +258,7 @@ public class Robot extends TimedRobot {
     } else {
       robotmap.climberLegs.set(0);
     }
+
     robotmap.arm.set(oi.getBothTriggers());
   }
 

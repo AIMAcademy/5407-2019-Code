@@ -42,14 +42,14 @@ public class RobotMap {
     // Climber Sparks
     private int climberArm_ID = 6; // FRT-DART (CAN)
     private int climberLegs_ID = 7; // LEG-LIFT (CAN)
-    private int leftClimberWheel_ID = 1; // LLEGGING (PWM)
-    private int rightClimberWheel_ID = 2; // RLEGGING (PWM)
+    private int leftClimberWheel_ID = 0; // LLEGGING (PWM)
+    private int rightClimberWheel_ID = 1; // RLEGGING (PWM)
     // Arm components
-    private int arm_ID = 6; // (PWM)
-    private int rollerWheel_ID = 5; // ROLLER (PWM)
-    private int smallWinchMotor_ID = 3; // S-WINCH (PWM)
+    private int arm_ID = 5; // (PWM)
+    private int rollerWheel_ID = 4; // ROLLER (PWM)
+    private int smallWinchMotor_ID = 2; // S-WINCH (PWM)
     // The Tung
-    private int tungMotor_ID = 4; // THE TUNG (PWM)
+    private int tungMotor_ID = 3; // THE TUNG (PWM)
 
     /*
      * Motor Controllers
@@ -86,16 +86,17 @@ public class RobotMap {
     public DifferentialDrive climbDrive;
 
     public RobotMap() {
+        // Check for jumper cable to determine which chassis to drive
         flowKcap = new DigitalInput(flowKcapPort);
 
         if (getFlowKcap()) {
             // Use Flow chassis
-
             leftTalon = new WPI_TalonSRX(13);
             rightTalon = new WPI_TalonSRX(16);
             leftVictor = new WPI_VictorSPX(17);
             rightVictor = new WPI_VictorSPX(21);
 
+            // Set slave motors
             leftVictor.follow(leftTalon);
             rightVictor.follow(rightTalon);
 
@@ -109,22 +110,23 @@ public class RobotMap {
         leftMotor_0 = new CANSparkMax(leftMotorID_0, MotorType.kBrushless);
         leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
         leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
-
         rightMotor_0 = new CANSparkMax(rightMotorID_0, MotorType.kBrushless);
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
         rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
+        // Climb system
         climberArm = new WPI_TalonSRX(climberArm_ID);
         climberLegs = new WPI_TalonSRX(climberLegs_ID);
+        leftClimberWheel = new Spark(leftClimberWheel_ID);
+        rightClimberWheel = new Spark(rightClimberWheel_ID);
 
+        // Other components
         arm = new WPI_VictorSPX(arm_ID);
         rollerWheel = new Spark(rollerWheel_ID);
         smallWinchMotor = new Spark(smallWinchMotor_ID);
         tungMotor = new Spark(tungMotor_ID);
 
-        leftClimberWheel = new Spark(leftClimberWheel_ID);
-        rightClimberWheel = new Spark(rightClimberWheel_ID);
-
+        // Speed controller groups
         speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
         speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0, rightMotor_1, rightMotor_2);
 

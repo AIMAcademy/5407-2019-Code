@@ -109,9 +109,9 @@ public class OI {
 	public double getClimbThrottle() { return climbThrottle; }
 	public double getClimbTurn() { return climbTurn; }
 	public boolean getOpYButton() { return op_yButton; }
-	public boolean getExtendArmButton() { return op_bButton; }
+	public boolean getOpBButton() { return op_bButton; }
 	public boolean getOpAButton() { return op_aButton; }
-	public boolean getRetractArmButton() { return op_xButton; }
+	public boolean getOpXButton() { return op_xButton; }
 	public boolean getOPControlButton() { return op_Control; }
 	public boolean getOpLeftBumper() { return op_leftBumper; }
 	public boolean getOpRightBumper() { return op_rightBumper; }
