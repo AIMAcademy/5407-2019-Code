@@ -28,54 +28,62 @@ public class RobotMap {
     // adjusted or removed)
     double climbVsDrive = 0.5;
 
+    /*
+     * Motor ports
+     */
     // Left Side Speed Controlers
     private int leftMotorID_0 = 0;
     private int leftMotorID_1 = 1;
     private int leftMotorID_2 = 2;
-
     // Right Side Speed Controlers
     private int rightMotorID_0 = 3;
     private int rightMotorID_1 = 4;
     private int rightMotorID_2 = 5;
-
     // Climber Sparks
-    private int dartSpark_ID = 6;
-    private int climberLegs_ID = 7;
-    private int leftClimberWheel_ID = 2;
-    private int rightClimberWheel_ID = 1;
+    private int climberArm_ID = 6; // FRT-DART (CAN)
+    private int climberLegs_ID = 7; // LEG-LIFT (CAN)
+    private int leftClimberWheel_ID = 1; // LLEGGING (PWM)
+    private int rightClimberWheel_ID = 2; // RLEGGING (PWM)
+    // Arm components
+    private int arm_ID = 6; // (PWM)
+    private int rollerWheel_ID = 5; // ROLLER (PWM)
+    private int smallWinchMotor_ID = 3; // S-WINCH (PWM)
+    // The Tung
+    private int tungMotor_ID = 4; // THE TUNG (PWM)
 
-    //More
-    private int arm_ID = 8;
-    private int leftPickupWheel_ID = 5;
-    private int rightPickupWheel_ID = 6;
-
+    /*
+     * Motor Controllers
+     */
+    // Powertrain
     public CANSparkMax leftMotor_0;
     public CANSparkMax leftMotor_1;
     public CANSparkMax leftMotor_2;
-
     public CANSparkMax rightMotor_0;
     public CANSparkMax rightMotor_1;
     public CANSparkMax rightMotor_2;
-
-    public WPI_TalonSRX climberArm;
-    public WPI_TalonSRX climberLegs;
-    public Spark leftClimberWheel;
-    public Spark rightClimberWheel;
-
-    public WPI_TalonSRX arm;
-    public Spark leftPickupWheel;
-    public Spark rightPickupWheel;
-
-    public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
-
-    public DifferentialDrive drive;
-    public DifferentialDrive climbDrive;
-
+    // Climbing System
+    public WPI_TalonSRX climberArm; // FRT-DART
+    public WPI_TalonSRX climberLegs; // LEG-LIFT (Dart)
+    public Spark leftClimberWheel; // LLEGGING
+    public Spark rightClimberWheel; // RLEGGING
+    // Arm System
+    public WPI_VictorSPX arm;
+    public Spark rollerWheel; // ROLLER
+    public Spark smallWinchMotor; // S-WINCH
+    // The Tung
+    public Spark tungMotor; // THE TUNG
+    // Flow Motors
     public WPI_TalonSRX leftTalon;
     public WPI_TalonSRX rightTalon;
     public WPI_VictorSPX leftVictor;
     public WPI_VictorSPX rightVictor;
 
+    // Kcap Speed Controller Group
+    public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
+    
+    // Differential drive variables
+    public DifferentialDrive drive;
+    public DifferentialDrive climbDrive;
 
     public RobotMap() {
         flowKcap = new DigitalInput(flowKcapPort);
@@ -106,12 +114,13 @@ public class RobotMap {
         rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
         rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
-        climberArm = new WPI_TalonSRX(dartSpark_ID);
+        climberArm = new WPI_TalonSRX(climberArm_ID);
         climberLegs = new WPI_TalonSRX(climberLegs_ID);
 
-        arm = new WPI_TalonSRX(arm_ID);
-        leftPickupWheel = new Spark(leftPickupWheel_ID);
-        rightPickupWheel = new Spark(rightPickupWheel_ID);
+        arm = new WPI_VictorSPX(arm_ID);
+        rollerWheel = new Spark(rollerWheel_ID);
+        smallWinchMotor = new Spark(smallWinchMotor_ID);
+        tungMotor = new Spark(tungMotor_ID);
 
         leftClimberWheel = new Spark(leftClimberWheel_ID);
         rightClimberWheel = new Spark(rightClimberWheel_ID);

@@ -206,11 +206,9 @@ public class Robot extends TimedRobot {
     //robotmap.arm.set(oi.getBothTriggers());
 
     if (oi.getOpYButton()) {
-      robotmap.leftPickupWheel.set(1);
-      robotmap.rightPickupWheel.set(1);
+      robotmap.rollerWheel.set(1);
     } else { 
-      robotmap.leftPickupWheel.set(0);
-      robotmap.rightPickupWheel.set(0);
+      robotmap.rollerWheel.set(0);
     }
   }
 
