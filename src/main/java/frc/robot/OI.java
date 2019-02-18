@@ -34,6 +34,7 @@ public class OI {
 	private boolean op_rightBumper;
 	private boolean op_Start;
 	private double op_BothTriggers;
+	private double basicOpThrottle;
 
 	public boolean ledStatus;
 	public boolean visionStatus;
@@ -83,6 +84,13 @@ public class OI {
 		} else {
 			op_BothTriggers = 0;
 		}
+		
+		// Left Stick Y Axis
+		if (opStick.getRawAxis(1) < -0.1 || opStick.getRawAxis(1) > 0.1) {
+			basicOpThrottle = opStick.getRawAxis(1);
+		} else {
+			basicOpThrottle = 0;
+		}
 			
 		op_yButton = opStick.getRawButton(4);
 		op_bButton = opStick.getRawButton(2);
@@ -103,6 +111,8 @@ public class OI {
 			setVision(isDriverVisionOn);
 		}
 	}
+
+	public double getBasicOpThrottle() { return basicOpThrottle; }
 
 	public double getThrottle() { return throttle; }
 	public double getTurn() { return turn; }

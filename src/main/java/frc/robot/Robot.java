@@ -192,7 +192,7 @@ public class Robot extends TimedRobot {
       robotmap.motorSafetyCheck();
     }
 
-    System.out.println(sensors.getArmPotValue());
+    // System.out.println(sensors.getArmPotValue());
 
   }
 
@@ -210,14 +210,14 @@ public class Robot extends TimedRobot {
     //   robotmap.rollerWheel.set(0);
     // }
 
-    if (oi.getOpYButton()) {
-      robotmap.arm.set(oi.getClimbThrottle());
-    } else if (oi.getOpAButton()) { 
-      robotmap.rollerWheel.set(oi.getClimbThrottle());
-    } else if (oi.getOpBButton()) { 
-      robotmap.smallWinchMotor.set(oi.getClimbThrottle());
-    } else if (oi.getOpXButton()) { 
-      robotmap.tungMotor.set(oi.getClimbThrottle());
+    if (oi.getOpYButton()) { // Arm
+      robotmap.arm.set(oi.getBasicOpThrottle());
+    } else if (oi.getOpAButton()) { // Roller
+      robotmap.rollerWheel.set(oi.getBasicOpThrottle());
+    } else if (oi.getOpBButton()) { // S-Winch
+      robotmap.smallWinchMotor.set(oi.getBasicOpThrottle());
+    } else if (oi.getOpXButton()) { // Tung
+      robotmap.tungMotor.set(oi.getBasicOpThrottle());
     }
 
   }
@@ -244,11 +244,14 @@ public class Robot extends TimedRobot {
 
     if (oi.getOpBButton()) {
       robotmap.leftClimberWheel.set(0.5);
+      robotmap.rightClimberWheel.set(0.5);
     }
     else if (oi.getOpXButton()) {
       robotmap.leftClimberWheel.set(-0.5);
+      robotmap.rightClimberWheel.set(-0.5);
     } else {
       robotmap.leftClimberWheel.set(0);
+      robotmap.rightClimberWheel.set(0);
     }
 
     if (oi.getOpAButton()) {
