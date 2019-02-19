@@ -60,6 +60,13 @@ public class Robot extends TimedRobot {
   double drivingAdjustFront;
   double steeringAdjustFront;
 
+  double armkp = 0;
+  double armkd = 0;
+  double armError = 0;
+  double output;
+  double armDistance = 0;
+  double actualdistance;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -225,32 +232,25 @@ public class Robot extends TimedRobot {
     }
   }
 
-  // public void armControl() {
-  //   double kp = 0;
-  //   double kd = 0;
-  //   double output;
-  //   double distance;
-  //   double error;
-  //   double preError;
-  //   double dError;
-  //   switch (m_armControl) {
-  //     case kHighHatch:
-  //       //Set Distance
-  //       break;
-  //     case kMidHatch:
-  //       //Set Distance
-  //       break;
-  //     case kLowHatch:
-  //       //Set Distance
-  //       break;
-  //     }
-  //   // dError = error - pervious error
-  //   dError = error - preError
-  //   output = kp * error + kd * dError;
-  //   robotmap.arm.set(output);
+  public void armControl() {
+ 
+    switch (m_armControl) {
+      case kHighHatch:
+        //Set Distace
+        break;
+      case kMidHatch:
+        //Set Distance
+        break;
+      case kLowHatch:
+        //Set Distance
+        break;
+      }
 
-  //   preError = error;
-  // }
+      armError = armDistance - actualdistance;
+
+    output = armkp * armError + armkd;
+    robotmap.arm.set(output);
+  }
 
   // public void driveStraight() {
   // double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) *

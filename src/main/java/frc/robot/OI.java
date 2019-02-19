@@ -106,7 +106,7 @@ public class OI {
 		xTurn = xboxDriveStick.getRawAxis(4);
 		
 		ds_2Button = driveStick.getRawButtonPressed(2);
-		ds_3Button = driveStick.getRawButtonPressed(3);
+		ds_3Button = driveStick.getRawButton(3);
 		ds_4Button = driveStick.getRawButtonPressed(4);
 		ds_5Button = driveStick.getRawButtonPressed(5);
 		ds_6Button = driveStick.getRawButtonPressed(6);

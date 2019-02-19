@@ -32,23 +32,24 @@ public class Actions {
         }
 
         // DriveStick buttons to extend solenoids while held
-        if (oi.getDSbutton3()) {
-            air.setSolenoid1(true);
-            air.setSolenoid2(true);
+        if (oi.getDSbutton3()) { // DriveStick button 3 = Back hatch pistons
+          air.setSolenoid3(true);
+        } else {
+          air.setSolenoid3(false);
         }
 
         // DriveStick buttons to toggle solenoids
-        if (oi.getDSbutton2()) { // DriveStick button 2 = Arm tri-grabber port 0
+        if (oi.getDSbutton2()) { // DriveStick button 2 = Arm grabber
             final boolean flippedStatus = !air.getSolenoid0();
             air.setSolenoid0(flippedStatus);
         }
-        if (oi.getDSbutton4()) { // DriveStick button 4 = Roller deploy port 3
-            final boolean flippedStatus = !air.getSolenoid3();
-            air.setSolenoid3(flippedStatus);
+        if (oi.getDSbutton4()) { // DriveStick button 4 = Fangs
+            final boolean flippedStatus = !air.getSolenoid1();
+            air.setSolenoid1(flippedStatus);
         }
-        if (oi.getDSbutton5()) { // DriveStick button 5 = Roller Fangs port 4
-            final boolean flippedStatus = !air.getSolenoid4();
-            air.setSolenoid4(flippedStatus);
+        if (oi.getDSbutton5()) { // DriveStick button 5 = Tung
+            final boolean flippedStatus = !air.getSolenoid2();
+            air.setSolenoid2(flippedStatus);
         }
     }
 
