@@ -39,7 +39,7 @@ public class OI {
 	private boolean op_rightBumper;
 	private boolean op_Start;
 	private double op_BothTriggers;
-	private double basicOpThrottle;
+	private double gameOpThrottle;
 
 	public boolean ledStatus;
 	public boolean visionStatus;
@@ -92,16 +92,16 @@ public class OI {
 		
 		// Left Stick Y Axis
 		if (opStick.getRawAxis(1) < -0.2 || opStick.getRawAxis(1) > 0.2) {
-			basicOpThrottle = -opStick.getRawAxis(1);
+			gameOpThrottle = -opStick.getRawAxis(1);
 		} else {
-			basicOpThrottle = 0;
+			gameOpThrottle = 0;
 		}
 		
-		ds_2Button = driveStick.getRawButton(2);
-		ds_3Button = driveStick.getRawButton(3);
-		ds_4Button = driveStick.getRawButton(4);
-		ds_5Button = driveStick.getRawButton(5);
-		ds_6Button = driveStick.getRawButton(6);
+		ds_2Button = driveStick.getRawButtonPressed(2);
+		ds_3Button = driveStick.getRawButtonPressed(3);
+		ds_4Button = driveStick.getRawButtonPressed(4);
+		ds_5Button = driveStick.getRawButtonPressed(5);
+		ds_6Button = driveStick.getRawButtonPressed(6);
 
 		op_yButton = opStick.getRawButton(4);
 		op_bButton = opStick.getRawButton(2);
@@ -129,7 +129,7 @@ public class OI {
 	public boolean getDSbutton5() { return ds_5Button; }
 	public boolean getDSbutton6() { return ds_6Button; }
 
-	public double getBasicOpThrottle() { return basicOpThrottle; }
+	public double getGameOpThrottle() { return gameOpThrottle; }
 
 	public double getThrottle() { return throttle; }
 	public double getTurn() { return turn; }
@@ -157,7 +157,7 @@ public class OI {
 
 	public void setVision(boolean isLedOn) {
 		if (isLedOn) {
-			limelight.setCameraMode(CameraMode.eDriver);
+			limelight.setCameraMode(CameraMode.eDriver); 
 			visionStatus = false;
 			return;
 		}

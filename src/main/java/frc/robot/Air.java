@@ -10,41 +10,45 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Air {
-    private int piston0_ID = 0; // Arm tri-grabber
-    private int piston1_ID = 1; // Back hatch pistons // make these while held and then return
-    private int piston2_ID = 2; // Back hatch pistons
-    private int piston3_ID = 3; // Roller deploy
-    private int piston4_ID = 4; // Roller Fangs
+    private final int solenoid0_ID = 0; // Arm tri-grabber
+    private final int solenoid1_ID = 1; // Back hatch pistons // make these while held and then return
+    private final int solenoid2_ID = 2; // Back hatch pistons
+    private final int solenoid3_ID = 3; // Roller deploy
+    private final int solenoid4_ID = 4; // Roller Fangs
 
-    private Solenoid piston0;
-    private Solenoid piston1;
-    private Solenoid piston2;
-    private Solenoid piston3;
-    private Solenoid piston4;
+    private final Solenoid solenoid0;
+    private final Solenoid solenoid1;
+    private final Solenoid solenoid2;
+    private final Solenoid solenoid3;
+    private final Solenoid solenoid4;
 
     public Air() {
-        piston0 = new Solenoid(piston0_ID);
-        piston1 = new Solenoid(piston1_ID);
-        piston2 = new Solenoid(piston2_ID);
-        piston3 = new Solenoid(piston3_ID);
-        piston4 = new Solenoid(piston4_ID);
+        solenoid0 = new Solenoid(solenoid0_ID);
+        solenoid1 = new Solenoid(solenoid1_ID);
+        solenoid2 = new Solenoid(solenoid2_ID);
+        solenoid3 = new Solenoid(solenoid3_ID);
+        solenoid4 = new Solenoid(solenoid4_ID);
 
         airInit();
     }
 
     public void airInit() {
-        piston0.set(false);
-        piston1.set(false);
-        piston2.set(false);
-        piston3.set(false);
-        piston4.set(false);
+        solenoid0.set(false);
+        solenoid1.set(false);
+        solenoid2.set(false);
+        solenoid3.set(false);
+        solenoid4.set(false);
     }
 
-    public boolean getSol(Solenoid sol) {
-        return sol.get();
-    }
+    public boolean getSolenoid0() { return solenoid0.get(); }
+    public boolean getSolenoid1() { return solenoid1.get(); }
+    public boolean getSolenoid2() { return solenoid2.get(); }
+    public boolean getSolenoid3() { return solenoid3.get(); }
+    public boolean getSolenoid4() { return solenoid4.get(); }
 
-    public void setSol(Solenoid sol, boolean isOn) {
-        sol.set(isOn);
-    }
+    public void setSolenoid0(boolean isOn) { solenoid0.set(isOn); }
+    public void setSolenoid1(boolean isOn) { solenoid1.set(isOn); }
+    public void setSolenoid2(boolean isOn) { solenoid2.set(isOn); }
+    public void setSolenoid3(boolean isOn) { solenoid3.set(isOn); }
+    public void setSolenoid4(boolean isOn) { solenoid4.set(isOn); }
 }

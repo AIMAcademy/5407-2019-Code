@@ -11,17 +11,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Limelight.LightMode;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TimedRobot {
+  Actions actions;
+  Air air;
   Limelight limelight10;
   Limelight limelight11;
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
-  Air air;
 
   public String hostNameTen = "limelight-ten";
   public String hostNameEleven = "limelight-eleven";
@@ -44,10 +42,9 @@ public class Robot extends TimedRobot {
 
   // Talk to Limelight Network Tables
   // http://docs.limelightvision.io/en/latest/getting_started.html
-  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-ten");
-  NetworkTableEntry cameraTargetXAxis = limelightTable.getEntry("tx");
-  NetworkTableEntry cameraTargetYAxis = limelightTable.getEntry("ty");
-  NetworkTableEntry cameraTargetArea = limelightTable.getEntry("ta");
+  private double cameraTargetXAxis;
+  private double cameraTargetYAxis;
+  private double cameraTargetArea;
 
   // For Range
   double distance;
@@ -69,12 +66,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    air = new Air();
     limelight10 = new Limelight(hostNameTen);
     limelight11 = new Limelight(hostNameEleven);
     oi = new OI(limelight10);
     robotmap = new RobotMap();
     sensors = new Sensors();
-    air = new Air();
+    actions = new Actions(air, oi, robotmap);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -108,14 +106,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.updateValues();
 
     // Limelight read values periodically
-    double x = cameraTargetXAxis.getDouble(0.0);
-    double y = cameraTargetYAxis.getDouble(0.0);
-    double area = cameraTargetArea.getDouble(0.0);
+    cameraTargetXAxis = limelight10.getTx();
+    cameraTargetYAxis = limelight10.getTy();
+    cameraTargetArea = limelight10.getTa();
 
     // Limelight post to smart dashboard periodically
-    SmartDashboard.putNumber("limelightX", x);
-    SmartDashboard.putNumber("limelightY", y);
-    SmartDashboard.putNumber("limelightArea", area);
+    SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
+    SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
+    SmartDashboard.putNumber("limelightArea", cameraTargetArea);
     SmartDashboard.putNumber("Distance", distance);
     SmartDashboard.putNumber("hardMA", hard_mounting_angle);
     SmartDashboard.putNumber("softMA", soft_mounting_angle);
@@ -172,20 +170,17 @@ public class Robot extends TimedRobot {
     distance = Calculations.getRange(cameraTargetYAxis);
 
     if (oi.getOPControlButton()) {
-      climbTime();
+      actions.endGameOp();
     } else if (oi.getOpLeftBumper()) {
       getAimAndRangeFront();
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
       robotmap.drive.arcadeDrive(drivingAdjustFront, steeringAdjustFront);
-      // robotmap.climbDrive.arcadeDrive(0,0);
     } else if (oi.getOpRightBumper()) {
       getAimAndRangeBack();
       robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
-      // robotmap.climbDrive.arcadeDrive(0,0);
     } else {
-      basicOp();
+      actions.gameOp();
       robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
-      // robotmap.climbDrive.arcadeDrive(0,0);
     }
 
     if (!robotmap.getFlowKcap()) {
@@ -199,18 +194,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  public void basicOp() {
-    if (oi.getOpYButton()) { // Y Button = Arm
-      robotmap.arm.set(oi.getBasicOpThrottle());
-    } else if (oi.getOpAButton()) { // A Button = Roller
-      robotmap.rollerWheel.set(oi.getBasicOpThrottle());
-    } else if (oi.getOpBButton()) { // B Button = S-Winch
-      robotmap.smallWinchMotor.set(oi.getBasicOpThrottle());
-    } else if (oi.getOpXButton()) { // X Button = Tung // set this to 75% limit
-      robotmap.tungMotor.set(oi.getBasicOpThrottle());
-    }
-  }
-
   public void getAimAndRangeFront() {
     AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
     drivingAdjustFront = aimAndRange.getDrivingAdjust();
@@ -221,38 +204,6 @@ public class Robot extends TimedRobot {
     AimAndRange aimAndRange = Calculations.getAimAndRangeBack(cameraTargetXAxis, cameraTargetYAxis);
     drivingAdjustBack = aimAndRange.getDrivingAdjust();
     steeringAdjustBack = aimAndRange.getSteeringAdjust();
-  }
-
-  public void climbTime() {
-    // robotmap.climbDrive.arcadeDrive(oi.getClimbThrottle(), oi.getClimbTurn());
-    // robotmap.drive.arcadeDrive(oi.getClimbThrottle() * robotmap.climbVsDrive, oi.getClimbTurn());
-    robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
-
-    if (oi.getDSbutton6()) {
-      robotmap.leftClimberWheel.set(-1.0);
-      robotmap.rightClimberWheel.set(1.0);
-    } else { 
-      robotmap.leftClimberWheel.set(0.0);
-      robotmap.rightClimberWheel.set(0.0);
-    }
-
-    if (oi.getOpBButton()) {
-      robotmap.climberArm.set(1);
-    } else if (oi.getOpXButton()) {
-      robotmap.climberArm.set(-1);
-    } else {
-      robotmap.climberArm.set(0);
-    }
-
-    if (oi.getOpAButton()) {
-      robotmap.climberLegs.set(-1);
-    } else if (oi.getOpYButton()) {
-      robotmap.climberLegs.set(1);
-    } else {
-      robotmap.climberLegs.set(0);
-    }
-
-    robotmap.arm.set(oi.getBothTriggers());
   }
 
   public void updatePipelineChoice() {

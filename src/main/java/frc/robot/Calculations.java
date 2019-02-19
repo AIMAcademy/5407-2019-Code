@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.AimAndRange;
 
 /**
@@ -45,8 +44,8 @@ public final class Calculations {
      * @param cameraTargetXAxis The X axis of the camera's current target
      * @return The heading error
      */
-    public static double getHeadingError(NetworkTableEntry cameraTargetXAxis) {
-        final double headingError = -cameraTargetXAxis.getDouble(0.0);
+    public static double getHeadingError(Double cameraTargetXAxis) {
+        final double headingError = -cameraTargetXAxis;
         return headingError;
     }
 
@@ -64,8 +63,8 @@ public final class Calculations {
      * @param distance The distance between the camera and its current target
      * @return The angle the robot believes the camera is mounted at
      */
-    public static double getSoftMountingAngle(NetworkTableEntry cameraTargetYAxis, double distance) {
-        final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
+    public static double getSoftMountingAngle(Double cameraTargetYAxis, double distance) {
+        final double angleToTarget = Math.toRadians(cameraTargetYAxis);
         final double mountingAngle = Math.atan((h2 - h1) / distance) - angleToTarget;
         return mountingAngle;
     }
@@ -76,8 +75,8 @@ public final class Calculations {
      * @param mountingAngle The angle at which the camera is mounted
      * @return The distance between the camera and its current target
      */
-    public static double getRange(NetworkTableEntry cameraTargetYAxis) {
-        final double angleToTarget = Math.toRadians(cameraTargetYAxis.getDouble(0.0));
+    public static double getRange(Double cameraTargetYAxis) {
+        final double angleToTarget = Math.toRadians(cameraTargetYAxis);
         final double distance = (h2 - h1) / Math.tan(a1 + angleToTarget);
         final double correction = distance / 12 * 2;
         return distance - correction;
@@ -89,32 +88,29 @@ public final class Calculations {
      * @param cameraTargetYAxis The Y axis of the camera's current target
      * @return An object containing drivingAdjust and steeringAdjust
      */
-    public static AimAndRange getAimAndRangeBack(NetworkTableEntry cameraTargetXAxis, NetworkTableEntry cameraTargetYAxis) {
+    public static AimAndRange getAimAndRangeBack(Double cameraTargetXAxis, Double cameraTargetYAxis) {
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
         double KpAim = 0.045;
         double KpDist = 0.09;
         double AimMinCmd = 0.095;
-    
-        double targetX = cameraTargetXAxis.getDouble(0.0);
-        double targetY = -cameraTargetYAxis.getDouble(0.0);
-    
+
         // Aim error and distance error based on calibrated limelight cross-hair
-        double aim_error = targetX;
-        double dist_error = targetY;
-    
+        double aim_error = cameraTargetXAxis;
+        double dist_error = -cameraTargetYAxis;
+
         // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
         double steeringAdjustBack = KpAim * aim_error;
-        if (targetX > .2) {
+        if (aim_error > .2) {
           steeringAdjustBack = steeringAdjustBack + AimMinCmd;
-        } else if (targetX < -.2f) {
+        } else if (aim_error < -.2f) {
           steeringAdjustBack = steeringAdjustBack - AimMinCmd;
         }
-    
+
         // Distance adjust, drive to the correct distance from the goal
         double drivingAdjustBack = KpDist * dist_error;
 
         return new AimAndRange(drivingAdjustBack, steeringAdjustBack);
-      }
+    }
 
     /**
      * Returns tracking data based on the front camera.
@@ -122,24 +118,22 @@ public final class Calculations {
      * @param cameraTargetYAxis The Y axis of the camera's current target
      * @return An object containing drivingAdjust and steeringAdjust
      */
-    public static AimAndRange getAimAndRangeFront(NetworkTableEntry cameraTargetXAxis, NetworkTableEntry cameraTargetYAxis) {
+    public static AimAndRange getAimAndRangeFront(Double cameraTargetXAxis, Double cameraTargetYAxis) {
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
         double KpAim = 0.045;
         double KpDist = 0.017;
         double AimMinCmd = 0.095;
         double distMinCmd = 0.04;
-  
-        double targetX = cameraTargetXAxis.getDouble(0.0);
 
         // Aim error and distance error based on calibrated limelight cross-hair
-        double aim_error = targetX;
+        double aim_error = cameraTargetXAxis;
         double dist_error = getRange(cameraTargetYAxis) - 20;
 
         // Steering adjust with a 0.2 degree deadband (close enough at 0.2deg)
         double steeringAdjustFront = KpAim * aim_error;
-        if (targetX > .2) {
+        if (aim_error > .2) {
           steeringAdjustFront = steeringAdjustFront + AimMinCmd;
-        } else if (targetX < -.2f) {
+        } else if (aim_error < -.2f) {
           steeringAdjustFront = steeringAdjustFront - AimMinCmd;
         }
 
