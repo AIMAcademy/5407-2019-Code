@@ -184,7 +184,8 @@ public class Robot extends TimedRobot {
       robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
     } else {
       actions.gameOp();
-      robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+      //robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+      robotmap.drive.arcadeDrive(-oi.getXThrottle(), oi.getXTurn());
     }
 
     if (!robotmap.getFlowKcap()) {

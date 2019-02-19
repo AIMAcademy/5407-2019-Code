@@ -27,6 +27,10 @@ public class OI {
 	private boolean ds_5Button;
 	private boolean ds_6Button;
 
+	private Joystick xboxDriveStick;
+	private double xThrottle;
+	private double xTurn;
+
 	private Joystick opStick;
 	private double climbThrottle;
 	private double climbTurn;
@@ -96,6 +100,9 @@ public class OI {
 		} else {
 			gameOpThrottle = 0;
 		}
+
+		xThrottle = xboxDriveStick.getRawAxis(1);
+		xTurn = xboxDriveStick.getRawAxis(4);
 		
 		ds_2Button = driveStick.getRawButtonPressed(2);
 		ds_3Button = driveStick.getRawButtonPressed(3);
@@ -144,6 +151,9 @@ public class OI {
 	public boolean getOpRightBumper() { return op_rightBumper; }
 	public boolean getOPStart() { return op_Start; }
 	public double getBothTriggers() { return op_BothTriggers; }
+
+	public double getXTurn() { return xTurn; }
+	public double getXThrottle() { return xThrottle; }
 	
 	public void setLed(boolean isLedOn) {
 		if (isLedOn) {
