@@ -162,6 +162,10 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     // Zero the NAVX before teleop
     sensors.zeroNAVX();
+
+    // Turn off Limelight LEDs before teleop
+    limelight10.setLedMode(LightMode.eOff);
+    limelight11.setLedMode(LightMode.eOff);
   }
 
   @Override
