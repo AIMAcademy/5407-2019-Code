@@ -57,6 +57,7 @@ public class OI {
 
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
+		xboxDriveStick = new Joystick(2);
 	}
 
 	public void readValues() {
