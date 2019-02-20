@@ -26,10 +26,12 @@ public class OI {
 	private boolean ds_4Button;
 	private boolean ds_5Button;
 	private boolean ds_6Button;
+	private boolean d_rightBumper;
 
 	private Joystick xboxDriveStick;
 	private double xThrottle;
 	private double xTurn;
+	private boolean xy;
 
 	private Joystick opStick;
 	private double climbThrottle;
@@ -120,12 +122,15 @@ public class OI {
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
 
+		d_rightBumper = xboxDriveStick.getRawButtonPressed(6);
+		xy = xboxDriveStick.getRawButton(4);
+
 		if (opStick.getRawButtonPressed(8)) {
 			boolean isLedOn = ledToggle.toggle();
 			setLed(isLedOn);
 		}
 
-		if (driveStick.getRawButtonPressed(1)) {
+		if (getXBumper()) {
 			boolean isDriverVisionOn = visionToggle.toggle();
 			setVision(isDriverVisionOn);
 		}
@@ -155,6 +160,8 @@ public class OI {
 
 	public double getXTurn() { return xTurn; }
 	public double getXThrottle() { return xThrottle; }
+	public boolean getXBumper() { return d_rightBumper; }
+	public boolean getxy() { return xy; }
 	
 	public void setLed(boolean isLedOn) {
 		if (isLedOn) {

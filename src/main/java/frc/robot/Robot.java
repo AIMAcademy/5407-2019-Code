@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     air = new Air();
     limelight10 = new Limelight(hostNameTen);
     limelight11 = new Limelight(hostNameEleven);
-    oi = new OI(limelight10);
+    oi = new OI(limelight11);
     robotmap = new RobotMap();
     sensors = new Sensors();
     actions = new Actions(air, oi, robotmap);
@@ -90,8 +90,8 @@ public class Robot extends TimedRobot {
     m_pipeline.addOption("Ball", kPipeline1);
     SmartDashboard.putData("Pipeline", m_pipeline);
 
-    limelight10.setLedMode(LightMode.eOff);
-    limelight11.setLedMode(LightMode.eOff);
+    // limelight10.setLedMode(LightMode.eOff);
+    // limelight11.setLedMode(LightMode.eOff);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -171,8 +171,8 @@ public class Robot extends TimedRobot {
     sensors.zeroNAVX();
 
     // Turn off Limelight LEDs before teleop
-    limelight10.setLedMode(LightMode.eOff);
-    limelight11.setLedMode(LightMode.eOff);
+    // limelight10.setLedMode(LightMode.eOff);
+    // limelight11.setLedMode(LightMode.eOff);
   }
 
   @Override

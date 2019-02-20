@@ -27,19 +27,19 @@ public class Actions {
             robotmap.rollerWheel.set(gameOpThrottle);
         } else if (oi.getOpBButton()) { // B Button = S-Winch
             robotmap.smallWinchMotor.set(gameOpThrottle);
-        } else if (oi.getOpXButton()) { // X Button = Tung
-            robotmap.tungMotor.set(gameOpThrottle * .75);
-        }
+        } //else if (oi.getOpXButton()) { // X Button = Tung
+        //    robotmap.tungMotor.set(gameOpThrottle * .75);
+        //}
 
         // DriveStick buttons to extend solenoids while held
-        if (oi.getDSbutton3()) { // DriveStick button 3 = Back hatch pistons
+        if (oi.getBothTriggers() > 0) { // DriveStick button 3 = Back hatch pistons
           air.setSolenoid3(true);
         } else {
           air.setSolenoid3(false);
         }
 
         // DriveStick buttons to toggle solenoids
-        if (oi.getDSbutton2()) { // DriveStick button 2 = Arm grabber
+        if (oi.getOpAButton()) { // DriveStick button 2 = Arm grabber
             final boolean flippedStatus = !air.getSolenoid0();
             air.setSolenoid0(flippedStatus);
         }
@@ -47,7 +47,7 @@ public class Actions {
             final boolean flippedStatus = !air.getSolenoid1();
             air.setSolenoid1(flippedStatus);
         }
-        if (oi.getDSbutton5()) { // DriveStick button 5 = Tung
+        if (oi.getOpXButton()) { // DriveStick button 5 = Tung
             final boolean flippedStatus = !air.getSolenoid2();
             air.setSolenoid2(flippedStatus);
         }
@@ -57,10 +57,10 @@ public class Actions {
         robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
     
         // Operator controls during end-game operations
-        if (oi.getDSbutton6()) {
-          robotmap.leftClimberWheel.set(-1.0);
-          robotmap.rightClimberWheel.set(1.0);
-        } else { 
+        if (oi.getxy()) {
+          robotmap.leftClimberWheel.set(1.0);
+          robotmap.rightClimberWheel.set(-1.0);
+        } else { // this currently gets stuck when releasing endgameop button first
           robotmap.leftClimberWheel.set(0.0);
           robotmap.rightClimberWheel.set(0.0);
         }
