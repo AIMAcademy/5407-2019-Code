@@ -90,8 +90,8 @@ public final class Calculations {
      */
     public static AimAndRange getAimAndRangeBack(Double cameraTargetXAxis, Double cameraTargetYAxis) {
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-        double KpAim = 0.045;
-        double KpDist = 0.09;
+        double KpAim = 0.02;
+        double KpDist = 0.02;
         double AimMinCmd = 0.095;
 
         // Aim error and distance error based on calibrated limelight cross-hair
@@ -102,7 +102,7 @@ public final class Calculations {
         double steeringAdjustBack = KpAim * aim_error;
         if (aim_error > .2) {
           steeringAdjustBack = steeringAdjustBack + AimMinCmd;
-        } else if (aim_error < -.2f) {
+        } else if (aim_error < -.2) {
           steeringAdjustBack = steeringAdjustBack - AimMinCmd;
         }
 

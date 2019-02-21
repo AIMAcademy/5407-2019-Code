@@ -113,9 +113,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.updateValues();
 
     // Limelight read values periodically
-    cameraTargetXAxis = limelight10.getTx();
-    cameraTargetYAxis = limelight10.getTy();
-    cameraTargetArea = limelight10.getTa();
+    cameraTargetXAxis = limelight11.getTx();
+    cameraTargetYAxis = limelight11.getTy();
+    cameraTargetArea = limelight11.getTa();
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
