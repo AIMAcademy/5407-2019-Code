@@ -173,8 +173,8 @@ public class OI {
 		ledStatus = true;
 	}
 
-	public void setVision(boolean isLedOn) {
-		if (isLedOn) {
+	public void setVision(boolean isDriverVisionOn) {
+		if (isDriverVisionOn) {
 			limelight.setCameraMode(CameraMode.eDriver); 
 			visionStatus = false;
 			return;
