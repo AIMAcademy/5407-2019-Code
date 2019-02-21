@@ -57,7 +57,7 @@ public class Actions {
         robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
     
         // Operator controls during end-game operations
-        if (oi.getxDriveButtonY()) {
+        if (oi.getXDriveButtonY()) {
           robotmap.leftClimberWheel.set(1.0);
           robotmap.rightClimberWheel.set(-1.0);
         } else { // this currently gets stuck when releasing endgameop button first

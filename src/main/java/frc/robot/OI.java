@@ -32,6 +32,7 @@ public class OI {
 	private double xDriveTurn;
 	private boolean xDriveButtonY;
 	private boolean xDriveRightBumper;
+	private double xDriveFrontBackSwitch;
 
 	private Joystick opStick;
 	private double climbThrottle;
@@ -104,6 +105,7 @@ public class OI {
 			gameOpThrottle = 0;
 		}
 
+		xDriveFrontBackSwitch = xboxDriveStick.getRawAxis(2); // Xbox Drive L Trigger
 		xDriveThrottle = xboxDriveStick.getRawAxis(1);
 		xDriveTurn = xboxDriveStick.getRawAxis(4);
 		xDriveButtonY = xboxDriveStick.getRawButton(4);
@@ -158,10 +160,11 @@ public class OI {
 	public boolean getOPStart() { return op_Start; }
 	public double getBothTriggers() { return op_BothTriggers; }
 
+	public double getXDriveVision() { return xDriveFrontBackSwitch; }
 	public double getXDriveTurn() { return xDriveTurn; }
 	public double getXDriveThrottle() { return xDriveThrottle; }
 	public boolean getXDriveBumper() { return xDriveRightBumper; }
-	public boolean getxDriveButtonY() { return xDriveButtonY; }
+	public boolean getXDriveButtonY() { return xDriveButtonY; }
 	
 	public void setLed(boolean isLedOn) {
 		if (isLedOn) {
