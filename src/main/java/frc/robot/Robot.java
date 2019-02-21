@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.SensorTerm;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -196,11 +198,7 @@ public class Robot extends TimedRobot {
       robotmap.drive.arcadeDrive(-oi.getXDriveThrottle(), oi.getXDriveTurn());
     }
 
-    if (!robotmap.getIsFlow()) {
-      robotmap.motorSafetyCheck();
-    }
-
-    // System.out.println(sensors.getArmPotValue());
+    System.out.println(sensors.getArmPotValue());
 
   }
 

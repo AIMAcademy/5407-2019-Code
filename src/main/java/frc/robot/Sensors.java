@@ -25,7 +25,8 @@ public class Sensors {
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
   Potentiometer armPot;
-  double armDegrees;
+  private double armDegrees;
+  private double armHight;
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
@@ -63,6 +64,11 @@ public class Sensors {
   public double getArmPotValue() {
     armDegrees = armPot.get();
     return armDegrees;
+  }
+
+  public double getArmHight() {
+    armHight = getArmPotValue();
+    return armHight;
   }
   
 }
