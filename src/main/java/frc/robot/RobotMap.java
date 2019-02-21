@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 public class RobotMap {
 
     // Digital IO Port for switching between robot flow and kcap chassis
-    public DigitalInput flowKcap;
-    public static final int flowKcapPort = 0;
+    public DigitalInput isFlow;
+    public static final int flowPort = 0;
 
     // Difference between power of climb motors to the brushless (needs to be
     // adjusted or removed)
@@ -68,7 +68,6 @@ public class RobotMap {
     public Spark leftClimberWheel; // LLEGGING
     public Spark rightClimberWheel; // RLEGGING
     // Arm System
-    // public WPI_VictorSPX arm;
     public VictorSP arm;
     public Spark rollerWheel; // ROLLER
     public Spark smallWinchMotor; // S-WINCH
@@ -89,9 +88,9 @@ public class RobotMap {
 
     public RobotMap() {
         // Check for jumper cable to determine which chassis to drive
-        flowKcap = new DigitalInput(flowKcapPort);
+        isFlow = new DigitalInput(flowPort);
 
-        if (getFlowKcap()) {
+        if (getIsFlow()) {
             // Use Flow chassis
             leftTalon = new WPI_TalonSRX(13);
             rightTalon = new WPI_TalonSRX(16);
@@ -102,8 +101,8 @@ public class RobotMap {
             leftVictor.follow(leftTalon);
             rightVictor.follow(rightTalon);
 
+            // Drive
             drive = new DifferentialDrive(leftTalon, rightTalon);
-            // climbDrive = new DifferentialDrive(leftTalon, rightTalon);
 
             return;
         }
@@ -132,9 +131,9 @@ public class RobotMap {
         // Speed controller groups
         speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
         speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0, rightMotor_1, rightMotor_2);
-
+        
+        // Drive
         drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
-        // climbDrive = new DifferentialDrive(leftClimberWheel, rightClimberWheel);
     }
 
     /*
@@ -157,7 +156,7 @@ public class RobotMap {
      * Returns which robot is being driven. True for Flow, False for Kcap.
      * @return A boolean that checks for a jumper cable in a digital IO port
      */
-    public boolean getFlowKcap() {
-        return !flowKcap.get();
+    public boolean getIsFlow() {
+        return !isFlow.get();
     }
 }

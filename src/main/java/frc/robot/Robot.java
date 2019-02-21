@@ -90,8 +90,9 @@ public class Robot extends TimedRobot {
     m_pipeline.addOption("Ball", kPipeline1);
     SmartDashboard.putData("Pipeline", m_pipeline);
 
-    // limelight10.setLedMode(LightMode.eOff);
-    // limelight11.setLedMode(LightMode.eOff);
+    // Turn off Limelight LEDs during init
+    limelight10.setLedMode(LightMode.eOff);
+    limelight11.setLedMode(LightMode.eOff);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -171,8 +172,8 @@ public class Robot extends TimedRobot {
     sensors.zeroNAVX();
 
     // Turn off Limelight LEDs before teleop
-    // limelight10.setLedMode(LightMode.eOff);
-    // limelight11.setLedMode(LightMode.eOff);
+    limelight10.setLedMode(LightMode.eOff);
+    limelight11.setLedMode(LightMode.eOff);
   }
 
   @Override
@@ -191,11 +192,11 @@ public class Robot extends TimedRobot {
       robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
     } else {
       actions.gameOp();
-      //robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
+      // robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
       robotmap.drive.arcadeDrive(-oi.getXThrottle(), oi.getXTurn());
     }
 
-    if (!robotmap.getFlowKcap()) {
+    if (!robotmap.getIsFlow()) {
       robotmap.motorSafetyCheck();
     }
 
