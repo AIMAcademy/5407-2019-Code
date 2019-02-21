@@ -193,7 +193,7 @@ public class Robot extends TimedRobot {
     } else {
       actions.gameOp();
       // robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
-      robotmap.drive.arcadeDrive(-oi.getXThrottle(), oi.getXTurn());
+      robotmap.drive.arcadeDrive(-oi.getXDriveThrottle(), oi.getXDriveTurn());
     }
 
     if (!robotmap.getIsFlow()) {
