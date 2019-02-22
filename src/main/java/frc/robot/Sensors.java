@@ -67,7 +67,11 @@ public class Sensors {
   }
 
   public double getArmHight() {
-    armHight = getArmPotValue();
+    double stringlength = 36; //TODO: Measure actual sting length
+    double inperDegree;
+
+    inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
+    armHight = getArmPotValue() * inperDegree;
     return armHight;
   }
   

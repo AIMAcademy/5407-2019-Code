@@ -40,6 +40,12 @@ public class Robot extends TimedRobot {
   private static final String kHighHatch = "High Hatch";
   private static final String kMidHatch = "Mid Hatch";
   private static final String kLowHatch = "Low Hatch";
+  private static final String kHighball = "High Ball";
+  private static final String kMidBall = "Mid Ball";
+  private static final String kLowBall = "Low Ball";
+
+  private static final String kCargoShipHatch = "Cargo Ship Hatch";
+  private static final String kCargoShipBall = "Cargo Ship Ball";
   private String m_armControl;
 
   // Talk to Limelight Network Tables
@@ -234,16 +240,35 @@ public class Robot extends TimedRobot {
   public void armControl() {
  
     switch (m_armControl) {
+    //Rocket
       case kHighHatch:
-        //Set Distace
+        armDistance = 19 + 28 + 28;
         break;
       case kMidHatch:
-        //Set Distance
+        armDistance = 19 + 28;
         break;
       case kLowHatch:
-        //Set Distance
+        armDistance = 19;
+        break;
+      case kHighball:
+        armDistance = 27.5 + 28 + 28;
+      case kMidBall:
+        armDistance = 27.5 + 28;
+        break;
+      case kLowBall:
+        armDistance = 27.5;
+        break;
+
+    //Cargo Ship
+      case kCargoShipHatch: //Same As Pickup Might never need to use because of the tung
+        armDistance = 19;   //Also same as Low Rocket Hatch so This can go away
+        break;
+      case kCargoShipBall:
+        armDistance = 55;
         break;
       }
+
+      armDistance = sensors.getArmHight();
 
       armError = armDistance - actualdistance;
 
