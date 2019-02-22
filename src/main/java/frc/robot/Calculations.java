@@ -90,9 +90,9 @@ public final class Calculations {
      */
     public static AimAndRange getAimAndRangeBack(Double cameraTargetXAxis, Double cameraTargetYAxis) {
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-        double KpAim = 0.02;
-        double KpDist = 0.02;
-        double AimMinCmd = 0.095;
+        double KpAim = 0.1;
+        double KpDist = 0.1;
+        double AimMinCmd = 0.05;
 
         // Aim error and distance error based on calibrated limelight cross-hair
         double aim_error = cameraTargetXAxis;
@@ -108,6 +108,43 @@ public final class Calculations {
 
         // Distance adjust, drive to the correct distance from the goal
         double drivingAdjustBack = KpDist * dist_error;
+
+        return new AimAndRange(drivingAdjustBack, steeringAdjustBack);
+    }
+
+    public static AimAndRange getAimAndRangeBackArea(Double cameraTargetXAxis, Double cameraTargetArea, boolean cameraTarget) {
+        boolean thisCameraTarget = cameraTarget;
+
+        // These numbers must be tuned for your Robot!  Be careful!
+        final double STEER_K = 0.05;                    // how hard to turn toward the target
+        final double DRIVE_K = 0.15;                     // how hard to drive fwd toward the target
+        final double DESIRED_TARGET_AREA = 15.0;        // Area of the target when the robot reaches the wall
+        final double MAX_DRIVE = 0.7;                   // Simple speed limit so we don't drive too fast
+
+        // Start with proportional steering
+        double steer_cmd = cameraTargetXAxis * STEER_K;
+        double steeringAdjustBack = steer_cmd;
+
+        // try to drive forward until the target area reaches our desired area
+        double drive_cmd = (DESIRED_TARGET_AREA - cameraTargetArea) * DRIVE_K;
+
+        // don't let the robot drive too fast into the goal
+        if (drive_cmd > MAX_DRIVE)
+        {
+            drive_cmd = MAX_DRIVE;
+        }
+
+        double drivingAdjustBack = -drive_cmd;
+
+        double drivingErrorThreshold = Math.abs(DESIRED_TARGET_AREA - cameraTargetArea);
+        if (drivingErrorThreshold < 5) { drivingAdjustBack = 0.0; }
+
+        if (thisCameraTarget == false)
+        {
+            // boolean m_LimelightHasValidTarget = false;
+            drivingAdjustBack = 0.0;
+            steeringAdjustBack = 0.0;
+        }
 
         return new AimAndRange(drivingAdjustBack, steeringAdjustBack);
     }

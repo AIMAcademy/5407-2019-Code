@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
   private double cameraTargetXAxis;
   private double cameraTargetYAxis;
   private double cameraTargetArea;
+  private boolean cameraTarget;
 
   // For Range
   double distance;
@@ -99,8 +100,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
-    limelight10.setLedMode(LightMode.eOff);
-    limelight11.setLedMode(LightMode.eOff);
+    // limelight10.setLedMode(LightMode.eOff);
+    // limelight11.setLedMode(LightMode.eOff);
+    boolean isLedOn = oi.ledToggle.toggle();
+		oi.setLed(isLedOn);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -125,11 +128,13 @@ public class Robot extends TimedRobot {
     cameraTargetXAxis = limelight11.getTx();
     cameraTargetYAxis = limelight11.getTy();
     cameraTargetArea = limelight11.getTa();
+    cameraTarget = limelight11.isTarget();
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
     SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
     SmartDashboard.putNumber("limelightArea", cameraTargetArea);
+    SmartDashboard.putBoolean("limelightTarget", cameraTarget);
     SmartDashboard.putNumber("Distance", distance);
     SmartDashboard.putNumber("hardMA", hard_mounting_angle);
     SmartDashboard.putNumber("softMA", soft_mounting_angle);
@@ -180,8 +185,8 @@ public class Robot extends TimedRobot {
     sensors.zeroNAVX();
 
     // Turn off Limelight LEDs before teleop
-    limelight10.setLedMode(LightMode.eOff);
-    limelight11.setLedMode(LightMode.eOff);
+    // limelight10.setLedMode(LightMode.eOff);
+    // limelight11.setLedMode(LightMode.eOff);
   }
 
   @Override
@@ -196,7 +201,8 @@ public class Robot extends TimedRobot {
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
       robotmap.drive.arcadeDrive(drivingAdjustFront, steeringAdjustFront);
     } else if (oi.getOpRightBumper()) {
-      getAimAndRangeBack();
+      // getAimAndRangeBack();
+      getAimAndRangeBackArea();
       robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
     } else {
       actions.gameOp();
@@ -223,6 +229,12 @@ public class Robot extends TimedRobot {
 
   public void getAimAndRangeBack() {
     AimAndRange aimAndRange = Calculations.getAimAndRangeBack(cameraTargetXAxis, cameraTargetYAxis);
+    drivingAdjustBack = aimAndRange.getDrivingAdjust();
+    steeringAdjustBack = aimAndRange.getSteeringAdjust();
+  }
+
+  public void getAimAndRangeBackArea() {
+    AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
     drivingAdjustBack = aimAndRange.getDrivingAdjust();
     steeringAdjustBack = aimAndRange.getSteeringAdjust();
   }

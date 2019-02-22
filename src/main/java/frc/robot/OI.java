@@ -15,7 +15,7 @@ import frc.robot.Limelight.LightMode;
  * Add your docs here.
  */
 public class OI {
-	private Toggle ledToggle;
+	public Toggle ledToggle;
 	private Toggle visionToggle;
 
 	private Joystick driveStick;
@@ -125,7 +125,6 @@ public class OI {
 		op_rightBumper = opStick.getRawButton(6);
 		op_Control = opStick.getRawButton(7);
 		op_Start = opStick.getRawButton(8);
-
 
 		if (opStick.getRawButtonPressed(8)) {
 			boolean isLedOn = ledToggle.toggle();
