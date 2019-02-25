@@ -7,12 +7,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.SensorTerm;
+// import com.ctre.phoenix.motorcontrol.SensorTerm;
+// import frc.robot.Limelight.LightMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Limelight.LightMode;
 
 public class Robot extends TimedRobot {
   Actions actions;
@@ -48,8 +48,7 @@ public class Robot extends TimedRobot {
   private static final String kCargoShipBall = "Cargo Ship Ball";
   private String m_armControl;
 
-  // Talk to Limelight Network Tables
-  // http://docs.limelightvision.io/en/latest/getting_started.html
+  // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
   private double cameraTargetYAxis;
   private double cameraTargetArea;
@@ -61,11 +60,11 @@ public class Robot extends TimedRobot {
   double hard_mounting_angle;
   double soft_mounting_angle;
 
-  // For AimAndRange
+  // For Aim And Range Back
   double steeringAdjustBack;
   double drivingAdjustBack;
 
-  // For Aim and Range Back
+  // For Aim and Range Front
   double drivingAdjustFront;
   double steeringAdjustFront;
 
@@ -100,8 +99,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
-    // limelight10.setLedMode(LightMode.eOff);
-    // limelight11.setLedMode(LightMode.eOff);
     boolean isLedOn = oi.ledToggle.toggle();
 		oi.setLed(isLedOn);
 
@@ -183,10 +180,6 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     // Zero the NAVX before teleop
     sensors.zeroNAVX();
-
-    // Turn off Limelight LEDs before teleop
-    // limelight10.setLedMode(LightMode.eOff);
-    // limelight11.setLedMode(LightMode.eOff);
   }
 
   @Override
@@ -201,8 +194,8 @@ public class Robot extends TimedRobot {
       heading_error = Calculations.getHeadingError(cameraTargetXAxis);
       robotmap.drive.arcadeDrive(drivingAdjustFront, steeringAdjustFront);
     } else if (oi.getOpRightBumper()) {
-      // getAimAndRangeBack();
-      getAimAndRangeBackArea();
+      // getAimAndRangeBack();  // Uses Y Axis Difference
+      getAimAndRangeBackArea(); // Uses Area Difference
       robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
     } else {
       actions.gameOp();

@@ -12,6 +12,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * Wrapper class for getting and setting Limelight NetworkTable values.
+ * Limelight documentation and code examples can be found here:
+ * http://docs.limelightvision.io/en/latest/getting_started.html
  * 
  * @author Dan Waxman
  */
