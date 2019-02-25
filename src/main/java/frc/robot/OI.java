@@ -19,34 +19,29 @@ public class OI {
 	private Toggle visionToggle;
 
 	private Joystick driveStick;
-	private double throttle;
-	private double turn;
-	private boolean ds_2Button;
-	private boolean ds_3Button;
-	private boolean ds_4Button;
-	private boolean ds_5Button;
-	private boolean ds_6Button;
+	private double drive_throttle;
+	private double drive_turn;
+	private boolean drive_buttonA;
+	private boolean drive_buttonB;
+	private boolean drive_buttonX;
+	private boolean drive_buttonY;
+	private boolean drive_leftBumper;
+	private boolean drive_rightBumper;
+	private boolean drive_back;
+	private boolean drive_start;
 
-	private Joystick xboxDriveStick;
-	private double xDriveThrottle;
-	private double xDriveTurn;
-	private boolean xDriveButtonY;
-	private boolean xDriveRightBumper;
-	private double xDriveFrontBackSwitch;
+	private double xDriveFrontBackSwitch;  // change this
 
 	private Joystick opStick;
-	private double climbThrottle;
-	private double climbTurn;
-	private boolean op_Control;
-	private boolean op_yButton;
-	private boolean op_bButton;
-	private boolean op_aButton;
-	private boolean op_xButton;
+	private double op_throttle;
+	private boolean op_buttonA;
+	private boolean op_buttonB;
+	private boolean op_buttonX;
+	private boolean op_buttonY;
 	private boolean op_leftBumper;
 	private boolean op_rightBumper;
-	private boolean op_Start;
-	private double op_BothTriggers;
-	private double gameOpThrottle;
+	private boolean op_back;
+	private boolean op_start;
 
 	public boolean ledStatus;
 	public boolean visionStatus;
@@ -58,113 +53,111 @@ public class OI {
 		ledToggle = new Toggle();
 		visionToggle = new Toggle();
 
+		// driveStick = new Joystick(0);
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
-		xboxDriveStick = new Joystick(2);
 	}
 
-	public void readValues() {
-		if (driveStick.getY() < -0.1 || driveStick.getY() > 0.1) {
-			throttle = driveStick.getY();
+	public void readValues() {	
+		/**
+		 * Read Driver joystick axes
+		 */
+		// Driver Left Stick Y Axis 1 for Driver Throttle
+		if (driveStick.getRawAxis(1) < -0.2 || opStick.getRawAxis(1) > 0.2) {
+			drive_throttle = -opStick.getRawAxis(1);
 		} else {
-			throttle = 0;
-		}
-
-		if (driveStick.getX() < -0.1 || driveStick.getX() > 0.1) {
-			turn = driveStick.getX();
-		} else {
-			turn = 0;
-		}
-
-		// Right Stick Y Axis
-		if (opStick.getRawAxis(5) < -0.1 || opStick.getRawAxis(5) > 0.1) {
-			climbThrottle = opStick.getRawAxis(5);
-		} else {
-			climbThrottle = 0;
-		}
-
-		// Right Stick X Axis
-		if (opStick.getRawAxis(4) < -0.1 || opStick.getRawAxis(4) > 0.1) {
-			climbTurn = opStick.getRawAxis(4);
-		} else {
-			climbTurn = 0;
-		}
-
-		if (opStick.getRawAxis(3) >= 0.2) {
-			op_BothTriggers = opStick.getRawAxis(3);
-		} else if (opStick.getRawAxis(2) >= 0.2) {
-			op_BothTriggers = -opStick.getRawAxis(2);
-		} else {
-			op_BothTriggers = 0;
-		}
+			drive_throttle = 0;
+		}	
 		
-		// Left Stick Y Axis
-		if (opStick.getRawAxis(1) < -0.2 || opStick.getRawAxis(1) > 0.2) {
-			gameOpThrottle = -opStick.getRawAxis(1);
+		// Driver Left Stick R Axis 4 for Driver Turn
+		if (driveStick.getRawAxis(4) < -0.2 || opStick.getRawAxis(4) > 0.2) {
+			drive_turn = -opStick.getRawAxis(4);
 		} else {
-			gameOpThrottle = 0;
-		}
+			drive_turn = 0;
+		}	
 
-		xDriveFrontBackSwitch = xboxDriveStick.getRawAxis(2); // Xbox Drive L Trigger
-		xDriveThrottle = xboxDriveStick.getRawAxis(1);
-		xDriveTurn = xboxDriveStick.getRawAxis(4);
-		xDriveButtonY = xboxDriveStick.getRawButton(4);
-		xDriveRightBumper = xboxDriveStick.getRawButtonPressed(6);
+		/**
+		 * Read Operator joystick axes
+		 */
+		// Operator Left Stick Y Axis 1
+		if (opStick.getRawAxis(1) < -0.2 || opStick.getRawAxis(1) > 0.2) {
+			op_throttle = -opStick.getRawAxis(1);
+		} else {
+			op_throttle = 0;
+		}	
 
-		ds_2Button = driveStick.getRawButtonPressed(2);
-		ds_3Button = driveStick.getRawButton(3);
-		ds_4Button = driveStick.getRawButtonPressed(4);
-		ds_5Button = driveStick.getRawButtonPressed(5);
-		ds_6Button = driveStick.getRawButtonPressed(6);
+		/**
+		 * Read Driver joystick buttons
+		 */
+		drive_buttonA = driveStick.getRawButton(1);
+		drive_buttonB = driveStick.getRawButton(2);
+		drive_buttonX = driveStick.getRawButton(3);
+		drive_buttonY = driveStick.getRawButton(4);
+		drive_leftBumper = driveStick.getRawButton(5);
+		drive_rightBumper = driveStick.getRawButton(6);
+		drive_back = driveStick.getRawButton(7);
+		drive_start = driveStick.getRawButton(8);
 
-		op_yButton = opStick.getRawButton(4);
-		op_bButton = opStick.getRawButton(2);
-		op_aButton = opStick.getRawButton(1);
-		op_xButton = opStick.getRawButton(3);
+		/**
+		 * Read Operator joystick buttons
+		 */
+		op_buttonA = opStick.getRawButton(1);
+		op_buttonB = opStick.getRawButton(2);
+		op_buttonX = opStick.getRawButton(3);
+		op_buttonY = opStick.getRawButton(4);
 		op_leftBumper = opStick.getRawButton(5);
 		op_rightBumper = opStick.getRawButton(6);
-		op_Control = opStick.getRawButton(7);
-		op_Start = opStick.getRawButton(8);
+		op_back = opStick.getRawButton(7);
+		op_start = opStick.getRawButton(8);
 
+		/**
+		 * Read button presses - fix this
+		 */
 		if (opStick.getRawButtonPressed(8)) {
 			boolean isLedOn = ledToggle.toggle();
 			setLed(isLedOn);
 		}
 
-		if (getXDriveBumper()) {
+		if (getDriveRightBumper()) {
 			boolean isDriverVisionOn = visionToggle.toggle();
 			setVision(isDriverVisionOn);
 		}
 	}
 
-	public boolean getDSbutton2() { return ds_2Button; }
-	public boolean getDSbutton3() { return ds_3Button; }
-	public boolean getDSbutton4() { return ds_4Button; }
-	public boolean getDSbutton5() { return ds_5Button; }
-	public boolean getDSbutton6() { return ds_6Button; }
+	// fix these
+	public double getGameOpThrottle() { return op_throttle; }
+	public double getDriveVision() { return xDriveFrontBackSwitch; }
 
-	public double getGameOpThrottle() { return gameOpThrottle; }
+	/**
+	 * Get and return Driver buttons
+	 */
+	public double getDriveThrottle() { return drive_throttle; }
+	public double getDriveTurn() { return drive_turn; }
+	public boolean getDriveButtonA() { return drive_buttonA; }
+	public boolean getDriveButtonB() { return drive_buttonB; }
+	public boolean getDriveButtonX() { return drive_buttonX; }
+	public boolean getDriveButtonY() { return drive_buttonY; }
+	public boolean getDriveLeftBumper() { return drive_leftBumper; }
+	public boolean getDriveRightBumper() { return drive_rightBumper; }
+	public boolean getDriveBackButton() { return drive_back; }
+	public boolean getDriveStartButton() { return drive_start; }
 
-	public double getThrottle() { return throttle; }
-	public double getTurn() { return turn; }
-	public double getClimbThrottle() { return climbThrottle; }
-	public double getClimbTurn() { return climbTurn; }
-	public boolean getOpYButton() { return op_yButton; }
-	public boolean getOpBButton() { return op_bButton; }
-	public boolean getOpAButton() { return op_aButton; }
-	public boolean getOpXButton() { return op_xButton; }
-	public boolean getOPControlButton() { return op_Control; }
+	/**
+	 * Get and return Operator buttons
+	 */
+	public boolean getOpButtonA() { return op_buttonA; }
+	public boolean getOpButtonB() { return op_buttonB; }
+	public boolean getOpButtonX() { return op_buttonX; }
+	public boolean getOpButtonY() { return op_buttonY; }
 	public boolean getOpLeftBumper() { return op_leftBumper; }
 	public boolean getOpRightBumper() { return op_rightBumper; }
-	public boolean getOPStart() { return op_Start; }
-	public double getBothTriggers() { return op_BothTriggers; }
-
-	public double getXDriveVision() { return xDriveFrontBackSwitch; }
-	public double getXDriveTurn() { return xDriveTurn; }
-	public double getXDriveThrottle() { return xDriveThrottle; }
-	public boolean getXDriveBumper() { return xDriveRightBumper; }
-	public boolean getXDriveButtonY() { return xDriveButtonY; }
+	public boolean getOpBackButton() { return op_back; }
+	public boolean getOpStartButton() { return op_start; }
 	
+	/**
+	 * Toggle LED and Driver Vision
+	 * Move these?
+	 */
 	public void setLed(boolean isLedOn) {
 		if (isLedOn) {
 			limelight.setLedMode(LightMode.eOff);

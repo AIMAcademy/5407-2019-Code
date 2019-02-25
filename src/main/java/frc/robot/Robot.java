@@ -187,7 +187,7 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
-    if (oi.getOPControlButton()) {
+    if (oi.getOpBackButton()) {
       actions.endGameOp();
     } else if (oi.getOpLeftBumper()) {
       getAimAndRangeFront();
@@ -200,11 +200,11 @@ public class Robot extends TimedRobot {
     } else {
       actions.gameOp();
       // robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
-      double xDriveThrottle = oi.getXDriveThrottle();
-      if (oi.getXDriveVision() > 0.75) {
-        xDriveThrottle = -xDriveThrottle;
+      double drive_throttle = oi.getDriveThrottle();
+      if (oi.getDriveVision() > 0.75) {
+        drive_throttle = -drive_throttle;
       }
-      robotmap.drive.arcadeDrive(-xDriveThrottle, oi.getXDriveTurn());
+      robotmap.drive.arcadeDrive(-drive_throttle, oi.getDriveTurn());
     }
 
     System.out.println(sensors.getArmPotValue());
