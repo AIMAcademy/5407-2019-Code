@@ -189,19 +189,19 @@ public class Robot extends TimedRobot {
 
     if (oi.getOpBackButton()) {
       actions.endGameOp();
-    } else if (oi.getOpLeftBumper()) {
-      getAimAndRangeFront();
-      heading_error = Calculations.getHeadingError(cameraTargetXAxis);
+    } else if (oi.getDriveRightBumper()) {
+      if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true
+        // getAimAndRangeBack();  // Uses Y Axis Difference
+        getAimAndRangeBackArea(); // Uses Area Difference
+      } else {
+        getAimAndRangeFront();
+        heading_error = Calculations.getHeadingError(cameraTargetXAxis);
+      }
       robotmap.drive.arcadeDrive(drivingAdjustFront, steeringAdjustFront);
-    } else if (oi.getOpRightBumper()) {
-      // getAimAndRangeBack();  // Uses Y Axis Difference
-      getAimAndRangeBackArea(); // Uses Area Difference
-      robotmap.drive.arcadeDrive(drivingAdjustBack, steeringAdjustBack);
     } else {
       actions.gameOp();
-      // robotmap.drive.arcadeDrive(-oi.getThrottle(), oi.getTurn());
       double drive_throttle = oi.getDriveThrottle();
-      if (oi.getDriveVision() > 0.75) {
+      if (oi.getDriveLeftTrigger()) {
         drive_throttle = -drive_throttle;
       }
       robotmap.drive.arcadeDrive(-drive_throttle, oi.getDriveTurn());

@@ -13,7 +13,7 @@ public class Air {
     private final int solenoid0_ID = 0; // Arm tri-grabber
     private final int solenoid1_ID = 1; // Roller Fangs
     private final int solenoid2_ID = 2; // Tung
-    private final int solenoid3_ID = 3; // Back hatch pistons
+    private final int solenoid3_ID = 3; // Back hatch tung pistons
     private final int solenoid4_ID = 4; // 
 
     private final Solenoid solenoid0;

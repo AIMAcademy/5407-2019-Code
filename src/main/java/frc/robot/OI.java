@@ -29,8 +29,8 @@ public class OI {
 	private boolean drive_rightBumper;
 	private boolean drive_back;
 	private boolean drive_start;
-
-	private double xDriveFrontBackSwitch;  // change this
+	private boolean drive_leftTrigger;
+	private boolean drive_rightTrigger;	
 
 	private Joystick opStick;
 	private double op_throttle;
@@ -38,10 +38,16 @@ public class OI {
 	private boolean op_buttonB;
 	private boolean op_buttonX;
 	private boolean op_buttonY;
+	private boolean op_buttonPressedA;
+	private boolean op_buttonPressedB;
+	private boolean op_buttonPressedX;
+	private boolean op_buttonPressedY;
 	private boolean op_leftBumper;
 	private boolean op_rightBumper;
 	private boolean op_back;
 	private boolean op_start;
+	private boolean op_leftTrigger;
+	private boolean op_rightTrigger;
 
 	public boolean ledStatus;
 	public boolean visionStatus;
@@ -67,24 +73,47 @@ public class OI {
 			drive_throttle = -opStick.getRawAxis(1);
 		} else {
 			drive_throttle = 0;
-		}	
-		
+		}
 		// Driver Left Stick R Axis 4 for Driver Turn
 		if (driveStick.getRawAxis(4) < -0.2 || opStick.getRawAxis(4) > 0.2) {
 			drive_turn = -opStick.getRawAxis(4);
 		} else {
 			drive_turn = 0;
-		}	
+		}
+		// Driver Left Trigger Axis 2
+		if (driveStick.getRawAxis(2) > .5) {
+			drive_leftTrigger = true;
+		} else {
+			drive_leftTrigger = false;
+		}
+		// Driver Right Trigger Axis 3
+		if (driveStick.getRawAxis(3) > .5) {
+			drive_rightTrigger = true;
+		} else {
+			drive_rightTrigger = false;
+		}
 
 		/**
 		 * Read Operator joystick axes
 		 */
-		// Operator Left Stick Y Axis 1
+		// Operator Left Stick Y Axis 1 for Operator Throttle
 		if (opStick.getRawAxis(1) < -0.2 || opStick.getRawAxis(1) > 0.2) {
 			op_throttle = -opStick.getRawAxis(1);
 		} else {
 			op_throttle = 0;
-		}	
+		}
+		// Operator Left Trigger Axis 2
+		if (opStick.getRawAxis(2) > .5) {
+			op_leftTrigger = true;
+		} else {
+			op_leftTrigger = false;
+		}
+		// Operator Right Trigger Axis 3
+		if (opStick.getRawAxis(3) > 0.5) {
+			op_rightTrigger = true;
+		} else {
+			op_rightTrigger = false;
+		}
 
 		/**
 		 * Read Driver joystick buttons
@@ -94,7 +123,7 @@ public class OI {
 		drive_buttonX = driveStick.getRawButton(3);
 		drive_buttonY = driveStick.getRawButton(4);
 		drive_leftBumper = driveStick.getRawButton(5);
-		drive_rightBumper = driveStick.getRawButton(6);
+		drive_rightBumper = driveStick.getRawButtonPressed(6);
 		drive_back = driveStick.getRawButton(7);
 		drive_start = driveStick.getRawButton(8);
 
@@ -105,28 +134,28 @@ public class OI {
 		op_buttonB = opStick.getRawButton(2);
 		op_buttonX = opStick.getRawButton(3);
 		op_buttonY = opStick.getRawButton(4);
+		op_buttonPressedA = opStick.getRawButtonPressed(1);
+		op_buttonPressedB = opStick.getRawButtonPressed(2);
+		op_buttonPressedX = opStick.getRawButtonPressed(3);
+		op_buttonPressedY = opStick.getRawButtonPressed(4);
 		op_leftBumper = opStick.getRawButton(5);
 		op_rightBumper = opStick.getRawButton(6);
 		op_back = opStick.getRawButton(7);
 		op_start = opStick.getRawButton(8);
 
 		/**
-		 * Read button presses - fix this
+		 * Read button presses
 		 */
 		if (opStick.getRawButtonPressed(8)) {
 			boolean isLedOn = ledToggle.toggle();
 			setLed(isLedOn);
 		}
 
-		if (getDriveRightBumper()) {
+		if (getDriveRightTrigger()) {	// TODO Will this toggle until it's released or only once?
 			boolean isDriverVisionOn = visionToggle.toggle();
 			setVision(isDriverVisionOn);
 		}
 	}
-
-	// fix these
-	public double getGameOpThrottle() { return op_throttle; }
-	public double getDriveVision() { return xDriveFrontBackSwitch; }
 
 	/**
 	 * Get and return Driver buttons
@@ -141,22 +170,30 @@ public class OI {
 	public boolean getDriveRightBumper() { return drive_rightBumper; }
 	public boolean getDriveBackButton() { return drive_back; }
 	public boolean getDriveStartButton() { return drive_start; }
+	public boolean getDriveLeftTrigger() { return drive_leftTrigger; }
+	public boolean getDriveRightTrigger() { return drive_rightTrigger; }
 
 	/**
 	 * Get and return Operator buttons
 	 */
+	public double getOpThrottle() { return op_throttle; }
 	public boolean getOpButtonA() { return op_buttonA; }
 	public boolean getOpButtonB() { return op_buttonB; }
 	public boolean getOpButtonX() { return op_buttonX; }
 	public boolean getOpButtonY() { return op_buttonY; }
+	public boolean getOpButtonPressedA() { return op_buttonPressedA; }
+	public boolean getOpButtonPressedB() { return op_buttonPressedB; }
+	public boolean getOpButtonPressedX() { return op_buttonPressedX; }
+	public boolean getOpButtonPressedY() { return op_buttonPressedY; }
 	public boolean getOpLeftBumper() { return op_leftBumper; }
 	public boolean getOpRightBumper() { return op_rightBumper; }
 	public boolean getOpBackButton() { return op_back; }
 	public boolean getOpStartButton() { return op_start; }
+	public boolean getOpLeftTrigger() { return op_leftTrigger; }
+	public boolean getOpRightTrigger() { return op_rightTrigger; }
 	
 	/**
 	 * Toggle LED and Driver Vision
-	 * Move these?
 	 */
 	public void setLed(boolean isLedOn) {
 		if (isLedOn) {
