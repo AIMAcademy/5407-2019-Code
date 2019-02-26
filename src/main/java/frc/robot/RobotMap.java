@@ -68,7 +68,8 @@ public class RobotMap {
     public Spark leftClimberWheel; // LLEGGING
     public Spark rightClimberWheel; // RLEGGING
     // Arm System
-    public VictorSP arm;
+    public VictorSP armKcap;
+    public Spark armFlow;
     public Spark rollerWheel; // ROLLER
     public Spark smallWinchMotor; // S-WINCH
     // The Tung
@@ -104,6 +105,9 @@ public class RobotMap {
             // Drive
             drive = new DifferentialDrive(leftTalon, rightTalon);
 
+            // Arm motor controller for Flow
+            armFlow = new Spark(arm_ID);
+
             return;
         }
         
@@ -122,8 +126,7 @@ public class RobotMap {
         rightClimberWheel = new Spark(rightClimberWheel_ID);
 
         // Other components
-        // arm = new WPI_VictorSPX(arm_ID);
-        arm = new VictorSP(arm_ID);
+        armKcap = new VictorSP(arm_ID);
         rollerWheel = new Spark(rollerWheel_ID);
         smallWinchMotor = new Spark(smallWinchMotor_ID);
         tungMotor = new Spark(tungMotor_ID);

@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
   double drivingAdjustFront;
   double steeringAdjustFront;
 
+  double potValue;
   double armkp = 0;
   double armkd = 0;
   double armError = 0;
@@ -127,6 +128,9 @@ public class Robot extends TimedRobot {
     cameraTargetArea = limelight11.getTa();
     cameraTarget = limelight11.isTarget();
 
+    // Update arm potentiometer value
+    potValue = sensors.getArmPotValue();
+
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
     SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
@@ -136,6 +140,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("hardMA", hard_mounting_angle);
     SmartDashboard.putNumber("softMA", soft_mounting_angle);
     SmartDashboard.putBoolean("ledStatus", oi.ledStatus);
+    SmartDashboard.putNumber("PotVal", potValue);
 
     m_pipelineChoice = m_pipeline.getSelected();
   }
@@ -187,9 +192,9 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
-    if (oi.getOpBackButton()) {
+    if (oi.getOpBackButton()) { // TODO Change to hardware switch on driver station
       actions.endGameOp();
-    } else if (oi.getDriveRightBumper()) {
+    } else if (oi.getDriveRightTrigger()) {
       if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true
         // getAimAndRangeBack();  // Uses Y Axis Difference
         getAimAndRangeBackArea(); // Uses Area Difference
@@ -204,11 +209,8 @@ public class Robot extends TimedRobot {
       if (oi.getDriveLeftTrigger()) {
         drive_throttle = -drive_throttle;
       }
-      robotmap.drive.arcadeDrive(-drive_throttle, oi.getDriveTurn());
+      robotmap.drive.arcadeDrive(drive_throttle,oi.getDriveTurn());
     }
-
-    System.out.println(sensors.getArmPotValue());
-
   }
 
   @Override
@@ -282,7 +284,11 @@ public class Robot extends TimedRobot {
       armError = armDistance - actualdistance;
 
     output = armkp * armError + armkd;
-    robotmap.arm.set(output);
+    if (robotmap.getIsFlow()) {
+      robotmap.armFlow.set(output);
+    } else {
+      robotmap.armKcap.set(output);
+    }
   }
 
   // public void driveStraight() {
