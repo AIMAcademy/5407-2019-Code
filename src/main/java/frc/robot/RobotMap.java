@@ -105,8 +105,9 @@ public class RobotMap {
             // Drive
             drive = new DifferentialDrive(leftTalon, rightTalon);
 
-            // Arm motor controller for Flow
+            // Motor controllers for Flow too
             armFlow = new Spark(arm_ID);
+            smallWinchMotor = new Spark(smallWinchMotor_ID);
 
             return;
         }

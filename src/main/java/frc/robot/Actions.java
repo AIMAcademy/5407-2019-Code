@@ -39,12 +39,16 @@ public class Actions {
       else {  // Manual arm control
         if (isFlow) {
           robotmap.armFlow.set(op_throttle);
-        } else if (!isFlow) {
-          robotmap.armKcap.set(op_throttle);
         } else {
-          robotmap.armKcap.set(0.0);
+          robotmap.armKcap.set(op_throttle);
         }
       } 
+    } else {
+      if (isFlow) {
+        robotmap.armFlow.set(0.0);
+      } else {
+        robotmap.armKcap.set(0.0);
+      }
     }
     // Get B Button to control Arm Small Winch
     if (oi.getOpButtonB()) {
