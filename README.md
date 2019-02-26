@@ -4,6 +4,7 @@
 - Create pipeline switching feature
 - Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
 - Test Potentiometer
+- Defense Mode
 
 ## Others ##
 - Copy pipelines to each camera
