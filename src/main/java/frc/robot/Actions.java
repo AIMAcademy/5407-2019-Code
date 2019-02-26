@@ -39,16 +39,18 @@ public class Actions {
       else {  // Manual arm control
         if (isFlow) {
           robotmap.armFlow.set(op_throttle);
-          System.out.println("flow: " + op_throttle);
-        } else {
+        } else if (!isFlow) {
           robotmap.armKcap.set(op_throttle);
-          System.out.println("kcap: " + op_throttle);
+        } else {
+          robotmap.armKcap.set(0.0);
         }
       } 
     }
     // Get B Button to control Arm Small Winch
     if (oi.getOpButtonB()) {
       robotmap.smallWinchMotor.set(op_throttle);
+    } else {
+      robotmap.smallWinchMotor.set(0.0);
     }
     // Get X Button Press to toggle front and back hatch solenoids
     if (oi.getOpButtonPressedX()) {
