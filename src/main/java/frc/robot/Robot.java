@@ -210,24 +210,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  public void getAimAndRangeFront() {
-    AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
-    drivingAdjustFront = aimAndRange.getDrivingAdjust();
-    steeringAdjustFront = aimAndRange.getSteeringAdjust();
-  }
-
-  public void getAimAndRangeBack() {
-    AimAndRange aimAndRange = Calculations.getAimAndRangeBack(cameraTargetXAxis, cameraTargetYAxis);
-    drivingAdjustBack = aimAndRange.getDrivingAdjust();
-    steeringAdjustBack = aimAndRange.getSteeringAdjust();
-  }
-
-  public void getAimAndRangeBackArea() {
-    AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
-    drivingAdjustBack = aimAndRange.getDrivingAdjust();
-    steeringAdjustBack = aimAndRange.getSteeringAdjust();
-  }
-
   public void updatePipelineChoice() {
     int pipeline = 0;
     switch (m_pipelineChoice) {
