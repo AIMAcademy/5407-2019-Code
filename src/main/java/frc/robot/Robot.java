@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   Actions actions;
   Air air;
+  Limelight currentLimelight;
   Limelight limelight10;
   Limelight limelight11;
   OI oi;
@@ -85,10 +86,10 @@ public class Robot extends TimedRobot {
     air = new Air();
     limelight10 = new Limelight(hostNameTen);
     limelight11 = new Limelight(hostNameEleven);
-    oi = new OI(limelight11);
+    oi = new OI(limelight11); // TODO: OI shouldn't rely on cameras
     robotmap = new RobotMap();
     sensors = new Sensors();
-    actions = new Actions(air, oi, robotmap);
+    actions = new Actions(air, oi, robot, robotmap);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -122,11 +123,19 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
-    // Limelight read values periodically
-    cameraTargetXAxis = limelight11.getTx();
-    cameraTargetYAxis = limelight11.getTy();
-    cameraTargetArea = limelight11.getTa();
-    cameraTarget = limelight11.isTarget();
+    if (oi.getDriveLeftTrigger()) {
+      // Back camera
+      currentLimelight = limelight11;
+    } else {
+      // Front camera
+      currentLimelight = limelight10;
+    }
+
+    // Use front camera to update limelight values
+    cameraTargetXAxis = currentLimelight.getTx();
+    cameraTargetYAxis = currentLimelight.getTy();
+    cameraTargetArea = currentLimelight.getTa();
+    cameraTarget = currentLimelight.isTarget();
 
     // Update arm potentiometer value
     potValue = sensors.getArmPotValue();
@@ -235,23 +244,25 @@ public class Robot extends TimedRobot {
   }
 
   public void updatePipelineChoice() {
+    int pipeline = 0;
     switch (m_pipelineChoice) {
       case kPipeline0:
-        limelight10.setPipeline(0);
+        pipeline = 0;
         break;
       case kPipeline1:
-        limelight10.setPipeline(1);
+        pipeline = 1;
         break;
       case kPipeline2:
-        limelight10.setPipeline(2);
+        pipeline = 2;
         break;
     }
+    currentLimelight.setPipeline(pipeline);
   }
 
   public void armControl() {
  
     switch (m_armControl) {
-    //Rocket
+      //Rocket
       case kHighHatch:
         armDistance = 19 + 28 + 28;
         break;
@@ -270,18 +281,17 @@ public class Robot extends TimedRobot {
         armDistance = 27.5;
         break;
 
-    //Cargo Ship
+      //Cargo Ship
       case kCargoShipHatch: //Same As Pickup Might never need to use because of the tung
         armDistance = 19;   //Also same as Low Rocket Hatch so This can go away
         break;
       case kCargoShipBall:
         armDistance = 55;
         break;
-      }
+    }
 
-      armDistance = sensors.getArmHight();
-
-      armError = armDistance - actualdistance;
+    armDistance = sensors.getArmHight();
+    armError = armDistance - actualdistance;
 
     output = armkp * armError + armkd;
     if (robotmap.getIsFlow()) {
