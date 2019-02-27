@@ -16,15 +16,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class Sensors {
   private AHRS ahrs;
-  // private RobotMap robotmap;
   private double followAngle;
-  // private double rotateToAngleRate;
 
   public final double kAngleSetpoint = 0.0;
   public final double kP = 0.005; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
-  Potentiometer armPot;
+  private Potentiometer armPot;
   private double armDegrees;
   private double armHight;
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
@@ -58,7 +56,6 @@ public class Sensors {
 
   public void zeroNAVX() {
     ahrs.reset();
-    // ahrs.zeroYaw();
   }
 
   public double getArmPotValue() {
@@ -67,12 +64,11 @@ public class Sensors {
   }
 
   public double getArmHight() {
-    double stringlength = 36; //TODO: Measure actual sting length
+    double stringlength = 36; //TODO: Measure actual string length
     double inperDegree;
 
     inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
     armHight = getArmPotValue() * inperDegree;
     return armHight;
   }
-  
 }

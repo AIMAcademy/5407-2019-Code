@@ -13,8 +13,8 @@ public class Actions {
   private OI oi;
   private RobotMap robotmap;
   private Toggle lightsAndVisionToggle;
-  private final boolean isFlow;
 
+  private final boolean isFlow;
   private boolean areLightsAndVisionOn;
   public boolean visionStatus;
 
@@ -61,7 +61,7 @@ public class Actions {
     // Get B Button to control Arm Small Winch
     double winchThrottle;
     if (oi.getOpButtonB()) {
-      winchThrottle = op_throttle;
+      winchThrottle = -op_throttle;
     } else {
       winchThrottle = 0.0;
     }
@@ -89,10 +89,10 @@ public class Actions {
     double steeringAdjust;
     
     if (oi.getDriveLeftTrigger()) {
-      drivingAdjust = oi.getDriveThrottle();
+      drivingAdjust = -oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     } else {
-      drivingAdjust = -oi.getDriveThrottle();
+      drivingAdjust = oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     }
 
@@ -199,14 +199,14 @@ public class Actions {
   }
 
 	public void setLightsAndVision(Limelight limelight, boolean areLightsAndVisionOn) {
-		if (areLightsAndVisionOn) {
-      limelight.setLedMode(LightMode.eOff);
-      limelight.setCameraMode(CameraMode.eDriver);
-      visionStatus = false;
+    if (areLightsAndVisionOn) {
+      limelight.setLedMode(LightMode.eOn);
+      limelight.setCameraMode(CameraMode.eVision);
+      visionStatus = true;
 			return;
 		}
-    limelight.setLedMode(LightMode.eOn);
-    limelight.setCameraMode(CameraMode.eVision);
-    visionStatus = true;
+    limelight.setLedMode(LightMode.eOff);
+    limelight.setCameraMode(CameraMode.eDriver);
+    visionStatus = false;
   }
 }

@@ -35,17 +35,6 @@ public class Robot extends TimedRobot {
   private String m_pipelineChoice;
   private final SendableChooser<String> m_pipeline = new SendableChooser<>();
 
-  private static final String kHighHatch = "High Hatch";
-  private static final String kMidHatch = "Mid Hatch";
-  private static final String kLowHatch = "Low Hatch";
-  private static final String kHighball = "High Ball";
-  private static final String kMidBall = "Mid Ball";
-  private static final String kLowBall = "Low Ball";
-
-  private static final String kCargoShipHatch = "Cargo Ship Hatch";
-  private static final String kCargoShipBall = "Cargo Ship Ball";
-  private String m_armControl;
-
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
   private double cameraTargetYAxis;
@@ -65,13 +54,23 @@ public class Robot extends TimedRobot {
   double drivingAdjustFront;
   double steeringAdjustFront;
 
-  double potValue;
-  double armkp = 0;
-  double armkd = 0;
-  double armError = 0;
-  double output;
-  double armDistance = 0;
-  double actualdistance;
+  // Potentiometer
+  private double potValue;
+  private static final String kHighHatch = "High Hatch";
+  private static final String kMidHatch = "Mid Hatch";
+  private static final String kLowHatch = "Low Hatch";
+  private static final String kHighball = "High Ball";
+  private static final String kMidBall = "Mid Ball";
+  private static final String kLowBall = "Low Ball";
+  private static final String kCargoShipHatch = "Cargo Ship Hatch";
+  private static final String kCargoShipBall = "Cargo Ship Ball";
+  private String m_armControl;
+  private double armkp = 0;
+  private double armkd = 0;
+  private double armError = 0;
+  private double output;
+  private double armDistance = 0;
+  private double actualdistance;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -97,7 +96,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
-    actions.setLightsAndVision(limelight10, false);
+    // actions.setLightsAndVision(limelight10, true);
+    // actions.setLightsAndVision(limelight11, true);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -203,9 +203,6 @@ public class Robot extends TimedRobot {
     }
   }
 
-  @Override
-  public void testPeriodic() {}
-
   public void updatePipelineChoice() {
     int pipeline = 0;
     switch (m_pipelineChoice) {
@@ -227,13 +224,13 @@ public class Robot extends TimedRobot {
     switch (m_armControl) {
       //Rocket
       case kHighHatch:
-        armDistance = 19 + 28 + 28;
+        armDistance = 19 + 28 + 28; //150
         break;
       case kMidHatch:
         armDistance = 19 + 28;
         break;
       case kLowHatch:
-        armDistance = 19;
+        armDistance = 19; //305
         break;
       case kHighball:
         armDistance = 27.5 + 28 + 28;
@@ -271,3 +268,4 @@ public class Robot extends TimedRobot {
   // robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
   // }
 }
+
