@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-// import com.ctre.phoenix.motorcontrol.SensorTerm;
-// import frc.robot.Limelight.LightMode;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -85,10 +82,10 @@ public class Robot extends TimedRobot {
     air = new Air();
     limelight10 = new Limelight(hostNameTen);
     limelight11 = new Limelight(hostNameEleven);
-    oi = new OI(limelight11); // TODO: OI shouldn't rely on cameras
+    oi = new OI();
     robotmap = new RobotMap();
     sensors = new Sensors();
-    actions = new Actions(air, oi, robotmap);
+    actions = new Actions(air, limelight10, limelight11, oi, robotmap);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -100,8 +97,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
-    boolean isLedOn = oi.ledToggle.toggle();
-		oi.setLed(isLedOn);
+    actions.setLightsAndVision(limelight10, false);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -147,7 +143,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", distance);
     SmartDashboard.putNumber("hardMA", hard_mounting_angle);
     SmartDashboard.putNumber("softMA", soft_mounting_angle);
-    SmartDashboard.putBoolean("ledStatus", oi.ledStatus);
+    SmartDashboard.putBoolean("visionStatus", actions.visionStatus);
     SmartDashboard.putNumber("PotVal", potValue);
 
     m_pipelineChoice = m_pipeline.getSelected();

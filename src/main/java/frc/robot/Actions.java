@@ -1,20 +1,34 @@
 package frc.robot;
 
+import frc.robot.Limelight.LightMode;
+import frc.robot.Limelight.CameraMode;
+
 /**
  * Robot actions
  */
 public class Actions {
   private Air air;
+  private Limelight limelight10;
+  private Limelight limelight11;
   private OI oi;
   private RobotMap robotmap;
+  private Toggle lightsAndVisionToggle;
   private final boolean isFlow;
 
-  public Actions(Air air, OI oi, RobotMap robotmap) {
+  private boolean areLightsAndVisionOn;
+  public boolean visionStatus;
+
+  public Actions(Air air, Limelight limelight10, Limelight limelight11, OI oi, RobotMap robotmap) {
     this.air = air;
+    this.limelight10 = limelight10;
+    this.limelight11 = limelight11;
     this.oi = oi;
     this.robotmap = robotmap;
 
     isFlow = robotmap.getIsFlow();
+
+    lightsAndVisionToggle = new Toggle();
+    areLightsAndVisionOn = false;
   }
 
   public void gameOp(
@@ -71,30 +85,43 @@ public class Actions {
     /**
      * Driver controls during game operations
      */
-
     double drivingAdjust;
     double steeringAdjust;
     
     if (oi.getDriveLeftTrigger()) {
-      drivingAdjust = -oi.getDriveThrottle();
+      drivingAdjust = oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     } else {
-      drivingAdjust = oi.getDriveThrottle();
+      drivingAdjust = -oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     }
 
     if (oi.getDriveRightTrigger()) {  // Auto targeting
       if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true and will use back camera for targeting
+        if (!areLightsAndVisionOn) {
+          areLightsAndVisionOn = lightsAndVisionToggle.toggle();
+          setLightsAndVision(limelight11, areLightsAndVisionOn);
+        }
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         drivingAdjust = aimAndRange.getDrivingAdjust();
         steeringAdjust = aimAndRange.getSteeringAdjust();
       } else {
+          if (!areLightsAndVisionOn) {
+            areLightsAndVisionOn = lightsAndVisionToggle.toggle();
+            setLightsAndVision(limelight10, areLightsAndVisionOn);
+          }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
         drivingAdjust = aimAndRange.getDrivingAdjust();
         steeringAdjust = aimAndRange.getSteeringAdjust();
       }
     }
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
+
+    if (areLightsAndVisionOn && !oi.getDriveRightTrigger()) {
+      areLightsAndVisionOn = lightsAndVisionToggle.toggle();
+      setLightsAndVision(limelight10, areLightsAndVisionOn);
+      setLightsAndVision(limelight11, areLightsAndVisionOn);
+    }
   }
 
   public void endGameOp() {
@@ -171,4 +198,15 @@ public class Actions {
     robotmap.climberLegs.set(climberLegsThrottle);
   }
 
+	public void setLightsAndVision(Limelight limelight, boolean areLightsAndVisionOn) {
+		if (areLightsAndVisionOn) {
+      limelight.setLedMode(LightMode.eOff);
+      limelight.setCameraMode(CameraMode.eDriver);
+      visionStatus = false;
+			return;
+		}
+    limelight.setLedMode(LightMode.eOn);
+    limelight.setCameraMode(CameraMode.eVision);
+    visionStatus = true;
+  }
 }
