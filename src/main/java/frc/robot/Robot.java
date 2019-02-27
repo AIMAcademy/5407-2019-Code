@@ -57,7 +57,6 @@ public class Robot extends TimedRobot {
 
   // For Range
   double distance;
-  double heading_error;
   double hard_mounting_angle;
   double soft_mounting_angle;
 
@@ -89,7 +88,7 @@ public class Robot extends TimedRobot {
     oi = new OI(limelight11); // TODO: OI shouldn't rely on cameras
     robotmap = new RobotMap();
     sensors = new Sensors();
-    actions = new Actions(air, oi, robot, robotmap);
+    actions = new Actions(air, oi, robotmap);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -203,22 +202,8 @@ public class Robot extends TimedRobot {
 
     if (oi.getOpBackButton()) { // TODO Change to hardware switch on driver station
       actions.endGameOp();
-    } else if (oi.getDriveRightTrigger()) {
-      if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true
-        // getAimAndRangeBack();  // Uses Y Axis Difference
-        getAimAndRangeBackArea(); // Uses Area Difference
-      } else {
-        getAimAndRangeFront();
-        heading_error = Calculations.getHeadingError(cameraTargetXAxis);
-      }
-      robotmap.drive.arcadeDrive(drivingAdjustFront, steeringAdjustFront);
     } else {
-      actions.gameOp();
-      double drive_throttle = oi.getDriveThrottle();
-      if (oi.getDriveLeftTrigger()) {
-        drive_throttle = -drive_throttle;
-      }
-      robotmap.drive.arcadeDrive(drive_throttle,oi.getDriveTurn());
+      actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }
   }
 

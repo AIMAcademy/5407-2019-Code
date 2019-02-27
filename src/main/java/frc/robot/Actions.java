@@ -6,8 +6,12 @@ package frc.robot;
 public class Actions {
   private Air air;
   private OI oi;
+  private Robot robot;
   private RobotMap robotmap;
   private final boolean isFlow;
+
+  private Toggle visionToggle;
+  private Toggle ledToggle;
 
   public Actions(Air air, OI oi, RobotMap robotmap) {
     this.air = air;
@@ -15,9 +19,24 @@ public class Actions {
     this.robotmap = robotmap;
 
     isFlow = robotmap.getIsFlow();
+
+    visionToggle = new Toggle();
+    ledToggle = new Toggle();
   }
 
-  public void gameOp() {
+  public void gameOp(
+      double cameraTargetXAxis,
+      double cameraTargetYAxis,
+      double cameraTargetArea,
+      boolean cameraTarget
+    ) {
+
+    double drive_throttle = oi.getDriveThrottle();
+    if (oi.getDriveLeftTrigger()) {
+      drive_throttle = -drive_throttle;
+    }
+    robotmap.drive.arcadeDrive(drive_throttle, oi.getDriveTurn());
+    
     // Get Operator Left Joystick Throttle
     final double op_throttle = oi.getOpThrottle();
 
@@ -65,7 +84,21 @@ public class Actions {
     /**
      * Driver controls during game operations
      */
-    // Nothing here yet
+    double drivingAdjust;
+    double steeringAdjust;
+    if (oi.getDriveRightTrigger()) {
+      if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true
+        // boolean isLedOn = ledToggle.toggle();
+        AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
+        drivingAdjust = -aimAndRange.getDrivingAdjust();
+        steeringAdjust = aimAndRange.getSteeringAdjust();
+      } else {
+        AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
+        drivingAdjust = aimAndRange.getDrivingAdjust();
+        steeringAdjust = aimAndRange.getSteeringAdjust();
+      }
+      robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
+    }
   }
 
   public void endGameOp() {
@@ -141,4 +174,5 @@ public class Actions {
     }
     robotmap.climberLegs.set(climberLegsThrottle);
   }
+
 }
