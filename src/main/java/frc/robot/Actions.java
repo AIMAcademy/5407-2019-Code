@@ -25,27 +25,27 @@ public class Actions {
      * Operator controls during game operations
      */
     // Get left bumper to control Arm
+    double armThrottle;
     if (oi.getOpLeftBumper()) {
       if (oi.getOpButtonY() || oi.getOpButtonX() || oi.getOpButtonA()) { return; }
-      if (isFlow) {
-        robotmap.armFlow.set(op_throttle);
-      } else {
-        robotmap.armKcap.set(op_throttle);
-      }
+      armThrottle = op_throttle;
     } else {
-      if (isFlow) {
-        robotmap.armFlow.set(0.0);
-      } else {
-        robotmap.armKcap.set(0.0);
-      }
+      armThrottle = 0.0;
+    }
+    if (isFlow) {
+      robotmap.armFlow.set(armThrottle);
+    } else {
+      robotmap.armKcap.set(armThrottle);
     }
 
     // Get B Button to control Arm Small Winch
+    double winchThrottle;
     if (oi.getOpButtonB()) {
-      robotmap.smallWinchMotor.set(op_throttle);
+      winchThrottle = op_throttle;
     } else {
-      robotmap.smallWinchMotor.set(0.0);
+      winchThrottle = 0.0;
     }
+    robotmap.smallWinchMotor.set(winchThrottle);
 
     // Get X Button Press to toggle front and back hatch solenoids
     if (oi.getOpButtonPressedX()) {
@@ -72,60 +72,73 @@ public class Actions {
     robotmap.drive.arcadeDrive(-oi.getDriveThrottle(), oi.getDriveTurn());
 
     if (isFlow) {
-    /**
-     * Flow Driver controls during end-game operations
-     */
-    // Driver control arm
-    if (oi.getDriveButtonY()) {
-      robotmap.armFlow.set(1);
-    } else if (oi.getDriveButtonB()) {
-      robotmap.armFlow.set(-1);
-    } else {
-      robotmap.armFlow.set(0);
-    }
+      /**
+       * Flow Driver controls during end-game operations
+       */
+      // Driver control arm
+      double armThrottle;
+      if (oi.getDriveButtonY()) {
+        armThrottle = 1;
+      } else if (oi.getDriveButtonB()) {
+        armThrottle = -1;
+      } else {
+        armThrottle = 0;
+      }
+      robotmap.armFlow.set(armThrottle);
+
       return;
     }
 
     /**
      * Kcap Driver controls during end-game operations
-     */     
-    // Driver control climb wheels 
+     */
+    // Driver control climb wheels
+    double leftClimbWheelThrottle;
+    double rightClimbWheelThrottle;
     if (oi.getDriveButtonX()) {
-      robotmap.leftClimberWheel.set(1.0);
-      robotmap.rightClimberWheel.set(-1.0);
+      leftClimbWheelThrottle = 1.0;
+      rightClimbWheelThrottle = -1.0;
     } else {
-      robotmap.leftClimberWheel.set(0.0);
-      robotmap.rightClimberWheel.set(0.0);
+      leftClimbWheelThrottle = 0.0;
+      rightClimbWheelThrottle = 0.0;
     }
+    robotmap.leftClimberWheel.set(leftClimbWheelThrottle);
+    robotmap.rightClimberWheel.set(rightClimbWheelThrottle);
 
     // Driver control arm
+    double driverArmThrottle;
     if (oi.getDriveButtonY()) {
-      robotmap.armKcap.set(1);
+      driverArmThrottle = 1;
     } else if (oi.getDriveButtonB()) {
-      robotmap.armKcap.set(-1);
+      driverArmThrottle = -1;
     } else {
-      robotmap.armKcap.set(0);
+      driverArmThrottle = 0;
     }
+    robotmap.armKcap.set(driverArmThrottle);
 
     /**
      * Operator controls during end-game operations
      */
-    // Dart climber arm up and down using B and X     
+    // Dart climber arm up and down using B and X
+    double climberArmThrottle;
     if (oi.getOpButtonB()) {
-      robotmap.climberArm.set(1);
+      climberArmThrottle = 1;
     } else if (oi.getOpButtonX()) {
-      robotmap.climberArm.set(-1);
+      climberArmThrottle = -1;
     } else {
-      robotmap.climberArm.set(0);
+      climberArmThrottle = 0;
     }
+    robotmap.climberArm.set(climberArmThrottle);
 
     // Climb legs up and down using A and Y
+    double climberLegsThrottle;
     if (oi.getOpButtonA()) {
-      robotmap.climberLegs.set(-1);
+      climberLegsThrottle = -1;
     } else if (oi.getOpButtonY()) {
-      robotmap.climberLegs.set(1);
+      climberLegsThrottle = 1;
     } else {
-      robotmap.climberLegs.set(0);
+      climberLegsThrottle = 0;
     }
+    robotmap.climberLegs.set(climberLegsThrottle);
   }
 }
