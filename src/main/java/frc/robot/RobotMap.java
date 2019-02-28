@@ -33,52 +33,48 @@ public class RobotMap {
      * Motor ports
      */
     // Left Side Speed Controlers
-    private int leftMotorID_0 = 0;
-    private int leftMotorID_1 = 1;
-    private int leftMotorID_2 = 2;
+    private int leftMotorID_0 = 0;  // KCAP CHASSIS
+    private int leftMotorID_1 = 1;  // KCAP CHASSIS
+    private int leftMotorID_2 = 2;  // KCAP CHASSIS
     // Right Side Speed Controlers
-    private int rightMotorID_0 = 3;
-    private int rightMotorID_1 = 4;
-    private int rightMotorID_2 = 5;
+    private int rightMotorID_0 = 3;  // KCAP CHASSIS
+    private int rightMotorID_1 = 4;  // KCAP CHASSIS
+    private int rightMotorID_2 = 5;  // KCAP CHASSIS
     // Climber Sparks
     private int climberArm_ID = 6; // FRT-DART (CAN)
     private int climberLegs_ID = 7; // LEG-LIFT (CAN)
     private int leftClimberWheel_ID = 0; // LLEGGING (PWM)
     private int rightClimberWheel_ID = 1; // RLEGGING (PWM)
     // Arm components
-    private int arm_ID = 5; // (PWM)
-    private int rollerWheel_ID = 4; // ROLLER (PWM)
+    private int arm_ID = 4; // (PWM)
+    private int cargoWheels_ID = 3; // CARGO CLAW ROLLER WHEELS (PWM)
     private int smallWinchMotor_ID = 2; // S-WINCH (PWM)
-    // The Tung
-    private int tungMotor_ID = 3; // THE TUNG (PWM)
 
     /*
      * Motor Controllers
      */
     // Powertrain
-    public CANSparkMax leftMotor_0;
-    public CANSparkMax leftMotor_1;
-    public CANSparkMax leftMotor_2;
-    public CANSparkMax rightMotor_0;
-    public CANSparkMax rightMotor_1;
-    public CANSparkMax rightMotor_2;
+    public CANSparkMax leftMotor_0;  // KCAP CHASSIS
+    public CANSparkMax leftMotor_1;  // KCAP CHASSIS
+    public CANSparkMax leftMotor_2;  // KCAP CHASSIS
+    public CANSparkMax rightMotor_0;  // KCAP CHASSIS
+    public CANSparkMax rightMotor_1;  // KCAP CHASSIS
+    public CANSparkMax rightMotor_2;  // KCAP CHASSIS
     // Climbing System
     public WPI_TalonSRX climberArm; // FRT-DART
     public WPI_TalonSRX climberLegs; // LEG-LIFT (Dart)
     public Spark leftClimberWheel; // LLEGGING
     public Spark rightClimberWheel; // RLEGGING
     // Arm System
-    public VictorSP armKcap;
-    public Spark armFlow;
-    public Spark rollerWheel; // ROLLER
+    public VictorSP armKcap;    // KCAP'S ARM
+    public Spark armFlow;   // FLOW'S ARM
+    public Spark cargoWheels; // CARGO CLAW ROLLER WHEELS
     public Spark smallWinchMotor; // S-WINCH
-    // The Tung
-    public Spark tungMotor; // THE TUNG
     // Flow Motors
-    public WPI_TalonSRX leftTalon;
-    public WPI_TalonSRX rightTalon;
-    public WPI_VictorSPX leftVictor;
-    public WPI_VictorSPX rightVictor;
+    public WPI_TalonSRX leftTalon;  // FLOW CHASSIS
+    public WPI_TalonSRX rightTalon;  // FLOW CHASSIS
+    public WPI_VictorSPX leftVictor;  // FLOW CHASSIS
+    public WPI_VictorSPX rightVictor;  // FLOW CHASSIS
 
     // Kcap Speed Controller Group
     public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
@@ -128,9 +124,8 @@ public class RobotMap {
 
         // Other components
         armKcap = new VictorSP(arm_ID);
-        rollerWheel = new Spark(rollerWheel_ID);
+        cargoWheels = new Spark(cargoWheels_ID);
         smallWinchMotor = new Spark(smallWinchMotor_ID);
-        tungMotor = new Spark(tungMotor_ID);
 
         // Speed controller groups
         speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
