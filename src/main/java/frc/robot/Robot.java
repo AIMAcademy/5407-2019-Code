@@ -203,12 +203,4 @@ public class Robot extends TimedRobot {
     }
     currentLimelight.setPipeline(pipeline);
   }
-
-  // public void driveStraight() {
-  // double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) *
-  // sensors.kP;
-  // turn = Math.copySign(turn, direction);
-  // robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
-  // }
 }
-
