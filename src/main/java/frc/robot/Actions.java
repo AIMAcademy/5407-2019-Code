@@ -139,6 +139,7 @@ public class Actions {
      */
     double drivingAdjust;
     double steeringAdjust;
+    boolean useGyroNAVX;
     
     if (oi.getDriveLeftTrigger()) {
       drivingAdjust = -oi.getDriveThrottle();
@@ -167,8 +168,20 @@ public class Actions {
         steeringAdjust = aimAndRange.getSteeringAdjust();
       }
     }
+
+    // If driving only forward or back ward within a threshold enable NavX drive straight
+    if (oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05) {
+      if (useGyroNAVX = false) {
+        sensors.setFollowAngleNAVX(0);
+      }
+      useGyroNAVX = true;
+      steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    }
+
+    // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
+    // Turn off Limelight lights and vision processing if not being used
     if (areLightsAndVisionOn && !oi.getDriveRightTrigger()) {
       areLightsAndVisionOn = lightsAndVisionToggle.toggle();
       setLightsAndVision(limelight10, areLightsAndVisionOn);
@@ -300,5 +313,9 @@ public class Actions {
     } else {
       robotmap.armKcap.set(-output);
     }
+  }
+
+  public void driveStraight() {
+
   }
 }
