@@ -12,18 +12,43 @@ public class Actions {
   private Limelight limelight11;
   private OI oi;
   private RobotMap robotmap;
+  private Sensors sensors;
   private Toggle lightsAndVisionToggle;
 
+  // Limelight vision
   private final boolean isFlow;
   private boolean areLightsAndVisionOn;
   public boolean visionStatus;
 
-  public Actions(Air air, Limelight limelight10, Limelight limelight11, OI oi, RobotMap robotmap) {
+  // Potentiometer arm
+  private double armThrottle;
+  private static final String kHighHatch = "High Hatch";
+  private static final String kMidHatch = "Mid Hatch";
+  private static final String kLowHatch = "Low Hatch";
+  private static final String kHighCargo = "High Ball";
+  private static final String kMidCargo = "Mid Ball";
+  private static final String kLowCargo = "Low Ball";
+  private double armKp = 0.02;
+  private double armMaxDrive = 0.25;  // TODO Make .7 after testing
+  private double armError = 0;
+  private double output;
+  private double armDesiredHeight = 0;
+  private double actualHeight;
+
+  public Actions(
+      Air air,
+      Limelight limelight10,
+      Limelight limelight11,
+      OI oi,
+      RobotMap robotmap,
+      Sensors sensors
+    ) {
     this.air = air;
     this.limelight10 = limelight10;
     this.limelight11 = limelight11;
     this.oi = oi;
     this.robotmap = robotmap;
+    this.sensors = sensors;
 
     isFlow = robotmap.getIsFlow();
 
@@ -41,14 +66,41 @@ public class Actions {
     // Get Operator Left Joystick Throttle
     final double op_throttle = oi.getOpThrottle();
 
+    if (oi.getOpButtonY() || oi.getOpButtonX() || oi.getOpButtonA()) { return; } //
+
     /**
      * Operator controls during game operations
      */
-    // Get left bumper to control Arm
-    double armThrottle;
+    // Get left bumper to control Arm for pickup and deploy Hatch
     if (oi.getOpLeftBumper()) {
-      if (oi.getOpButtonY() || oi.getOpButtonX() || oi.getOpButtonA()) { return; }
-      armThrottle = op_throttle;
+      if (oi.getOpButtonY()) {
+        armControl(kHighHatch);
+      } else if (oi.getOpButtonX()) {
+        armControl(kMidHatch);
+      } else if (oi.getOpButtonA()) {
+        armControl(kLowHatch);
+      } else {
+        armThrottle = op_throttle;
+      }
+    } else {
+      armThrottle = 0.0;
+    }
+    if (isFlow) {
+      robotmap.armFlow.set(armThrottle);
+    } else {
+      robotmap.armKcap.set(armThrottle);
+    }
+    // Get right bumper to control Arm for pickup and deploy Cargo
+    if (oi.getOpRightBumper()) {
+      if (oi.getOpButtonY()) {
+        armControl(kHighCargo);
+      } else if (oi.getOpButtonX()) {
+        armControl(kMidCargo);
+      } else if (oi.getOpButtonA()) {
+        armControl(kLowCargo);
+      } else {
+        armThrottle = op_throttle;
+      }
     } else {
       armThrottle = 0.0;
     }
@@ -208,5 +260,45 @@ public class Actions {
     limelight.setLedMode(LightMode.eOff);
     limelight.setCameraMode(CameraMode.eDriver);
     visionStatus = false;
+  }
+
+  public void armControl(String m_armControl) {
+    switch (m_armControl) {
+      //Rocket
+      case kHighHatch:
+        armDesiredHeight = 160;  // 9 + 28 + 28;
+        break;
+      case kMidHatch:
+        armDesiredHeight = 275;  // 19 + 28;
+        break;
+      case kLowHatch:
+        armDesiredHeight = 305;  // 19;
+        break;
+      case kHighCargo:
+        armDesiredHeight = 150;  // 27.5 + 28 + 28;
+      case kMidCargo:
+        armDesiredHeight = 265;  // 27.5 + 28;
+        break;
+      case kLowCargo:
+        armDesiredHeight = 300;  // 27.5;
+        break;
+    }
+
+    // Get and set error values to drive towards target height
+    actualHeight = sensors.getArmHeight();
+    armError = armDesiredHeight - actualHeight;
+    output = armKp * armError;
+    // Don't let the arm drive too fast
+    if (output > armMaxDrive) {
+      output = armMaxDrive;
+    } else if (output < -armMaxDrive) {
+      output = -armMaxDrive;
+    }
+    // Move arm based on robot and reverse motor (positive is up, negative is down)
+    if (robotmap.getIsFlow()) {
+      robotmap.armFlow.set(-output);
+    } else {
+      robotmap.armKcap.set(-output);
+    }
   }
 }

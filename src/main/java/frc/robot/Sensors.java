@@ -24,7 +24,7 @@ public class Sensors {
 
   private Potentiometer armPot;
   private double armDegrees;
-  private double armHight;
+  private double armHeight;
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
@@ -63,12 +63,12 @@ public class Sensors {
     return armDegrees;
   }
 
-  public double getArmHight() {
-    double stringlength = 36; //TODO: Measure actual string length
+  public double getArmHeight() {
+    double stringlength = 24;
     double inperDegree;
 
     inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
-    armHight = getArmPotValue() * inperDegree;
-    return armHight;
+    armHeight = getArmPotValue() * inperDegree;
+    return armHeight;
   }
 }

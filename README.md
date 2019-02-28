@@ -5,6 +5,7 @@
 - Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
 - Test Potentiometer
 - Defense Mode
+- Make drive straight work for driver left stick
 
 ## Others ##
 - Copy pipelines to each camera
