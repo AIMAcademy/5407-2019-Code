@@ -82,16 +82,8 @@ public class Actions {
       } else {
         armThrottle = op_throttle;
       }
-    } else {
-      armThrottle = 0.0;
-    }
-    if (isFlow) {
-      robotmap.armFlow.set(armThrottle);
-    } else {
-      robotmap.armKcap.set(armThrottle);
-    }
     // Get right bumper to control Arm for pickup and deploy Cargo
-    if (oi.getOpRightBumper()) {
+    } else if (oi.getOpRightBumper()) {
       if (oi.getOpButtonY()) {
         armControl(kHighCargo);
       } else if (oi.getOpButtonX()) {
