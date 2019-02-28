@@ -44,6 +44,8 @@ public class OI {
 	private boolean op_leftTrigger;
 	private boolean op_rightTrigger;
 
+	private double d_pad;
+
 	public OI() {
 		// driveStick = new Joystick(0);
 		driveStick = new Joystick(0);
@@ -128,6 +130,8 @@ public class OI {
 		op_rightBumper = opStick.getRawButton(6);
 		op_back = opStick.getRawButton(7);
 		op_start = opStick.getRawButton(8);
+
+		d_pad = opStick.getPOV(5);
 	}
 
 	/**
@@ -164,4 +168,5 @@ public class OI {
 	public boolean getOpStartButton() { return op_start; }
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
+	public double getDpad(){ return d_pad; }
 }

@@ -51,10 +51,14 @@ public class RobotMap {
     private int smallWinchMotor_ID = 2; // S-WINCH (PWM)
     // The Tung
     private int tungMotor_ID = 3; // THE TUNG (PWM)
+    // LED
+    private int LED_ID = 5;
 
     /*
      * Motor Controllers
      */
+    // LED
+    public Spark LED;
     // Powertrain
     public CANSparkMax leftMotor_0;
     public CANSparkMax leftMotor_1;
@@ -111,7 +115,10 @@ public class RobotMap {
 
             return;
         }
-        
+        // led
+        LED = new Spark(LED_ID);
+
+
         // Use Kcap Chassis
         leftMotor_0 = new CANSparkMax(leftMotorID_0, MotorType.kBrushless);
         leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);

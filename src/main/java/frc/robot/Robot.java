@@ -201,6 +201,9 @@ public class Robot extends TimedRobot {
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }
+    if (oi.getDpad() >= 0){
+      robotmap.LED.set(-.99);
+    }
   }
 
   public void updatePipelineChoice() {
