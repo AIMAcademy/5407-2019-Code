@@ -314,8 +314,4 @@ public class Actions {
       robotmap.armKcap.set(-output);
     }
   }
-
-  public void driveStraight() {
-
-  }
 }
