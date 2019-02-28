@@ -104,6 +104,7 @@ public class RobotMap {
             // Motor controllers for Flow too
             armFlow = new Spark(arm_ID);
             smallWinchMotor = new Spark(smallWinchMotor_ID);
+            cargoWheels = new Spark(cargoWheels_ID);
 
             return;
         }

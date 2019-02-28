@@ -15,6 +15,8 @@ public class Actions {
   private Sensors sensors;
   private Toggle lightsAndVisionToggle;
 
+  private boolean useGyroNAVX = false;
+
   // Limelight vision
   private final boolean isFlow;
   private boolean areLightsAndVisionOn;
@@ -22,6 +24,7 @@ public class Actions {
 
   // Potentiometer arm
   private double armThrottle;
+  private double cargoWheelsThrottle;
   private static final String kHighHatch = "High Hatch";
   private static final String kMidHatch = "Mid Hatch";
   private static final String kLowHatch = "Low Hatch";
@@ -63,12 +66,11 @@ public class Actions {
       boolean cameraTarget
     ) {
     
-    // Get Operator Left Joystick Throttle
-    final double op_throttle = oi.getOpThrottle();
-
     /**
      * Operator controls during game operations
      */
+    // Get Operator Left Stick Throttle
+    final double op_throttle = oi.getOpThrottle();
     // Get left bumper to control Arm for pickup and deploy Hatch
     if (oi.getOpLeftBumper()) {
       if (oi.getOpButtonY()) {
@@ -80,17 +82,6 @@ public class Actions {
       } else {
         armThrottle = op_throttle;
       }
-    // Get right bumper to control Arm for pickup and deploy Cargo
-    } else if (oi.getOpRightBumper()) {
-      if (oi.getOpButtonY()) {
-        armControl(kHighCargo);
-      } else if (oi.getOpButtonX()) {
-        armControl(kMidCargo);
-      } else if (oi.getOpButtonA()) {
-        armControl(kLowCargo);
-      } else {
-        armThrottle = op_throttle;
-      }
     } else {
       armThrottle = 0.0;
     }
@@ -99,6 +90,21 @@ public class Actions {
     } else {
       robotmap.armKcap.set(armThrottle);
     }
+
+    // Enable Cargo Mode
+    if (oi.getOpRightBumper()) {
+      if (oi.getOpButtonPressedY()) {  // Claw
+        final boolean solenoidStatus4 = !air.getSolenoid4();  // Cargo Claw
+        air.setSolenoid4(solenoidStatus4);
+      } else if (oi.getOpButtonPressedX()) { // Fangs
+        final boolean solenoidStatus1 = !air.getSolenoid1();  // Fangs
+        air.setSolenoid1(solenoidStatus1);
+      }
+      cargoWheelsThrottle = op_throttle;
+    } else {
+      cargoWheelsThrottle = 0.0;
+    }
+    robotmap.cargoWheels.set(cargoWheelsThrottle);
 
     // Get B Button to control Arm Small Winch
     double winchThrottle;
@@ -131,7 +137,6 @@ public class Actions {
      */
     double drivingAdjust;
     double steeringAdjust;
-    boolean useGyroNAVX;
     
     if (oi.getDriveLeftTrigger()) {
       drivingAdjust = -oi.getDriveThrottle();
@@ -163,11 +168,13 @@ public class Actions {
 
     // // If driving only forward or back ward within a threshold enable NavX drive straight
     // if (oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05) {
-    //   if (useGyroNAVX = false) {
+    //   if (useGyroNAVX == false) {
     //     sensors.setFollowAngleNAVX(0);
     //   }
     //   useGyroNAVX = true;
     //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    // } else if ((oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05)) {
+    //   useGyroNAVX = false;
     // }
 
     // Finally drive
