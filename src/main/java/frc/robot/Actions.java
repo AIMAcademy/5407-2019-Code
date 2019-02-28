@@ -29,7 +29,7 @@ public class Actions {
   private static final String kMidCargo = "Mid Ball";
   private static final String kLowCargo = "Low Ball";
   private double armKp = 0.02;
-  private double armMaxDrive = 0.25;  // TODO Make .7 after testing
+  private double armMaxDrive = 0.7;  // TODO Needs tuning and arm only goes one way
   private double armError = 0;
   private double output;
   private double armDesiredHeight = 0;
@@ -65,8 +65,6 @@ public class Actions {
     
     // Get Operator Left Joystick Throttle
     final double op_throttle = oi.getOpThrottle();
-
-    if (oi.getOpButtonY() || oi.getOpButtonX() || oi.getOpButtonA()) { return; } //
 
     /**
      * Operator controls during game operations
@@ -105,6 +103,7 @@ public class Actions {
     // Get B Button to control Arm Small Winch
     double winchThrottle;
     if (oi.getOpButtonB()) {
+      if (oi.getOpLeftBumper() || oi.getOpRightBumper()) { return; }
       winchThrottle = -op_throttle;
     } else {
       winchThrottle = 0.0;
@@ -113,6 +112,7 @@ public class Actions {
 
     // Get X Button Press to toggle front and back hatch solenoids
     if (oi.getOpButtonPressedX()) {
+      if (oi.getOpLeftBumper() || oi.getOpRightBumper()) { return; }
       final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
       final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
       if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
@@ -161,14 +161,14 @@ public class Actions {
       }
     }
 
-    // If driving only forward or back ward within a threshold enable NavX drive straight
-    if (oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05) {
-      if (useGyroNAVX = false) {
-        sensors.setFollowAngleNAVX(0);
-      }
-      useGyroNAVX = true;
-      steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
-    }
+    // // If driving only forward or back ward within a threshold enable NavX drive straight
+    // if (oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05) {
+    //   if (useGyroNAVX = false) {
+    //     sensors.setFollowAngleNAVX(0);
+    //   }
+    //   useGyroNAVX = true;
+    //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    // }
 
     // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
@@ -290,7 +290,7 @@ public class Actions {
     }
 
     // Get and set error values to drive towards target height
-    actualHeight = sensors.getArmHeight();
+    actualHeight = sensors.getArmPotValue();
     armError = armDesiredHeight - actualHeight;
     output = armKp * armError;
     // Don't let the arm drive too fast
@@ -302,6 +302,7 @@ public class Actions {
     // Move arm based on robot and reverse motor (positive is up, negative is down)
     if (robotmap.getIsFlow()) {
       robotmap.armFlow.set(-output);
+      System.out.println("armDesiredHeight: " + armDesiredHeight + " | armError: " + armError + " | output: " + output);
     } else {
       robotmap.armKcap.set(-output);
     }
