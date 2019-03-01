@@ -31,7 +31,7 @@ public class Actions {
   private static final String kHighCargo = "High Ball";
   private static final String kMidCargo = "Mid Ball";
   private static final String kLowCargo = "Low Ball";
-  private double armKp = 0.02;
+  private double armKp = 0.25;
   private double armMaxDrive = 0.7;  // TODO Needs tuning and arm only goes one way
   private double armError = 0;
   private double output;
@@ -99,10 +99,13 @@ public class Actions {
       } else if (oi.getOpButtonPressedX()) { // Fangs
         final boolean solenoidStatus1 = !air.getSolenoid1();  // Fangs
         air.setSolenoid1(solenoidStatus1);
+      } else if (oi.getDriveLeftBumper()) { // Output
+        cargoWheelsThrottle = 1;
+      } else if (oi.getDriveRightBumper()) {  // Intake
+        cargoWheelsThrottle = -1;
+      } else {
+        cargoWheelsThrottle = op_throttle;
       }
-      cargoWheelsThrottle = op_throttle;
-    } else {
-      cargoWheelsThrottle = 0.0;
     }
     robotmap.cargoWheels.set(cargoWheelsThrottle);
 
@@ -308,10 +311,10 @@ public class Actions {
     }
     // Move arm based on robot and reverse motor (positive is up, negative is down)
     if (robotmap.getIsFlow()) {
-      robotmap.armFlow.set(-output);
+      robotmap.armFlow.set(output);
       System.out.println("armDesiredHeight: " + armDesiredHeight + " | armError: " + armError + " | output: " + output);
     } else {
-      robotmap.armKcap.set(-output);
+      robotmap.armKcap.set(output);
     }
   }
 }

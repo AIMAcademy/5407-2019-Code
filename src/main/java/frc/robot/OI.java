@@ -109,7 +109,7 @@ public class OI {
 		drive_buttonX = driveStick.getRawButton(3);
 		drive_buttonY = driveStick.getRawButton(4);
 		drive_leftBumper = driveStick.getRawButton(5);
-		drive_rightBumper = driveStick.getRawButtonPressed(6);
+		drive_rightBumper = driveStick.getRawButton(6);
 		drive_back = driveStick.getRawButton(7);
 		drive_start = driveStick.getRawButton(8);
 
