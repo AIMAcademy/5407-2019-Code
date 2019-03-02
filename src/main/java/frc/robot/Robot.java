@@ -100,6 +100,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    System.out.println("ROBOT PERIODIC");
+    System.out.println("drivestick: " + oi.getDriveThrottle());
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
