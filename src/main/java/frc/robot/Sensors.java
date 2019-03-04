@@ -19,7 +19,7 @@ public class Sensors {
   private double followAngle;
 
   public final double kAngleSetpoint = 0.0;
-  public final double kP = 0.005; // propotional turning constant
+  public final double kP = 0.075; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
   private Potentiometer armPot;

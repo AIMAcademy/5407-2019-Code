@@ -71,6 +71,9 @@ public class Robot extends TimedRobot {
     sensors = new Sensors();
     actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
 
+    // Zero the NAVX
+    sensors.zeroNAVX();
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);

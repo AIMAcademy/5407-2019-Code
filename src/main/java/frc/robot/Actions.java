@@ -77,7 +77,6 @@ public class Actions {
         armControl(kHighHatch);
       } else if (oi.getOpButtonX()) {
         armControl(kMidHatch);
-        System.out.println("x pressed and armThrottle is: " +armThrottle);
       } else if (oi.getOpButtonA()) {
         armControl(kLowHatch);
       } else {
@@ -91,7 +90,6 @@ public class Actions {
     } else {
       robotmap.armKcap.set(armThrottle);
     }
-    System.out.println("armThrottle: " +armThrottle);
 
     // Enable Cargo Mode
     if (oi.getOpRightBumper()) {
@@ -142,7 +140,7 @@ public class Actions {
      */
     double drivingAdjust;
     double steeringAdjust;
-    
+    // Drive forwards or backwards
     if (oi.getDriveLeftTrigger()) {
       drivingAdjust = -oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
@@ -150,7 +148,7 @@ public class Actions {
       drivingAdjust = oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     }
-
+    // Aim and range forwards and backwards
     if (oi.getDriveRightTrigger()) {  // Auto targeting
       if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true and will use back camera for targeting
         if (!areLightsAndVisionOn) {
@@ -170,18 +168,16 @@ public class Actions {
         steeringAdjust = aimAndRange.getSteeringAdjust();
       }
     }
-
-    // // If driving only forward or back ward within a threshold enable NavX drive straight
-    // if (oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05) {
-    //   if (useGyroNAVX == false) {
-    //     sensors.setFollowAngleNAVX(0);
-    //   }
-    //   useGyroNAVX = true;
-    //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
-    // } else if ((oi.getDriveTurn() <= .05 && oi.getDriveTurn() >= -0.05)) {
-    //   useGyroNAVX = false;
-    // }
-
+    // If driving only forward or backward within a threshold enable NavX drive straight
+    if (oi.getDriveThrottle() == 0 || oi.getDriveTurn() != 0){
+      useGyroNAVX = false;
+    } else if (oi.getDriveTurn() == 0 && oi.getDriveThrottle() != 0){
+      if (useGyroNAVX == false) {
+        sensors.setFollowAngleNAVX(0);
+      }
+      useGyroNAVX = true;
+      steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    }
     // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
