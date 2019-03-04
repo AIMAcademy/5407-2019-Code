@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * Add your docs here.
@@ -27,7 +28,7 @@ public class OI {
 	private boolean drive_leftTrigger;
 	private boolean drive_rightTrigger;	
 
-	private Joystick opStick;
+	private XboxController opStick;
 	private double op_throttle;
 	private boolean op_buttonA;
 	private boolean op_buttonB;
@@ -43,13 +44,12 @@ public class OI {
 	private boolean op_start;
 	private boolean op_leftTrigger;
 	private boolean op_rightTrigger;
-
-	//private double d_pad;
+	private double d_pad;
 
 	public OI() {
 		// driveStick = new Joystick(0);
 		driveStick = new Joystick(0);
-		opStick = new Joystick(1);
+		opStick = new XboxController(1);
 	}
 
 	public void readValues() {	
@@ -130,8 +130,7 @@ public class OI {
 		op_rightBumper = opStick.getRawButton(6);
 		op_back = opStick.getRawButton(7);
 		op_start = opStick.getRawButton(8);
-
-		//d_pad = opStick.getPOV(5);
+		d_pad = opStick.getPOV(5);
 	}
 
 	/**
@@ -168,5 +167,5 @@ public class OI {
 	public boolean getOpStartButton() { return op_start; }
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
-	//public double getDpad(){ return d_pad; }
+	public double getDpad(){ return d_pad; }
 }
