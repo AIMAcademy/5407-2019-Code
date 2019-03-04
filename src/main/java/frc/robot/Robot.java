@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
     cameraTarget = currentLimelight.isTarget();
 
     // Update arm potentiometer value
-    potValue = sensors.getArmPotValue();
+    potValue = sensors.getArmHeight();
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);

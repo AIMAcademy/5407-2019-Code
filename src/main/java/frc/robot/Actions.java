@@ -31,7 +31,7 @@ public class Actions {
   private static final String kHighCargo = "High Ball";
   private static final String kMidCargo = "Mid Ball";
   private static final String kLowCargo = "Low Ball";
-  private double armKp = 0.25;
+  private double armKp = 0.05;
   private double armMaxDrive = 0.7;  // TODO Needs tuning and arm only goes one way
   private double armError = 0;
   private double output;
@@ -77,6 +77,7 @@ public class Actions {
         armControl(kHighHatch);
       } else if (oi.getOpButtonX()) {
         armControl(kMidHatch);
+        System.out.println("x pressed and armThrottle is: " +armThrottle);
       } else if (oi.getOpButtonA()) {
         armControl(kLowHatch);
       } else {
@@ -90,6 +91,7 @@ public class Actions {
     } else {
       robotmap.armKcap.set(armThrottle);
     }
+    System.out.println("armThrottle: " +armThrottle);
 
     // Enable Cargo Mode
     if (oi.getOpRightBumper()) {
@@ -265,6 +267,9 @@ public class Actions {
     robotmap.climberLegs.set(climberLegsThrottle);
   }
 
+  /**
+   * Toggle the limelight lights and camera modes
+   */
 	public void setLightsAndVision(Limelight limelight, boolean areLightsAndVisionOn) {
     if (areLightsAndVisionOn) {
       limelight.setLedMode(LightMode.eOn);
@@ -277,44 +282,47 @@ public class Actions {
     visionStatus = false;
   }
 
-  public void armControl(String m_armControl) {
+  /**
+   * Arm positioning using the potentiometer
+   */
+  public double armControl(String m_armControl) {
     switch (m_armControl) {
-      //Rocket
+      // Hatch values
       case kHighHatch:
-        armDesiredHeight = 160;  // 9 + 28 + 28;
+        armDesiredHeight = 840; //160;  // 9 + 28 + 28;
         break;
       case kMidHatch:
-        armDesiredHeight = 275;  // 19 + 28;
+        armDesiredHeight = 725; //275;  // 19 + 28;
         break;
       case kLowHatch:
-        armDesiredHeight = 305;  // 19;
+        armDesiredHeight = 695; //305;  // 19;
         break;
+      // Cargo values
       case kHighCargo:
-        armDesiredHeight = 150;  // 27.5 + 28 + 28;
+        armDesiredHeight = 850; //150;  // 27.5 + 28 + 28;
       case kMidCargo:
-        armDesiredHeight = 265;  // 27.5 + 28;
+        armDesiredHeight = 735; //265;  // 27.5 + 28;
         break;
       case kLowCargo:
-        armDesiredHeight = 300;  // 27.5;
+        armDesiredHeight = 700; //300;  // 27.5;
         break;
     }
 
     // Get and set error values to drive towards target height
-    actualHeight = sensors.getArmPotValue();
+    actualHeight = sensors.getArmHeight();
     armError = armDesiredHeight - actualHeight;
     output = armKp * armError;
+
     // Don't let the arm drive too fast
     if (output > armMaxDrive) {
       output = armMaxDrive;
     } else if (output < -armMaxDrive) {
       output = -armMaxDrive;
     }
-    // Move arm based on robot and reverse motor (positive is up, negative is down)
-    if (robotmap.getIsFlow()) {
-      robotmap.armFlow.set(output);
-      System.out.println("armDesiredHeight: " + armDesiredHeight + " | armError: " + armError + " | output: " + output);
-    } else {
-      robotmap.armKcap.set(output);
-    }
+    
+    // Convert to armThrottle to send back to arm control function
+    armThrottle = output;
+
+    return armThrottle;
   }
 }
