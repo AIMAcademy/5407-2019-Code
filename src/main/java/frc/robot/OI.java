@@ -44,10 +44,14 @@ public class OI {
 	private boolean op_leftTrigger;
 	private boolean op_rightTrigger;
 
+	private Joystick joystickEmulator;
+	private boolean em_button1;
+
 	public OI() {
 		// driveStick = new Joystick(0);
 		driveStick = new Joystick(0);
 		opStick = new Joystick(1);
+		joystickEmulator = new Joystick(2);
 	}
 
 	public void readValues() {	
@@ -128,6 +132,11 @@ public class OI {
 		op_rightBumper = opStick.getRawButton(6);
 		op_back = opStick.getRawButton(7);
 		op_start = opStick.getRawButton(8);
+
+		/**
+		 * Read Joystick Emulator buttons
+		 */
+		em_button1 = joystickEmulator.getRawButton(1);
 	}
 
 	/**
@@ -164,4 +173,9 @@ public class OI {
 	public boolean getOpStartButton() { return op_start; }
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
+
+	/**
+	 * Get and return Joystick Emulator buttons
+	 */
+	public boolean getJoystickEmulatorButton1() { return em_button1; }
 }

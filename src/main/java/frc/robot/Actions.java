@@ -71,77 +71,104 @@ public class Actions {
      */
     // Get Operator Left Stick Throttle
     final double op_throttle = oi.getOpThrottle();
-    // Get left bumper to control Arm for pickup and deploy Hatch
-    if (oi.getOpLeftBumper()) {
-      if (oi.getOpButtonY()) {
-        armControl(kHighHatch);
-      } else if (oi.getOpButtonX()) {
-        armControl(kMidHatch);
-      } else if (oi.getOpButtonA()) {
-        armControl(kLowHatch);
+    /** CARGO MODE **/
+    if (oi.getJoystickEmulatorButton1()) {
+      // Get left bumper to control arm
+      if (oi.getOpLeftBumper()) {
+        if (oi.getOpButtonY()) {
+          armControl(kHighHatch);
+        } else if (oi.getOpButtonX()) {
+          armControl(kMidHatch);
+        } else if (oi.getOpButtonA()) {
+          armControl(kLowHatch);
+        } else {
+          // Set arm motor to operator joystick throttle
+          armThrottle = op_throttle;
+          // Set arm limits
+          if (sensors.getArmHeight() < 115 && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
+            armThrottle = 0.0;
+          }
+        }
       } else {
-        // Set arm motor to operator joystick throttle
-        armThrottle = op_throttle;
-        // Set arm limits
-        if (sensors.getArmHeight() < 115 && op_throttle < 0) {
-          armThrottle = 0.0;
-        } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
-          armThrottle = 0.0;
+        armThrottle = 0.0;
+      }
+      // Get Y button to control Claw
+      if (oi.getOpButtonPressedY()) {
+        final boolean solenoidStatus4 = !air.getSolenoid4();
+        air.setSolenoid4(solenoidStatus4);
+      }
+      // Get X Button to control Fangs
+      if (oi.getOpButtonPressedX()) {
+        final boolean solenoidStatus1 = !air.getSolenoid1();
+        air.setSolenoid1(solenoidStatus1);
+      }
+      // Get Driver Left Bumper for Cargo Wheels output
+      if (oi.getDriveLeftBumper()) {
+        cargoWheelsThrottle = 1;
+      // Get Driver Right Bumper for Cargo Wheels intake
+      } else if (oi.getDriveRightBumper()) {
+        cargoWheelsThrottle = -1;
+      } else {
+        cargoWheelsThrottle = op_throttle;
+      }
+      // Set cargo wheels motors
+      robotmap.cargoWheels.set(cargoWheelsThrottle);
+    /** HATCH MODE **/
+    } else if (!oi.getJoystickEmulatorButton1()) {
+      if (oi.getOpLeftBumper()) {
+        if (oi.getOpButtonY()) {
+          armControl(kHighCargo);
+        } else if (oi.getOpButtonX()) {
+          armControl(kMidCargo);
+        } else if (oi.getOpButtonA()) {
+          armControl(kLowCargo);
+        } else {
+          // Set arm motor to operator joystick throttle
+          armThrottle = op_throttle;
+          // Set arm limits
+          if (sensors.getArmHeight() < 115 && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
+            armThrottle = 0.0;
+          }
+        }
+      } else {
+        armThrottle = 0.0;
+      }
+      // Get X Button to control hatch mechanisms
+      if (oi.getOpButtonPressedX()) {
+        final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
+        final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
+        if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+          air.setSolenoid2(solenoidStatus2);
+        } else {
+          air.setSolenoid0(solenoidStatus0);
         }
       }
-    } else {
-      armThrottle = 0.0;
+      // Get Right Trigger to fire back hatch tung pistons only if driving backwards
+      if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+        final boolean fireBackHatchTung = oi.getOpRightTrigger();
+        air.setSolenoid3(fireBackHatchTung);
+      }
     }
+    /** BOTH MODES **/
     // Set arm motor
     if (isFlow) {
       robotmap.armFlow.set(armThrottle);
     } else {
       robotmap.armKcap.set(armThrottle);
     }
-
-    // Enable Cargo Mode
-    if (oi.getOpRightBumper()) {
-      if (oi.getOpButtonPressedY()) {  // Claw
-        final boolean solenoidStatus4 = !air.getSolenoid4();  // Cargo Claw
-        air.setSolenoid4(solenoidStatus4);
-      } else if (oi.getOpButtonPressedX()) { // Fangs
-        final boolean solenoidStatus1 = !air.getSolenoid1();  // Fangs
-        air.setSolenoid1(solenoidStatus1);
-      } else if (oi.getDriveLeftBumper()) { // Output
-        cargoWheelsThrottle = 1;
-      } else if (oi.getDriveRightBumper()) {  // Intake
-        cargoWheelsThrottle = -1;
-      } else {
-        cargoWheelsThrottle = op_throttle;
-      }
-    }
-    robotmap.cargoWheels.set(cargoWheelsThrottle);
-
     // Get B Button to control Arm Small Winch
     double winchThrottle;
     if (oi.getOpButtonB()) {
-      if (oi.getOpLeftBumper() || oi.getOpRightBumper()) { return; }
+      if (oi.getOpLeftBumper()) { return; }
       winchThrottle = -op_throttle;
     } else {
       winchThrottle = 0.0;
     }
     robotmap.smallWinchMotor.set(winchThrottle);
-
-    // Get X Button Press to toggle front and back hatch solenoids
-    if (oi.getOpButtonPressedX()) {
-      if (oi.getOpLeftBumper() || oi.getOpRightBumper()) { return; }
-      final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
-      final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-      if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
-        air.setSolenoid2(solenoidStatus2);
-      } else {
-        air.setSolenoid0(solenoidStatus0);
-      }
-    }
-
-    // Get Right Trigger to fire back hatch tung pistons
-    final boolean fireBackHatchTung = oi.getOpRightTrigger();
-    air.setSolenoid3(fireBackHatchTung);
 
     /**
      * Driver controls during game operations
@@ -189,7 +216,9 @@ public class Actions {
     // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
-    // Turn off Limelight lights and vision processing if not being used
+    /**
+     * Turn off Limelight lights and vision processing if not being used
+     */
     if (areLightsAndVisionOn && !oi.getDriveRightTrigger()) {
       areLightsAndVisionOn = lightsAndVisionToggle.toggle();
       setLightsAndVision(limelight10, areLightsAndVisionOn);
