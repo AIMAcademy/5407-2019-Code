@@ -38,6 +38,8 @@ public class Actions {
   private double output;
   private double armDesiredHeight;
   private double actualHeight;
+  private double lowerArmLimit = 115;
+  private double upperArmLimit = 570;
 
   public Actions(
       Air air,
@@ -89,9 +91,9 @@ public class Actions {
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          if (sensors.getArmHeight() < 115 && op_throttle < 0) {
+          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
             armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
+          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
             armThrottle = 0.0;
           }
         }
@@ -132,9 +134,9 @@ public class Actions {
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          if (sensors.getArmHeight() < 115 && op_throttle < 0) {
+          if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
             armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
+          } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
             armThrottle = 0.0;
           }
         }
