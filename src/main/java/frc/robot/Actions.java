@@ -32,10 +32,10 @@ public class Actions {
   private static final String kMidCargo = "Mid Ball";
   private static final String kLowCargo = "Low Ball";
   private double armKp = 0.05;
-  private double armMaxDrive = 0.7;  // TODO Needs tuning and arm only goes one way
-  private double armError = 0;
+  private double armMaxDrive = 0.85;
+  private double armError;
   private double output;
-  private double armDesiredHeight = 0;
+  private double armDesiredHeight;
   private double actualHeight;
 
   public Actions(
@@ -80,11 +80,19 @@ public class Actions {
       } else if (oi.getOpButtonA()) {
         armControl(kLowHatch);
       } else {
+        // Set arm motor to operator joystick throttle
         armThrottle = op_throttle;
+        // Set arm limits
+        if (sensors.getArmHeight() < 115 && op_throttle < 0) {
+          armThrottle = 0.0;
+        } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
+          armThrottle = 0.0;
+        }
       }
     } else {
       armThrottle = 0.0;
     }
+    // Set arm motor
     if (isFlow) {
       robotmap.armFlow.set(armThrottle);
     } else {
@@ -285,22 +293,22 @@ public class Actions {
     switch (m_armControl) {
       // Hatch values
       case kHighHatch:
-        armDesiredHeight = 840; //160;  // 9 + 28 + 28;
+        armDesiredHeight = 555;
         break;
       case kMidHatch:
-        armDesiredHeight = 725; //275;  // 19 + 28;
+        armDesiredHeight = 365;
         break;
       case kLowHatch:
-        armDesiredHeight = 695; //305;  // 19;
+        armDesiredHeight = 180;
         break;
       // Cargo values
       case kHighCargo:
-        armDesiredHeight = 850; //150;  // 27.5 + 28 + 28;
+        armDesiredHeight = 580;
       case kMidCargo:
-        armDesiredHeight = 735; //265;  // 27.5 + 28;
+        armDesiredHeight = 425;
         break;
       case kLowCargo:
-        armDesiredHeight = 700; //300;  // 27.5;
+        armDesiredHeight = 230;
         break;
     }
 

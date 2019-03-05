@@ -37,7 +37,7 @@ public class Sensors {
     }
 
     AnalogInput ai = new AnalogInput(3);
-    armPot = new AnalogPotentiometer(ai, 360, 0); // TODO change fullrange to 1000 and make range an arm limit
+    armPot = new AnalogPotentiometer(ai, 1000, 0);
   }
 
   public void setFollowAngleNAVX(double offset){
@@ -68,7 +68,7 @@ public class Sensors {
     // double stringlength = 24;
     // double inperDegree;
 
-    // inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
+    // inperDegree = stringlength / 360;
     // armHeight = getArmPotValue() * inperDegree;
     armHeight = 1000 - getArmPotValue();
     return armHeight;
