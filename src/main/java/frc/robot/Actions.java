@@ -76,49 +76,6 @@ public class Actions {
       // Get left bumper to control arm
       if (oi.getOpLeftBumper()) {
         if (oi.getOpButtonY()) {
-          armControl(kHighHatch);
-        } else if (oi.getOpButtonX()) {
-          armControl(kMidHatch);
-        } else if (oi.getOpButtonA()) {
-          armControl(kLowHatch);
-        } else {
-          // Set arm motor to operator joystick throttle
-          armThrottle = op_throttle;
-          // Set arm limits
-          if (sensors.getArmHeight() < 115 && op_throttle < 0) {
-            armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
-            armThrottle = 0.0;
-          }
-        }
-      } else {
-        armThrottle = 0.0;
-      }
-      // Get Y button to control Claw
-      if (oi.getOpButtonPressedY()) {
-        final boolean solenoidStatus4 = !air.getSolenoid4();
-        air.setSolenoid4(solenoidStatus4);
-      }
-      // Get X Button to control Fangs
-      if (oi.getOpButtonPressedX()) {
-        final boolean solenoidStatus1 = !air.getSolenoid1();
-        air.setSolenoid1(solenoidStatus1);
-      }
-      // Get Driver Left Bumper for Cargo Wheels output
-      if (oi.getDriveLeftBumper()) {
-        cargoWheelsThrottle = 1;
-      // Get Driver Right Bumper for Cargo Wheels intake
-      } else if (oi.getDriveRightBumper()) {
-        cargoWheelsThrottle = -1;
-      } else {
-        cargoWheelsThrottle = op_throttle;
-      }
-      // Set cargo wheels motors
-      robotmap.cargoWheels.set(cargoWheelsThrottle);
-    /** HATCH MODE **/
-    } else if (!oi.getJoystickEmulatorButton1()) {
-      if (oi.getOpLeftBumper()) {
-        if (oi.getOpButtonY()) {
           armControl(kHighCargo);
         } else if (oi.getOpButtonX()) {
           armControl(kMidCargo);
@@ -136,21 +93,64 @@ public class Actions {
         }
       } else {
         armThrottle = 0.0;
-      }
-      // Get X Button to control hatch mechanisms
-      if (oi.getOpButtonPressedX()) {
-        final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
-        final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-        if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
-          air.setSolenoid2(solenoidStatus2);
-        } else {
-          air.setSolenoid0(solenoidStatus0);
+        // Get Y button to control Claw
+        if (oi.getOpButtonPressedY()) {
+          final boolean solenoidStatus4 = !air.getSolenoid4();
+          air.setSolenoid4(solenoidStatus4);
+        }
+        // Get X Button to control Fangs
+        if (oi.getOpButtonPressedX()) {
+          final boolean solenoidStatus1 = !air.getSolenoid1();
+          air.setSolenoid1(solenoidStatus1);
         }
       }
-      // Get Right Trigger to fire back hatch tung pistons only if driving backwards
-      if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
-        final boolean fireBackHatchTung = oi.getOpRightTrigger();
-        air.setSolenoid3(fireBackHatchTung);
+      // Get Driver Left Bumper for Cargo Wheels output
+      if (oi.getDriveLeftBumper()) {
+        cargoWheelsThrottle = 1;
+      // Get Driver Right Bumper for Cargo Wheels intake
+      } else if (oi.getDriveRightBumper()) {
+        cargoWheelsThrottle = -1;
+      } else {
+        cargoWheelsThrottle = op_throttle;
+      }
+      // Set cargo wheels motors
+      robotmap.cargoWheels.set(cargoWheelsThrottle);
+    /** HATCH MODE **/
+    } else if (!oi.getJoystickEmulatorButton1()) {
+      if (oi.getOpLeftBumper()) {
+        if (oi.getOpButtonY()) {
+          armControl(kHighHatch);
+        } else if (oi.getOpButtonX()) {
+          armControl(kMidHatch);
+        } else if (oi.getOpButtonA()) {
+          armControl(kLowHatch);
+        } else {
+          // Set arm motor to operator joystick throttle
+          armThrottle = op_throttle;
+          // Set arm limits
+          if (sensors.getArmHeight() < 115 && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > 570 && op_throttle > 0){
+            armThrottle = 0.0;
+          }
+        }
+      } else {
+        armThrottle = 0.0;
+        // Get X Button to control hatch mechanisms
+        if (oi.getOpButtonPressedX()) {
+          final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
+          final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
+          if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+            air.setSolenoid2(solenoidStatus2);
+          } else {
+            air.setSolenoid0(solenoidStatus0);
+          }
+        }
+        // Get Right Trigger to fire back hatch tung pistons only if driving backwards
+        if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+          final boolean fireBackHatchTung = oi.getOpRightTrigger();
+          air.setSolenoid3(fireBackHatchTung);
+        }
       }
     }
     /** BOTH MODES **/

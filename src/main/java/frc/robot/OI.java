@@ -46,6 +46,7 @@ public class OI {
 
 	private Joystick joystickEmulator;
 	private boolean em_button1;
+	private boolean em_button2;
 
 	public OI() {
 		// driveStick = new Joystick(0);
@@ -137,6 +138,7 @@ public class OI {
 		 * Read Joystick Emulator buttons
 		 */
 		em_button1 = joystickEmulator.getRawButton(1);
+		em_button2 = joystickEmulator.getRawButton(2);
 	}
 
 	/**
@@ -178,4 +180,5 @@ public class OI {
 	 * Get and return Joystick Emulator buttons
 	 */
 	public boolean getJoystickEmulatorButton1() { return em_button1; }
+	public boolean getJoystickEmulatorButton2() { return em_button2; }
 }

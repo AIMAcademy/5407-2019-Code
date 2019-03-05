@@ -184,7 +184,7 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
-    if (oi.getOpBackButton()) { // TODO Change to hardware switch on driver station
+    if (oi.getJoystickEmulatorButton2()) {
       actions.endGameOp();
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
