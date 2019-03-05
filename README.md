@@ -1,11 +1,10 @@
 ## To Do ##
 - Test Declan's auton
-- Make limelight targeting toggle LED and Vision automatically and switch camera based on driving direction
 - Create pipeline switching feature
-- Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
-- Test Potentiometer
 - Defense Mode
-- Make drive straight work for driver left stick
+- Create cargo vs hatch modes
+- Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
+- Make sure that lights are turning off during init
 
 ## Others ##
 - Copy pipelines to each camera

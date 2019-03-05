@@ -19,7 +19,7 @@ public class Sensors {
   private double followAngle;
 
   public final double kAngleSetpoint = 0.0;
-  public final double kP = 0.005; // propotional turning constant
+  public final double kP = 0.075; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
   private Potentiometer armPot;
@@ -37,7 +37,7 @@ public class Sensors {
     }
 
     AnalogInput ai = new AnalogInput(3);
-    armPot = new AnalogPotentiometer(ai, 360, 0);
+    armPot = new AnalogPotentiometer(ai, 1000, 0);
   }
 
   public void setFollowAngleNAVX(double offset){
@@ -63,12 +63,14 @@ public class Sensors {
     return armDegrees;
   }
 
+  // not using
   public double getArmHeight() {
-    double stringlength = 24;
-    double inperDegree;
+    // double stringlength = 24;
+    // double inperDegree;
 
-    inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
-    armHeight = getArmPotValue() * inperDegree;
+    // inperDegree = stringlength / 360;
+    // armHeight = getArmPotValue() * inperDegree;
+    armHeight = 1000 - getArmPotValue();
     return armHeight;
   }
 }

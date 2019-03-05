@@ -71,6 +71,9 @@ public class Robot extends TimedRobot {
     sensors = new Sensors();
     actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
 
+    // Zero the NAVX
+    sensors.zeroNAVX();
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -100,8 +103,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    System.out.println("ROBOT PERIODIC");
-    System.out.println("drivestick: " + oi.getDriveThrottle());
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
     cameraTarget = currentLimelight.isTarget();
 
     // Update arm potentiometer value
-    potValue = sensors.getArmPotValue();
+    potValue = sensors.getArmHeight();
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
