@@ -8,12 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * Add your docs here.
  */
 public class OI {
-	private Joystick driveStick;
+	private XboxController driveStick;
 	private double drive_throttle;
 	private double drive_turn;
 	private boolean drive_buttonA;
@@ -27,7 +28,7 @@ public class OI {
 	private boolean drive_leftTrigger;
 	private boolean drive_rightTrigger;	
 
-	private Joystick opStick;
+	private XboxController opStick;
 	private double op_throttle;
 	private double op_rightThrottle;
 	private boolean op_buttonA;
@@ -50,9 +51,8 @@ public class OI {
 	private boolean em_button2;
 
 	public OI() {
-		// driveStick = new Joystick(0);
-		driveStick = new Joystick(0);
-		opStick = new Joystick(1);
+		driveStick = new XboxController(0);
+		opStick = new XboxController(1);
 		joystickEmulator = new Joystick(2);
 	}
 
