@@ -28,9 +28,10 @@ public class Actions {
   private static final String kHighHatch = "High Hatch";
   private static final String kMidHatch = "Mid Hatch";
   private static final String kLowHatch = "Low Hatch";
-  private static final String kHighCargo = "High Ball";
-  private static final String kMidCargo = "Mid Ball";
-  private static final String kLowCargo = "Low Ball";
+  private static final String kHighCargo = "High Cargo";
+  private static final String kMidCargo = "Mid Cargo";
+  private static final String kLowCargo = "Low Cargo";
+  private static final String kPickupCargo = "Pick up Cargo";
   private double armKp = 0.05;
   private double armMaxDrive = 0.85;
   private double armError;
@@ -71,6 +72,7 @@ public class Actions {
      */
     // Get Operator Left Stick Throttle
     final double op_throttle = oi.getOpThrottle();
+    final double op_rightThrottle = oi.getOpRightThrottle();
     /** CARGO MODE **/
     if (oi.getJoystickEmulatorButton1()) {
       // Get left bumper to control arm
@@ -81,6 +83,8 @@ public class Actions {
           armControl(kMidCargo);
         } else if (oi.getOpButtonA()) {
           armControl(kLowCargo);
+        } else if (oi.getOpButtonB()) {
+          armControl(kPickupCargo);
         } else {
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
@@ -111,7 +115,7 @@ public class Actions {
       } else if (oi.getDriveRightBumper()) {
         cargoWheelsThrottle = -1;
       } else {
-        cargoWheelsThrottle = op_throttle;
+        cargoWheelsThrottle = op_rightThrottle;
       }
       // Set cargo wheels motors
       robotmap.cargoWheels.set(cargoWheelsThrottle);
@@ -333,11 +337,15 @@ public class Actions {
       // Cargo values
       case kHighCargo:
         armDesiredHeight = 545;
+        break;
       case kMidCargo:
         armDesiredHeight = 400;
         break;
       case kLowCargo:
         armDesiredHeight = 200;
+        break;
+      case kPickupCargo:
+        armDesiredHeight = 120;
         break;
     }
 

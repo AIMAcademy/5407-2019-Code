@@ -29,6 +29,7 @@ public class OI {
 
 	private Joystick opStick;
 	private double op_throttle;
+	private double op_rightThrottle;
 	private boolean op_buttonA;
 	private boolean op_buttonB;
 	private boolean op_buttonX;
@@ -93,6 +94,12 @@ public class OI {
 		} else {
 			op_throttle = 0;
 		}
+		// Operator Right Stick Y Axis 5 for Operator Right Throttle
+		if (opStick.getRawAxis(5) < -0.2 || opStick.getRawAxis(5) > 0.2) {
+			op_rightThrottle = -opStick.getRawAxis(5);
+		} else {
+			op_rightThrottle = 0;
+		}		
 		// Operator Left Trigger Axis 2
 		if (opStick.getRawAxis(2) > .5) {
 			op_leftTrigger = true;
@@ -161,6 +168,7 @@ public class OI {
 	 * Get and return Operator buttons
 	 */
 	public double getOpThrottle() { return op_throttle; }
+	public double getOpRightThrottle() { return op_rightThrottle; }
 	public boolean getOpButtonA() { return op_buttonA; }
 	public boolean getOpButtonB() { return op_buttonB; }
 	public boolean getOpButtonX() { return op_buttonX; }
