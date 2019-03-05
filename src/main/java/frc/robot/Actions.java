@@ -303,12 +303,12 @@ public class Actions {
         break;
       // Cargo values
       case kHighCargo:
-        armDesiredHeight = 580;
+        armDesiredHeight = 545;
       case kMidCargo:
-        armDesiredHeight = 425;
+        armDesiredHeight = 400;
         break;
       case kLowCargo:
-        armDesiredHeight = 230;
+        armDesiredHeight = 200;
         break;
     }
 
