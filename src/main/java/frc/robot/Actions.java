@@ -144,11 +144,11 @@ public class Actions {
         armThrottle = 0.0;
         // Get X Button to control hatch mechanisms
         if (oi.getOpButtonPressedX()) {
-          final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
-          final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
           if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+            final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
             air.setSolenoid2(solenoidStatus2);
           } else {
+            final boolean solenoidStatus0 = !air.getSolenoid0();  // Beak
             air.setSolenoid0(solenoidStatus0);
           }
         }
