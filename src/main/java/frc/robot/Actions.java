@@ -22,6 +22,9 @@ public class Actions {
   private boolean areLightsAndVisionOn;
   public boolean visionStatus;
 
+  // Defense mode
+  private boolean defenseToggle;
+
   // Potentiometer arm
   private double armThrottle;
   private double cargoWheelsThrottle;
@@ -159,6 +162,7 @@ public class Actions {
         }
       }
     }
+
     /** BOTH MODES **/
     // Set arm motor
     if (isFlow) {
@@ -230,6 +234,17 @@ public class Actions {
       setLightsAndVision(limelight10, areLightsAndVisionOn);
       setLightsAndVision(limelight11, areLightsAndVisionOn);
     }
+  }
+
+  public boolean checkDefenseMode() {
+    if (oi.getJoystickEmulatorButton3()) {
+      defenseToggle = !defenseToggle;
+    }
+    return defenseToggle;
+  }
+
+  public void defenseMode() {
+    armControl(kPickupCargo);
   }
 
   public void endGameOp() {

@@ -49,6 +49,7 @@ public class OI {
 	private Joystick joystickEmulator;
 	private boolean em_button1;
 	private boolean em_button2;
+	private boolean em_button3;
 
 	public OI() {
 		driveStick = new XboxController(0);
@@ -146,6 +147,7 @@ public class OI {
 		 */
 		em_button1 = joystickEmulator.getRawButton(1);
 		em_button2 = joystickEmulator.getRawButton(2);
+		em_button3 = joystickEmulator.getRawButtonPressed(3);
 	}
 
 	/**
@@ -189,4 +191,5 @@ public class OI {
 	 */
 	public boolean getJoystickEmulatorButton1() { return em_button1; }
 	public boolean getJoystickEmulatorButton2() { return em_button2; }
+	public boolean getJoystickEmulatorButton3() { return em_button3; }
 }

@@ -186,6 +186,8 @@ public class Robot extends TimedRobot {
 
     if (oi.getJoystickEmulatorButton2()) {
       actions.endGameOp();
+    } else if (actions.checkDefenseMode()) {
+      actions.defenseMode();
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }
