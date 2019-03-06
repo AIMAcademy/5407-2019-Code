@@ -44,6 +44,20 @@ public class Actions {
   private double lowerArmLimit = 115;
   private double upperArmLimit = 570;
 
+  // Potentiometer smallWinch
+  private double smallWinchThrottle;
+  private static final String ksmallWinchUp = "Small Winch Up";
+  private static final String ksmallWinchMid = "Small Winch Mid";
+  private static final String ksmallWinchDown = "Small Winch Down";
+  private double smallWinchkP = 0.05;
+  private double smallWinchMaxDrive = 0.85;
+  private double smallWinchError;
+  private double smallWinchOutput;
+  private double smallWinchDesiredHeight;
+  private double smallWinchactualHeight;
+  private double smallWinchLowerLimit = 115;
+  private double smallWinchUpperLimit = 570;
+
   public Actions(
       Air air,
       Limelight limelight10,
@@ -334,6 +348,36 @@ public class Actions {
     limelight.setLedMode(LightMode.eOff);
     limelight.setCameraMode(CameraMode.eDriver);
     visionStatus = false;
+  }
+
+  public double smallWinchControl(String m_smallWinchControl) {
+    switch (m_smallWinchControl) {
+
+      case ksmallWinchDown:
+        smallWinchDesiredHeight = 55; //TODO: Change All
+        break;
+      case ksmallWinchMid:
+        smallWinchDesiredHeight = 365;
+        break;
+      case ksmallWinchUp:
+        smallWinchDesiredHeight = 180;
+        break;
+    }
+
+    // Get and set error values to drive towards target height
+    smallWinchactualHeight = sensors.getSmallWinchPot();
+    smallWinchError = smallWinchDesiredHeight - smallWinchactualHeight;
+    smallWinchOutput = smallWinchkP * smallWinchError;
+
+    // Don't let the winch drive too fast
+    if (smallWinchOutput > smallWinchMaxDrive) {
+      smallWinchOutput = smallWinchMaxDrive;
+    } else if (smallWinchOutput < -smallWinchMaxDrive) {
+      smallWinchOutput = -smallWinchMaxDrive;
+    }
+    
+    smallWinchThrottle = smallWinchOutput;
+    return smallWinchThrottle;
   }
 
   /**
