@@ -184,10 +184,14 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
+    // Check if in defense mode and only run defense function
+    if (actions.checkDefenseMode()) {
+      actions.defenseMode();
+      return;
+    }
+    // If not in defense mode run either Game Operations or End Game Operations
     if (oi.getJoystickEmulatorButtonSwitch2()) {
       actions.endGameOp();
-    } else if (actions.checkDefenseMode()) {
-      actions.defenseMode();
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }

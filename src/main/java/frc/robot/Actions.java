@@ -23,7 +23,7 @@ public class Actions {
   public boolean visionStatus;
 
   // Defense mode
-  private boolean defenseToggle;
+  private boolean defenseToggle = false;
 
   // Potentiometer arm
   private double armThrottle;
@@ -249,17 +249,6 @@ public class Actions {
     }
   }
 
-  public boolean checkDefenseMode() {
-    if (oi.getJoystickEmulatorButtonPressed3()) {
-      defenseToggle = !defenseToggle;
-    }
-    return defenseToggle;
-  }
-
-  public void defenseMode() {
-    armControl(kPickupCargo);
-  }
-
   public void endGameOp() {
     robotmap.drive.arcadeDrive(-oi.getDriveThrottle(), oi.getDriveTurn());
 
@@ -332,6 +321,21 @@ public class Actions {
       climberLegsThrottle = 0;
     }
     robotmap.climberLegs.set(climberLegsThrottle);
+  }
+
+  public boolean checkDefenseMode() {
+    if (oi.getJoystickEmulatorButtonPressed3()) {
+      defenseToggle = !defenseToggle;
+    }
+    return defenseToggle;
+  }
+
+  public void defenseMode() {
+    // set arm
+    // set pistons
+    // set winch
+    // set leds
+    armControl(kPickupCargo);
   }
 
   /**
