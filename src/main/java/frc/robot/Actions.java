@@ -183,15 +183,24 @@ public class Actions {
     } else {
       robotmap.armKcap.set(armThrottle);
     }
-    // Get B Button to control Arm Small Winch
-    double winchThrottle;
+    // Small Winch
     if (oi.getOpButtonB()) {
-      if (oi.getOpLeftBumper()) { return; }
-      winchThrottle = -op_throttle;
+      if (oi.getOpDpadLeft()) {
+        // Set winch to stowed
+        smallWinchControl(ksmallWinchStowedLeft);
+      } else if (oi.getOpDpadUp()) {
+        // Set winch to Cargo mode
+        smallWinchControl(ksmallWinchCargoUp);
+      } else if (oi.getOpDpadRight()) {
+        // Set winch to Hatch mode
+        smallWinchControl(ksmallWinchHatchRight);
+      } else {
+        smallWinchThrottle = -op_throttle;
+      }
     } else {
-      winchThrottle = 0.0;
+      smallWinchThrottle = 0.0;
     }
-    robotmap.smallWinchMotor.set(winchThrottle);
+    robotmap.smallWinchMotor.set(smallWinchThrottle);
 
     /**
      * Driver controls during game operations

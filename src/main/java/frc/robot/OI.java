@@ -45,6 +45,10 @@ public class OI {
 	private boolean op_start;
 	private boolean op_leftTrigger;
 	private boolean op_rightTrigger;
+	private boolean op_dpadUp;
+	private boolean op_dpadRight;
+	private boolean op_dpadDown;
+	private boolean op_dpadLeft;
 
 	private Joystick joystickEmulator;
 	private boolean em_buttonSwitch1;
@@ -112,6 +116,30 @@ public class OI {
 			op_rightTrigger = true;
 		} else {
 			op_rightTrigger = false;
+		}
+		// Operator Dpad Up 
+		if ((opStick.getPOV(0) >= 315 && opStick.getPOV(0) <= 45) && opStick.getPOV(0) != -1) {
+			op_dpadUp = true;
+		} else {
+			op_dpadUp = false;
+		}
+		// Operator Dpad Right
+		if ((opStick.getPOV(0) >= 45 && opStick.getPOV(0) <= 135) && opStick.getPOV(0) != -1) {
+			op_dpadRight = true;
+		} else {
+			op_dpadRight = false;
+		}
+		// Operator Dpad Down
+		if ((opStick.getPOV(0) >= 135 && opStick.getPOV(0) <= 225) && opStick.getPOV(0) != -1) {
+			op_dpadDown = true;
+		} else {
+			op_dpadDown = false;
+		}
+		// Operator Dpad Left
+		if ((opStick.getPOV(0) >= 225 && opStick.getPOV(0) <= 315) && opStick.getPOV(0) != -1) {
+			op_dpadLeft = true;
+		} else {
+			op_dpadLeft = false;
 		}
 
 		/**
@@ -185,6 +213,10 @@ public class OI {
 	public boolean getOpStartButton() { return op_start; }
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
+	public boolean getOpDpadUp() { return op_dpadUp; }
+	public boolean getOpDpadRight() { return op_dpadRight; }
+	public boolean getOpDpadDown() { return op_dpadDown; }
+	public boolean getOpDpadLeft() { return op_dpadLeft; }
 
 	/**
 	 * Get and return Joystick Emulator buttons
