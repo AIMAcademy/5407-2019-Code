@@ -46,9 +46,9 @@ public class Actions {
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
-  private static final String ksmallWinchUp = "Small Winch Up";
-  private static final String ksmallWinchMid = "Small Winch Mid";
-  private static final String ksmallWinchDown = "Small Winch Down";
+  private static final String ksmallWinchStowedLeft = "Small Winch Up";
+  private static final String ksmallWinchCargoUp = "Small Winch Mid";
+  private static final String ksmallWinchHatchRight = "Small Winch Down";
   private double smallWinchkP = 0.05;
   private double smallWinchMaxDrive = 0.85;
   private double smallWinchError;
@@ -355,13 +355,13 @@ public class Actions {
 
   public double smallWinchControl(String m_smallWinchControl) {
     switch (m_smallWinchControl) {
-      case ksmallWinchDown:
+      case ksmallWinchStowedLeft:
         smallWinchDesiredHeight = 55; //TODO: Change All
         break;
-      case ksmallWinchMid:
+      case ksmallWinchCargoUp:
         smallWinchDesiredHeight = 365;
         break;
-      case ksmallWinchUp:
+      case ksmallWinchHatchRight:
         smallWinchDesiredHeight = 180;
         break;
     }
