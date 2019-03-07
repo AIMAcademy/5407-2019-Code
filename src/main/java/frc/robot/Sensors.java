@@ -18,6 +18,12 @@ public class Sensors {
   private AHRS ahrs;
   private double followAngle;
 
+  private int armPotentiometer_ID = 0;
+  private int smallWinchPotentiometer_ID = 1;
+  
+  private Potentiometer s_WinchPot;
+  private double s_winchPotValue;
+
   public final double kAngleSetpoint = 0.0;
   public final double kP = 0.075; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
@@ -28,9 +34,6 @@ public class Sensors {
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
-  private Potentiometer s_WinchPot;
-  private double s_winchPotValue;
-
   public Sensors() {
 
     try {
@@ -39,10 +42,10 @@ public class Sensors {
       DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
     }
 
-    AnalogInput ai = new AnalogInput(3);
+    AnalogInput ai = new AnalogInput(armPotentiometer_ID);
     armPot = new AnalogPotentiometer(ai, 1000, 0);
 
-    AnalogInput ai2 = new AnalogInput(2);
+    AnalogInput ai2 = new AnalogInput(smallWinchPotentiometer_ID);
     s_WinchPot = new AnalogPotentiometer(ai2, 1000, 0);
   }
 
