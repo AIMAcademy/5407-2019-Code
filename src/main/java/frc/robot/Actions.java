@@ -23,7 +23,7 @@ public class Actions {
   public boolean visionStatus;
 
   // Defense mode
-  private boolean defenseToggle = false;
+  public boolean defenseToggle = false;
 
   // Potentiometer arm
   private double armThrottle;
@@ -41,8 +41,8 @@ public class Actions {
   private double output;
   private double armDesiredHeight;
   private double actualHeight;
-  private double lowerArmLimit = 115;
-  private double upperArmLimit = 570;
+  private double lowerArmLimit = 0;
+  private double upperArmLimit = 1000;
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
@@ -108,11 +108,11 @@ public class Actions {
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
-            armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
-            armThrottle = 0.0;
-          }
+          // if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
+          //   armThrottle = 0.0;
+          // } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
+          //   armThrottle = 0.0;
+          // }
         }
       } else {
         armThrottle = 0.0;
@@ -151,11 +151,11 @@ public class Actions {
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
-            armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
-            armThrottle = 0.0;
-          }
+          // if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
+          //   armThrottle = 0.0;
+          // } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
+          //   armThrottle = 0.0;
+          // }
         }
       } else {
         armThrottle = 0.0;
@@ -195,7 +195,14 @@ public class Actions {
         // Set winch to Hatch mode
         smallWinchControl(ksmallWinchHatchRight);
       } else {
+        // Set winch motor to operator joystick throttle
         smallWinchThrottle = -op_throttle;
+        // Set winch limits
+        // if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+        //   smallWinchThrottle = 0.0;
+        // } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+        //   smallWinchThrottle = 0.0;
+        // }
       }
     } else {
       smallWinchThrottle = 0.0;

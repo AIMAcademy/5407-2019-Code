@@ -55,7 +55,8 @@ public class Robot extends TimedRobot {
   double steeringAdjustFront;
 
   // Potentiometer
-  private double potValue;
+  private double armPotValue;
+  private double winchPotValue;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -121,7 +122,8 @@ public class Robot extends TimedRobot {
     cameraTarget = currentLimelight.isTarget();
 
     // Update arm potentiometer value
-    potValue = sensors.getArmHeight();
+    armPotValue = sensors.getArmHeight();
+    winchPotValue = sensors.getSmallWinchPot();
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
@@ -132,7 +134,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("hardMA", hard_mounting_angle);
     SmartDashboard.putNumber("softMA", soft_mounting_angle);
     SmartDashboard.putBoolean("visionStatus", actions.visionStatus);
-    SmartDashboard.putNumber("PotVal", potValue);
+    SmartDashboard.putNumber("ArmPot", armPotValue);
+    SmartDashboard.putNumber("WinchPot", winchPotValue);
+    SmartDashboard.putBoolean("limelightTarget", cameraTarget);
+    SmartDashboard.putBoolean("DEFENSE", actions.defenseToggle);
 
     m_pipelineChoice = m_pipeline.getSelected();
   }
