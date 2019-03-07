@@ -130,7 +130,7 @@ public class OI {
 		op_rightBumper = opStick.getRawButton(6);
 		op_back = opStick.getRawButton(7);
 		op_start = opStick.getRawButton(8);
-		d_pad = opStick.getPOV(5);
+		d_pad = opStick.getPOV(0);
 	}
 
 	/**

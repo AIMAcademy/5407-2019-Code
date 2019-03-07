@@ -52,14 +52,13 @@ public class RobotMap {
     // The Tung
     private int tungMotor_ID = 3; // THE TUNG (PWM)
     // LED
-    //private int LED_ID = 5;
-
+    private int LED_ID = 5;
+    public Spark LED;
     /*
      * Motor Controllers
      */
-    // LED
-    //public Spark LED;
-    // Powertrain
+
+    // Powertrainzx
     public CANSparkMax leftMotor_0;
     public CANSparkMax leftMotor_1;
     public CANSparkMax leftMotor_2;
@@ -116,7 +115,7 @@ public class RobotMap {
             return;
         }
         // led
-        //LED = new Spark(LED_ID);
+        LED = new Spark(LED_ID);
 
 
         // Use Kcap Chassis

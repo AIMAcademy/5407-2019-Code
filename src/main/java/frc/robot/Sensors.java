@@ -28,6 +28,9 @@ public class Sensors {
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
+  private Potentiometer wintchPot;
+  private double wintchDegrees;
+  private double wintch_position;
   public Sensors() {
 
     try {
@@ -38,6 +41,9 @@ public class Sensors {
 
     AnalogInput ai = new AnalogInput(3);
     armPot = new AnalogPotentiometer(ai, 360, 0);
+
+    AnalogInput pai = new AnalogInput(5);
+    wintchPot = new AnalogPotentiometer(pai, 360, 0);
   }
 
   public void setFollowAngleNAVX(double offset){
@@ -70,5 +76,12 @@ public class Sensors {
     inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
     armHight = getArmPotValue() * inperDegree;
     return armHight;
+  }
+
+  public double getwintchheight(){
+    wintchDegrees = wintchPot.get();
+    
+
+    return wintch_position;
   }
 }

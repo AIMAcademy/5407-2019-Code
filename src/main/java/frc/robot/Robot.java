@@ -163,26 +163,28 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // Zero the NAVX before auton
-    sensors.zeroNAVX();
+    // // Zero the NAVX before auton
+    // sensors.zeroNAVX();
 
-    m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
+    // m_autoSelected = m_chooser.getSelected();
+    // System.out.println("Auto selected: " + m_autoSelected);
+    teleopInit();
   }
 
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      sensors.setFollowAngleNAVX(0);
-      robotmap.drive.arcadeDrive(0, (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
-      break;
-    }
+    // switch (m_autoSelected) {
+    // case kCustomAuto:
+    //   // Put custom auto code here
+    //   break;
+    // case kDefaultAuto:
+    // default:
+    //   // Put default auto code here
+    //   sensors.setFollowAngleNAVX(0);
+    //   robotmap.drive.arcadeDrive(0, (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
+    //   break;
+    // }
+    teleopPeriodic();
   }
 
   @Override
@@ -201,10 +203,17 @@ public class Robot extends TimedRobot {
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }
-    if (oi.getDpad() >= 0){
-      robotmap.smallWinchMotor.set(.3);
-      //robotmap.LED.set(-.99);
-    }
+    // if (oi.getDpad() == 0){
+    //   //System.out.println("dpad pressed: " + oi.getDpad());
+    //   robotmap.smallWinchMotor.set(1);
+    //   //robotmap.LED.set(-.99);
+    // }
+    // if (oi.getDpad() == 180){
+    //   robotmap.smallWinchMotor.set(-1);
+    // }
+    // //else {
+    // //   System.out.println("dpad not pressed: " + oi.getDpad());
+    // // }
   }
 
   public void updatePipelineChoice() {
