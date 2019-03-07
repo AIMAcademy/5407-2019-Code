@@ -47,9 +47,9 @@ public class OI {
 	private boolean op_rightTrigger;
 
 	private Joystick joystickEmulator;
-	private boolean em_button1;
-	private boolean em_button2;
-	private boolean em_button3;
+	private boolean em_buttonSwitch1;
+	private boolean em_buttonSwitch2;
+	private boolean em_buttonPressed3;
 
 	public OI() {
 		driveStick = new XboxController(0);
@@ -145,9 +145,9 @@ public class OI {
 		/**
 		 * Read Joystick Emulator buttons
 		 */
-		em_button1 = joystickEmulator.getRawButton(1);
-		em_button2 = joystickEmulator.getRawButton(2);
-		em_button3 = joystickEmulator.getRawButtonPressed(3);
+		em_buttonSwitch1 = joystickEmulator.getRawButton(1);
+		em_buttonSwitch2 = joystickEmulator.getRawButton(2);
+		em_buttonPressed3 = joystickEmulator.getRawButtonPressed(3);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class OI {
 	/**
 	 * Get and return Joystick Emulator buttons
 	 */
-	public boolean getJoystickEmulatorButton1() { return em_button1; }
-	public boolean getJoystickEmulatorButton2() { return em_button2; }
-	public boolean getJoystickEmulatorButton3() { return em_button3; }
+	public boolean getJoystickEmulatorButtonSwitch1() { return em_buttonSwitch1; }
+	public boolean getJoystickEmulatorButtonSwitch2() { return em_buttonSwitch2; }
+	public boolean getJoystickEmulatorButtonPressed3() { return em_buttonPressed3; }
 }

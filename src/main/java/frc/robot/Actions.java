@@ -93,7 +93,7 @@ public class Actions {
     final double op_throttle = oi.getOpThrottle();
     final double op_rightThrottle = oi.getOpRightThrottle();
     /** CARGO MODE **/
-    if (oi.getJoystickEmulatorButton1()) {
+    if (oi.getJoystickEmulatorButtonSwitch1()) {
       // Get left bumper to control arm
       if (oi.getOpLeftBumper()) {
         if (oi.getOpButtonY()) {
@@ -139,7 +139,7 @@ public class Actions {
       // Set cargo wheels motors
       robotmap.cargoWheels.set(cargoWheelsThrottle);
     /** HATCH MODE **/
-    } else if (!oi.getJoystickEmulatorButton1()) {
+    } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
       if (oi.getOpLeftBumper()) {
         if (oi.getOpButtonY()) {
           armControl(kHighHatch);
@@ -176,7 +176,6 @@ public class Actions {
         }
       }
     }
-
     /** BOTH MODES **/
     // Set arm motor
     if (isFlow) {
@@ -251,7 +250,7 @@ public class Actions {
   }
 
   public boolean checkDefenseMode() {
-    if (oi.getJoystickEmulatorButton3()) {
+    if (oi.getJoystickEmulatorButtonPressed3()) {
       defenseToggle = !defenseToggle;
     }
     return defenseToggle;
@@ -352,7 +351,6 @@ public class Actions {
 
   public double smallWinchControl(String m_smallWinchControl) {
     switch (m_smallWinchControl) {
-
       case ksmallWinchDown:
         smallWinchDesiredHeight = 55; //TODO: Change All
         break;
