@@ -1,24 +1,24 @@
 ## To Do ##
+- Test and update small winch Pot values and kp and max speed
 - Change pipeline based on cargo vs hatch modes
 - Tune auto aim functions
-- Update arm positions for kcap
-- Defense Mode and add defense button
-- (Done) Add winch potentiometer and position settings
+- Defense Mode
 - Make sure that lights are turning off during init
 - Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
 - Test Declan's auton
+
+## DONE ##
 - Move defense mode to where ever it should be
-- Add wicnch control to defense mode
-- Tets and update small winch Pot values and kp and max speed
+- Add winch potentiometer and position settings
+- Update arm positions for kcap
 
 ## Others ##
 - Update pipelines for hatch and cargo and copy to each camera
 - Update shuffleboard
-- Label limelights
 
 ## Values To Use ##
 - ball pickup:
-- winch 496
+- winch 495
 - arm 60
 - 
 - top cargo
@@ -41,6 +41,5 @@
 - 
 - high hatch arm 495
 - 
-- stow arm 55
-- winch stow 450
-
+- stowe arm 55
+- stowe winch 450

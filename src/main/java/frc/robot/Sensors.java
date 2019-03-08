@@ -25,7 +25,7 @@ public class Sensors {
   private double s_winchPotValue;
 
   public final double kAngleSetpoint = 0.0;
-  public final double kP = 0.075; // propotional turning constant
+  public final double kP = 0.05; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
   private Potentiometer armPot;

@@ -41,22 +41,26 @@ public class Actions {
   private double output;
   private double armDesiredHeight;
   private double actualHeight;
-  private double lowerArmLimit = 0;
-  private double upperArmLimit = 1000;
+  private double lowerArmLimit = 70;
+  private double upperArmLimit = 505;
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
   private static final String ksmallWinchStowedLeft = "Small Winch Up";
   private static final String ksmallWinchCargoUp = "Small Winch Mid";
   private static final String ksmallWinchHatchRight = "Small Winch Down";
+  private static final String ksmallWinchCargoPickup = "Small Winch Cargo Pickup";
+  private static final String ksmallWinchCargoTop = "Small Winch Cargo Top";
+  private static final String ksmallWinchCargoMiddle = "Small Winch Cargo Middle";
+  private static final String ksmallWinchCargoBottom = "Small Winch Cargo Bottom";
   private double smallWinchkP = 0.05;
-  private double smallWinchMaxDrive = 0.85;
+  private double smallWinchMaxDrive = 1;
   private double smallWinchError;
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchactualHeight;
-  private double smallWinchLowerLimit = 115;
-  private double smallWinchUpperLimit = 570;
+  private double smallWinchLowerLimit = 450;
+  private double smallWinchUpperLimit = 510;
 
   public Actions(
       Air air,
@@ -98,21 +102,27 @@ public class Actions {
       if (oi.getOpLeftBumper()) {
         if (oi.getOpButtonY()) {
           armControl(kHighCargo);
+          smallWinchControl(ksmallWinchCargoTop);
         } else if (oi.getOpButtonX()) {
           armControl(kMidCargo);
+          smallWinchControl(ksmallWinchCargoMiddle);
         } else if (oi.getOpButtonA()) {
           armControl(kLowCargo);
+          smallWinchControl(ksmallWinchCargoBottom);
         } else if (oi.getOpButtonB()) {
           armControl(kPickupCargo);
+          smallWinchControl(ksmallWinchCargoPickup);
         } else {
+          // Set small winch throttle to zero
+          smallWinchThrottle = 0.0;
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          // if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
-          //   armThrottle = 0.0;
-          // } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
-          //   armThrottle = 0.0;
-          // }
+          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
+            armThrottle = 0.0;
+          }
         }
       } else {
         armThrottle = 0.0;
@@ -143,19 +153,24 @@ public class Actions {
       if (oi.getOpLeftBumper()) {
         if (oi.getOpButtonY()) {
           armControl(kHighHatch);
+          smallWinchControl(ksmallWinchHatchRight);
         } else if (oi.getOpButtonX()) {
           armControl(kMidHatch);
+          smallWinchControl(ksmallWinchHatchRight);
         } else if (oi.getOpButtonA()) {
           armControl(kLowHatch);
+          smallWinchControl(ksmallWinchHatchRight);
         } else {
+          // Set small winch throttle to zero
+          smallWinchThrottle = 0.0;
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          // if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
-          //   armThrottle = 0.0;
-          // } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
-          //   armThrottle = 0.0;
-          // }
+          if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
+            armThrottle = 0.0;
+          }
         }
       } else {
         armThrottle = 0.0;
@@ -184,27 +199,26 @@ public class Actions {
       robotmap.armKcap.set(armThrottle);
     }
     // Small Winch
-    if (oi.getOpButtonB()) {
-      if (oi.getOpDpadLeft()) {
-        // Set winch to stowed
-        smallWinchControl(ksmallWinchStowedLeft);
-      } else if (oi.getOpDpadUp()) {
-        // Set winch to Cargo mode
-        smallWinchControl(ksmallWinchCargoUp);
-      } else if (oi.getOpDpadRight()) {
-        // Set winch to Hatch mode
-        smallWinchControl(ksmallWinchHatchRight);
-      } else {
+    if (oi.getOpDpadLeft()) {
+      // Set winch to stowed
+      smallWinchControl(ksmallWinchStowedLeft);
+    } else if (oi.getOpDpadUp()) {
+      // Set winch to Cargo mode
+      smallWinchControl(ksmallWinchCargoUp);
+    } else if (oi.getOpDpadRight()) {
+      // Set winch to Hatch mode
+      smallWinchControl(ksmallWinchHatchRight);
+    } else if (oi.getOpButtonB()) {
         // Set winch motor to operator joystick throttle
         smallWinchThrottle = -op_throttle;
         // Set winch limits
-        // if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
-        //   smallWinchThrottle = 0.0;
-        // } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
-        //   smallWinchThrottle = 0.0;
-        // }
-      }
+        if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+          smallWinchThrottle = 0.0;
+        } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+          smallWinchThrottle = 0.0;
+        }
     } else {
+      if (oi.getOpLeftBumper()) { return; }
       smallWinchThrottle = 0.0;
     }
     robotmap.smallWinchMotor.set(smallWinchThrottle);
@@ -243,15 +257,15 @@ public class Actions {
       }
     }
     // If driving only forward or backward within a threshold enable NavX drive straight
-    // if (oi.getDriveThrottle() == 0 || oi.getDriveTurn() != 0){
-    //   useGyroNAVX = false;
-    // } else if (oi.getDriveTurn() == 0 && oi.getDriveThrottle() != 0){
-    //   if (useGyroNAVX == false) {
-    //     sensors.setFollowAngleNAVX(0);
-    //   }
-    //   useGyroNAVX = true;
-    //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
-    // }
+    if (oi.getDriveThrottle() == 0 || oi.getDriveTurn() != 0){
+      useGyroNAVX = false;
+    } else if (oi.getDriveTurn() == 0 && oi.getDriveThrottle() != 0){
+      if (useGyroNAVX == false) {
+        sensors.setFollowAngleNAVX(0);
+      }
+      useGyroNAVX = true;
+      steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    }
     // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
@@ -372,13 +386,25 @@ public class Actions {
   public double smallWinchControl(String m_smallWinchControl) {
     switch (m_smallWinchControl) {
       case ksmallWinchStowedLeft:
-        smallWinchDesiredHeight = 55; //TODO: Change All
+        smallWinchDesiredHeight = 450;
         break;
       case ksmallWinchCargoUp:
-        smallWinchDesiredHeight = 365;
+        smallWinchDesiredHeight = 495;
         break;
       case ksmallWinchHatchRight:
-        smallWinchDesiredHeight = 180;
+        smallWinchDesiredHeight = 570;
+        break;
+      case ksmallWinchCargoPickup:
+        smallWinchDesiredHeight = 495;
+        break;
+      case ksmallWinchCargoTop:
+        smallWinchDesiredHeight = 580;
+        break;
+      case ksmallWinchCargoMiddle:
+        smallWinchDesiredHeight = 510;
+        break;
+      case ksmallWinchCargoBottom:
+        smallWinchDesiredHeight = 510;
         break;
     }
 
@@ -405,26 +431,26 @@ public class Actions {
     switch (m_armControl) {
       // Hatch values
       case kHighHatch:
-        armDesiredHeight = 555;
+        armDesiredHeight = 495;
         break;
       case kMidHatch:
-        armDesiredHeight = 365;
+        armDesiredHeight = 280;
         break;
       case kLowHatch:
-        armDesiredHeight = 180;
+        armDesiredHeight = 90;
         break;
       // Cargo values
       case kHighCargo:
-        armDesiredHeight = 545;
+        armDesiredHeight = 460;
         break;
       case kMidCargo:
-        armDesiredHeight = 400;
+        armDesiredHeight = 310;
         break;
       case kLowCargo:
-        armDesiredHeight = 200;
+        armDesiredHeight = 170;
         break;
       case kPickupCargo:
-        armDesiredHeight = 120;
+        armDesiredHeight = 60;
         break;
     }
 

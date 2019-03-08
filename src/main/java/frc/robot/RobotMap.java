@@ -106,13 +106,6 @@ public class RobotMap {
             smallWinchMotor = new Spark(smallWinchMotor_ID);
             cargoWheels = new Spark(cargoWheels_ID);
 
-            // Set motor limits
-            motorSafetyCheck();
-            setMotorCurrentLimit();
-            setOpenLoopRampRate();
-            setClosedLoopRampRate();
-            setIdleMode();
-
             return;
         }
         
@@ -138,6 +131,13 @@ public class RobotMap {
         // Speed controller groups
         speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
         speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0, rightMotor_1, rightMotor_2);
+
+        // Set motor limits
+        motorSafetyCheck();
+        setMotorCurrentLimit();
+        setOpenLoopRampRate();
+        setClosedLoopRampRate();
+        setIdleMode();
         
         // Drive
         drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
