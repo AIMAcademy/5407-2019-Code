@@ -15,3 +15,32 @@
 - Update pipelines for hatch and cargo and copy to each camera
 - Update shuffleboard
 - Label limelights
+
+## Values To Use ##
+- ball pickup:
+- winch 496
+- arm 60
+- 
+- top cargo
+- arm 460
+- winch 580
+- 
+- mid cargo
+- arm 310
+- winch 510
+- 
+- low cargo
+- arm 170
+- winch 510
+- 
+- hatch winch 570
+- 
+- low hatch arm 90
+- 
+- mid hatch arm 280
+- 
+- high hatch arm 495
+- 
+- stow arm 55
+- winch stow 450
+
