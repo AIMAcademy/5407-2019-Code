@@ -58,6 +58,14 @@ public class Robot extends TimedRobot {
   private double armPotValue;
   private double winchPotValue;
 
+  // Motor voltages
+  private double LM0;
+  private double LM1;
+  private double LM2;
+  private double RM0;
+  private double RM1;
+  private double RM2;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -139,6 +147,21 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("limelightTarget", cameraTarget);
     SmartDashboard.putBoolean("DEFENSE", actions.defenseToggle);
 
+    // Get motor voltage values
+    LM0 = robotmap.leftMotor_0.getOutputCurrent();
+    LM1 = robotmap.leftMotor_1.getOutputCurrent();
+    LM2 = robotmap.leftMotor_2.getOutputCurrent();
+    RM0 = robotmap.rightMotor_0.getOutputCurrent();
+    RM1 = robotmap.rightMotor_1.getOutputCurrent();
+    RM2 = robotmap.rightMotor_2.getOutputCurrent();
+    // Put motor voltage values on shuffleboard
+    SmartDashboard.putNumber("LM0", LM0);
+    SmartDashboard.putNumber("LM1", LM1);
+    SmartDashboard.putNumber("LM2", LM2);
+    SmartDashboard.putNumber("RM0", RM0);
+    SmartDashboard.putNumber("RM1", RM1);
+    SmartDashboard.putNumber("RM2", RM2);
+
     m_pipelineChoice = m_pipeline.getSelected();
   }
 
@@ -188,9 +211,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     robotmap.motorSafetyCheck();
     robotmap.setMotorCurrentLimit();
-
-    System.out.println(robotmap.leftMotor_0.getOutputCurrent() + " L");
-    System.out.println(robotmap.rightMotor_0.getOutputCurrent() + " R"); // TODO Put all on dash
 
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
