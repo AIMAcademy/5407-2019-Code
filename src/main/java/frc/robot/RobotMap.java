@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -105,6 +106,13 @@ public class RobotMap {
             smallWinchMotor = new Spark(smallWinchMotor_ID);
             cargoWheels = new Spark(cargoWheels_ID);
 
+            // Set motor limits
+            motorSafetyCheck();
+            setMotorCurrentLimit();
+            setOpenLoopRampRate();
+            setClosedLoopRampRate();
+            setIdleMode();
+
             return;
         }
         
@@ -151,6 +159,9 @@ public class RobotMap {
         }
     }
 
+    /**
+     * Set limits for brushless motors to hopefully stop browning out
+     */
     public void setMotorCurrentLimit() {
         leftMotor_0.setSmartCurrentLimit(40);
         leftMotor_1.setSmartCurrentLimit(40);
@@ -158,6 +169,30 @@ public class RobotMap {
         rightMotor_0.setSmartCurrentLimit(40);
         rightMotor_1.setSmartCurrentLimit(40);
         rightMotor_2.setSmartCurrentLimit(40);
+    }
+    public void setOpenLoopRampRate() {
+        leftMotor_0.setOpenLoopRampRate(0.2);
+        leftMotor_1.setOpenLoopRampRate(0.2);
+        leftMotor_2.setOpenLoopRampRate(0.2);
+        rightMotor_0.setOpenLoopRampRate(0.2);
+        rightMotor_1.setOpenLoopRampRate(0.2);
+        rightMotor_2.setOpenLoopRampRate(0.2);
+    }
+    public void setClosedLoopRampRate() {
+        leftMotor_0.setClosedLoopRampRate(0.2);
+        leftMotor_1.setClosedLoopRampRate(0.2);
+        leftMotor_2.setClosedLoopRampRate(0.2);
+        rightMotor_0.setClosedLoopRampRate(0.2);
+        rightMotor_1.setClosedLoopRampRate(0.2);
+        rightMotor_2.setClosedLoopRampRate(0.2);
+    }
+    public void setIdleMode() {
+        leftMotor_0.setIdleMode(IdleMode.kBrake);
+        leftMotor_1.setIdleMode(IdleMode.kBrake);
+        leftMotor_2.setIdleMode(IdleMode.kBrake);
+        rightMotor_0.setIdleMode(IdleMode.kBrake);
+        rightMotor_1.setIdleMode(IdleMode.kBrake);
+        rightMotor_2.setIdleMode(IdleMode.kBrake);
     }
 
     /**

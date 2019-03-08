@@ -190,7 +190,7 @@ public class Robot extends TimedRobot {
     robotmap.setMotorCurrentLimit();
 
     System.out.println(robotmap.leftMotor_0.getOutputCurrent() + " L");
-    System.out.println(robotmap.rightMotor_0.getOutputCurrent() + " R");
+    System.out.println(robotmap.rightMotor_0.getOutputCurrent() + " R"); // TODO Put all on dash
 
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
