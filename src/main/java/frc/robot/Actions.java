@@ -240,13 +240,6 @@ public class Actions {
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
         drivingAdjust = aimAndRange.getDrivingAdjust();
         steeringAdjust = aimAndRange.getSteeringAdjust();
-
-        robotmap.leftMotor_0.setSmartCurrentLimit(40);
-        robotmap.leftMotor_1.setSmartCurrentLimit(40);
-        robotmap.leftMotor_2.setSmartCurrentLimit(40);
-        robotmap.rightMotor_0.setSmartCurrentLimit(40);
-        robotmap.rightMotor_1.setSmartCurrentLimit(40);
-        robotmap.rightMotor_2.setSmartCurrentLimit(40);
       }
     }
     // If driving only forward or backward within a threshold enable NavX drive straight

@@ -186,6 +186,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    robotmap.motorSafetyCheck();
+    robotmap.setMotorCurrentLimit();
 
     System.out.println(robotmap.leftMotor_0.getOutputCurrent() + " L");
     System.out.println(robotmap.rightMotor_0.getOutputCurrent() + " R");

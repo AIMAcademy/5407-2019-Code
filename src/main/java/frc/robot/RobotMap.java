@@ -151,6 +151,15 @@ public class RobotMap {
         }
     }
 
+    public void setMotorCurrentLimit() {
+        leftMotor_0.setSmartCurrentLimit(40);
+        leftMotor_1.setSmartCurrentLimit(40);
+        leftMotor_2.setSmartCurrentLimit(40);
+        rightMotor_0.setSmartCurrentLimit(40);
+        rightMotor_1.setSmartCurrentLimit(40);
+        rightMotor_2.setSmartCurrentLimit(40);
+    }
+
     /**
      * Returns which robot is being driven. True for Flow, False for Kcap.
      * @return A boolean that checks for a jumper cable in a digital IO port
