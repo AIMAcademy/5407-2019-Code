@@ -209,7 +209,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 

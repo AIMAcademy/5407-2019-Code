@@ -362,10 +362,22 @@ public class Actions {
 
   public void defenseMode() {
     // set arm
-    // set pistons
+    // armControl(kPickupCargo);
+    // robotmap.armKcap.set(armThrottle);
     // set winch
+    // smallWinchControl(ksmallWinchStowedLeft);
+    // robotmap.smallWinchMotor.set(smallWinchThrottle);
+    // set pistons
+    // boolean allPistonsOff = false;
+    // if (!allPistonsOff) {
+    //   air.setSolenoid0(false);
+    //   air.setSolenoid1(false);
+    //   air.setSolenoid2(false);
+    //   air.setSolenoid3(false);
+    //   air.setSolenoid4(false);
+    //   allPistonsOff = true;
+    // }
     // set leds
-    armControl(kPickupCargo);
   }
 
   /**
