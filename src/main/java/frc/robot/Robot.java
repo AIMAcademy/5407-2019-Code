@@ -209,8 +209,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    robotmap.motorSafetyCheck();
-    robotmap.setMotorCurrentLimit();
 
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);

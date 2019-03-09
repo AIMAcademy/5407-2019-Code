@@ -166,9 +166,9 @@ public class Actions {
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
-          if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
+          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
             armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
+          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
             armThrottle = 0.0;
           }
         }
@@ -212,11 +212,11 @@ public class Actions {
         // Set winch motor to operator joystick throttle
         smallWinchThrottle = -op_throttle;
         // Set winch limits
-        if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
-          smallWinchThrottle = 0.0;
-        } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
-          smallWinchThrottle = 0.0;
-        }
+        // if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+        //   smallWinchThrottle = 0.0;
+        // } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+        //   smallWinchThrottle = 0.0;
+        // }
     } else {
       if (oi.getOpLeftBumper()) { return; }
       smallWinchThrottle = 0.0;
@@ -241,7 +241,7 @@ public class Actions {
       if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true and will use back camera for targeting
         if (!areLightsAndVisionOn) {
           areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-          setLightsAndVision(limelight11, areLightsAndVisionOn);
+          setLightsAndVision(limelight10, areLightsAndVisionOn);
         }
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         drivingAdjust = aimAndRange.getDrivingAdjust();
@@ -249,7 +249,7 @@ public class Actions {
       } else {
           if (!areLightsAndVisionOn) {
             areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-            setLightsAndVision(limelight10, areLightsAndVisionOn);
+            setLightsAndVision(limelight11, areLightsAndVisionOn);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
         drivingAdjust = aimAndRange.getDrivingAdjust();
@@ -257,15 +257,15 @@ public class Actions {
       }
     }
     // If driving only forward or backward within a threshold enable NavX drive straight
-    if (oi.getDriveThrottle() == 0 || oi.getDriveTurn() != 0){
-      useGyroNAVX = false;
-    } else if (oi.getDriveTurn() == 0 && oi.getDriveThrottle() != 0){
-      if (useGyroNAVX == false) {
-        sensors.setFollowAngleNAVX(0);
-      }
-      useGyroNAVX = true;
-      steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
-    }
+    // if (oi.getDriveThrottle() == 0 || oi.getDriveTurn() != 0){
+    //   useGyroNAVX = false;
+    // } else if (oi.getDriveTurn() == 0 && oi.getDriveThrottle() != 0){
+    //   if (useGyroNAVX == false) {
+    //     sensors.setFollowAngleNAVX(0);
+    //   }
+    //   useGyroNAVX = true;
+    //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    // }
     // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 

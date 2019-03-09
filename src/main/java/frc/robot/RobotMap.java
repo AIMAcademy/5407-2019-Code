@@ -33,7 +33,7 @@ public class RobotMap {
      * Motor ports
      */
     // Left Side Speed Controlers
-    private int leftMotorID_0 = 0;  // KCAP CHASSIS
+    private int leftMotorID_0 = 6;  // KCAP CHASSIS
     private int leftMotorID_1 = 1;  // KCAP CHASSIS
     private int leftMotorID_2 = 2;  // KCAP CHASSIS
     // Right Side Speed Controlers
@@ -163,28 +163,31 @@ public class RobotMap {
      * Set limits for brushless motors to hopefully stop browning out
      */
     public void setMotorCurrentLimit() {
-        leftMotor_0.setSmartCurrentLimit(40);
-        leftMotor_1.setSmartCurrentLimit(40);
-        leftMotor_2.setSmartCurrentLimit(40);
-        rightMotor_0.setSmartCurrentLimit(40);
-        rightMotor_1.setSmartCurrentLimit(40);
-        rightMotor_2.setSmartCurrentLimit(40);
+        final int motorCurrentLimit = 40;
+        leftMotor_0.setSmartCurrentLimit(motorCurrentLimit);
+        leftMotor_1.setSmartCurrentLimit(motorCurrentLimit);
+        leftMotor_2.setSmartCurrentLimit(motorCurrentLimit);
+        rightMotor_0.setSmartCurrentLimit(motorCurrentLimit);
+        rightMotor_1.setSmartCurrentLimit(motorCurrentLimit);
+        rightMotor_2.setSmartCurrentLimit(motorCurrentLimit);
     }
     public void setOpenLoopRampRate() {
-        leftMotor_0.setOpenLoopRampRate(0.2);
-        leftMotor_1.setOpenLoopRampRate(0.2);
-        leftMotor_2.setOpenLoopRampRate(0.2);
-        rightMotor_0.setOpenLoopRampRate(0.2);
-        rightMotor_1.setOpenLoopRampRate(0.2);
-        rightMotor_2.setOpenLoopRampRate(0.2);
+        final double openLoopRampRate = 0.3;
+        leftMotor_0.setOpenLoopRampRate(openLoopRampRate);
+        leftMotor_1.setOpenLoopRampRate(openLoopRampRate);
+        leftMotor_2.setOpenLoopRampRate(openLoopRampRate);
+        rightMotor_0.setOpenLoopRampRate(openLoopRampRate);
+        rightMotor_1.setOpenLoopRampRate(openLoopRampRate);
+        rightMotor_2.setOpenLoopRampRate(openLoopRampRate);
     }
     public void setClosedLoopRampRate() {
-        leftMotor_0.setClosedLoopRampRate(0.2);
-        leftMotor_1.setClosedLoopRampRate(0.2);
-        leftMotor_2.setClosedLoopRampRate(0.2);
-        rightMotor_0.setClosedLoopRampRate(0.2);
-        rightMotor_1.setClosedLoopRampRate(0.2);
-        rightMotor_2.setClosedLoopRampRate(0.2);
+        final double closedLoopRampRate = 0.3;
+        leftMotor_0.setClosedLoopRampRate(closedLoopRampRate);
+        leftMotor_1.setClosedLoopRampRate(closedLoopRampRate);
+        leftMotor_2.setClosedLoopRampRate(closedLoopRampRate);
+        rightMotor_0.setClosedLoopRampRate(closedLoopRampRate);
+        rightMotor_1.setClosedLoopRampRate(closedLoopRampRate);
+        rightMotor_2.setClosedLoopRampRate(closedLoopRampRate);
     }
     public void setIdleMode() {
         leftMotor_0.setIdleMode(IdleMode.kBrake);
