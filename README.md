@@ -6,6 +6,7 @@
 - Make sure that lights are turning off during init
 - Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
 - Test Declan's auton
+- Make an easier way to get softMA
 
 ## DONE ##
 - Move defense mode to where ever it should be

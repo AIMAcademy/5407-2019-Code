@@ -11,7 +11,7 @@ public final class Calculations {
     // Front camera properties
     private final static double h2 = 28.5; // inches from floor to center of target
     // Update these when the front camera moves.
-    private final static double a1 = 0.5017; // the camera's mounting angle in radians
+    private final static double a1 = 0.2773; // the camera's mounting angle in radians
     private final static double h1 = 8.75; // inches from floor to camera lens
 
     // Constructor

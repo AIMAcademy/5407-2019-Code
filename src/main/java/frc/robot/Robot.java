@@ -117,10 +117,10 @@ public class Robot extends TimedRobot {
 
     if (oi.getDriveLeftTrigger()) {
       // Back camera
-      currentLimelight = limelight11;
+      currentLimelight = limelight10;
     } else {
       // Front camera
-      currentLimelight = limelight10;
+      currentLimelight = limelight11;
     }
 
     // Use front camera to update limelight values
