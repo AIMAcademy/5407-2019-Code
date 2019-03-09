@@ -467,26 +467,26 @@ public class Actions {
     switch (m_armControl) {
       // Hatch values
       case kHighHatch:
-        armDesiredHeight = 495;
+        armDesiredHeight = 500;
         break;
       case kMidHatch:
-        armDesiredHeight = 280;
+        armDesiredHeight = 291;
         break;
       case kLowHatch:
-        armDesiredHeight = 90;
+        armDesiredHeight = 112;
         break;
       // Cargo values
       case kHighCargo:
-        armDesiredHeight = 460;
+        armDesiredHeight = 465;
         break;
       case kMidCargo:
-        armDesiredHeight = 310;
+        armDesiredHeight = 315;
         break;
       case kLowCargo:
-        armDesiredHeight = 170;
+        armDesiredHeight = 175;
         break;
       case kPickupCargo:
-        armDesiredHeight = 60;
+        armDesiredHeight = 65;
         break;
       // End Game
       case kEndGame:
