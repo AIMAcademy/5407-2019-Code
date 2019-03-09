@@ -58,6 +58,9 @@ public class Robot extends TimedRobot {
   private double armPotValue;
   private double winchPotValue;
 
+  // Tung open or closed
+  private boolean isTungOpen;
+
   // Motor voltages
   private double LM0;
   private double LM1;
@@ -133,6 +136,9 @@ public class Robot extends TimedRobot {
     armPotValue = sensors.getArmHeight();
     winchPotValue = sensors.getSmallWinchPot();
 
+    // Tung open or closed
+    isTungOpen = air.getSolenoid2();
+
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
     SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
@@ -146,6 +152,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("WinchPot", winchPotValue);
     SmartDashboard.putBoolean("limelightTarget", cameraTarget);
     SmartDashboard.putBoolean("DEFENSE", actions.defenseToggle);
+    SmartDashboard.putBoolean("Tung", isTungOpen);
 
     // Get motor voltage values
     LM0 = robotmap.leftMotor_0.getOutputCurrent();

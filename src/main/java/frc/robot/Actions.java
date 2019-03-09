@@ -45,7 +45,7 @@ public class Actions {
   private double actualHeight;
   private double lowerArmLimit = 70;
   private double upperArmLimit = 505;
-  private double endGameUpperArmLimit = 225;
+  private double endGameUpperArmLimit = 140;
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
@@ -317,12 +317,11 @@ public class Actions {
       if (sensors.getArmHeight() < lowerArmLimit && driverArmThrottle < 0) {
         driverArmThrottle = 0.0;
       }
-    } else {
-      driverArmThrottle = 0;
-    }
-    if (sensors.getArmHeight() > endGameUpperArmLimit) {
+    } else if (sensors.getArmHeight() > endGameUpperArmLimit) {
       armControl(kEndGame);
       driverArmThrottle = armThrottle;
+    } else {
+      driverArmThrottle = 0;
     }
     robotmap.armKcap.set(driverArmThrottle);
 
@@ -489,7 +488,7 @@ public class Actions {
         break;
       // End Game
       case kEndGame:
-        armDesiredHeight = 250;
+        armDesiredHeight = 140;
         break;
     }
 
