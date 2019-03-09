@@ -228,7 +228,8 @@ public class Actions {
           setLightsAndVision(limelight10, areLightsAndVisionOn);
         }
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
-        drivingAdjust = aimAndRange.getDrivingAdjust();
+        // drivingAdjust = aimAndRange.getDrivingAdjust();
+        drivingAdjust = -oi.getDriveThrottle();
         steeringAdjust = aimAndRange.getSteeringAdjust();
       } else {
           if (!areLightsAndVisionOn) {
@@ -236,7 +237,8 @@ public class Actions {
             setLightsAndVision(limelight11, areLightsAndVisionOn);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
-        drivingAdjust = aimAndRange.getDrivingAdjust();
+        // drivingAdjust = aimAndRange.getDrivingAdjust();
+        drivingAdjust = oi.getDriveThrottle();
         steeringAdjust = aimAndRange.getSteeringAdjust();
       }
     }
