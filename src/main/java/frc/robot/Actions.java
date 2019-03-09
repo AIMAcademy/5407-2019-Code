@@ -44,7 +44,7 @@ public class Actions {
   private double actualHeight;
   private double lowerArmLimit = 70;
   private double upperArmLimit = 505;
-  private double endGameUpperArmLimit = 250;
+  private double endGameUpperArmLimit = 225;
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
@@ -61,7 +61,7 @@ public class Actions {
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchactualHeight;
-  private double smallWinchLowerLimit = 465;
+  private double smallWinchLowerLimit = 455;
   private double smallWinchUpperLimit = 575;
 
   public Actions(
@@ -315,7 +315,7 @@ public class Actions {
     } else {
       driverArmThrottle = 0;
     }
-    if (sensors.getArmHeight() > 260) {
+    if (sensors.getArmHeight() > endGameUpperArmLimit) {
       armControl(kEndGame);
       driverArmThrottle = armThrottle;
     }
