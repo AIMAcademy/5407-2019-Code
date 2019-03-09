@@ -249,6 +249,7 @@ public class Actions {
     //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
     // }
     // Finally drive
+    steeringAdjust = steeringAdjust * 0.5;
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
     /**

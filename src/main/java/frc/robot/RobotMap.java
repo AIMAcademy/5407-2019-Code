@@ -172,7 +172,7 @@ public class RobotMap {
         rightMotor_2.setSmartCurrentLimit(motorCurrentLimit);
     }
     public void setOpenLoopRampRate() {
-        final double openLoopRampRate = 0.25;
+        final double openLoopRampRate = 0.2;
         leftMotor_0.setOpenLoopRampRate(openLoopRampRate);
         leftMotor_1.setOpenLoopRampRate(openLoopRampRate);
         leftMotor_2.setOpenLoopRampRate(openLoopRampRate);
@@ -181,7 +181,7 @@ public class RobotMap {
         rightMotor_2.setOpenLoopRampRate(openLoopRampRate);
     }
     public void setClosedLoopRampRate() {
-        final double closedLoopRampRate = 0.25;
+        final double closedLoopRampRate = 0.2;
         leftMotor_0.setClosedLoopRampRate(closedLoopRampRate);
         leftMotor_1.setClosedLoopRampRate(closedLoopRampRate);
         leftMotor_2.setClosedLoopRampRate(closedLoopRampRate);
