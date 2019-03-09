@@ -395,19 +395,19 @@ public class Actions {
     visionStatus = false;
   }
 
-  public double smallWinchControl(String m_smallWinchControl) {
+  private void smallWinchControl(String m_smallWinchControl) {
     switch (m_smallWinchControl) {
       case ksmallWinchStowedLeft:
-        smallWinchDesiredHeight = 450;
+        smallWinchDesiredHeight = 468;
         break;
       case ksmallWinchCargoUp:
-        smallWinchDesiredHeight = 495;
+        smallWinchDesiredHeight = 510;
         break;
       case ksmallWinchHatchRight:
-        smallWinchDesiredHeight = 570;
+        smallWinchDesiredHeight = 575;
         break;
       case ksmallWinchCargoPickup:
-        smallWinchDesiredHeight = 495;
+        smallWinchDesiredHeight = 525;
         break;
       case ksmallWinchCargoTop:
         smallWinchDesiredHeight = 580;
@@ -432,8 +432,7 @@ public class Actions {
       smallWinchOutput = -smallWinchMaxDrive;
     }
     
-    smallWinchThrottle = smallWinchOutput;
-    return smallWinchThrottle;
+    smallWinchThrottle = -smallWinchOutput;
   }
 
   /**
