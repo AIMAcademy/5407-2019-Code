@@ -159,7 +159,9 @@ public final class Calculations {
      * @param cameraTargetYAxis The Y axis of the camera's current target
      * @return An object containing drivingAdjust and steeringAdjust
      */
-    public static AimAndRange getAimAndRangeFront(Double cameraTargetXAxis, Double cameraTargetYAxis) {
+    public static AimAndRange getAimAndRangeFront(Double cameraTargetXAxis, Double cameraTargetYAxis, boolean cameraTarget) {
+        boolean thisCameraTarget = cameraTarget;
+
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
         double KpAim = 0.045;
         double KpDist = 0.017;
@@ -180,6 +182,13 @@ public final class Calculations {
 
         // Distance adjust, drive to the correct distance from the goal
         double drivingAdjustFront = (KpDist * dist_error) + distMinCmd;
+
+        if (thisCameraTarget == false)
+        {
+            // boolean m_LimelightHasValidTarget = false;
+            drivingAdjustFront = 0.0;
+            steeringAdjustFront = 0.0;
+        }
 
         return new AimAndRange(drivingAdjustFront, steeringAdjustFront);
     }

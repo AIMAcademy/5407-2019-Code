@@ -188,17 +188,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      sensors.setFollowAngleNAVX(0);
-      robotmap.drive.arcadeDrive(0, (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
-      break;
-    }
+    teleopPeriodic();
+    // switch (m_autoSelected) {
+    // case kCustomAuto:
+    //   // Put custom auto code here
+    //   break;
+    // case kDefaultAuto:
+    // default:
+    //   // Put default auto code here
+    //   sensors.setFollowAngleNAVX(0);
+    //   robotmap.drive.arcadeDrive(0, (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
+    //   break;
+    // }
   }
 
   @Override

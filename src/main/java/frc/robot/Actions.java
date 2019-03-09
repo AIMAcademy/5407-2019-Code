@@ -35,6 +35,7 @@ public class Actions {
   private static final String kMidCargo = "Mid Cargo";
   private static final String kLowCargo = "Low Cargo";
   private static final String kPickupCargo = "Pick up Cargo";
+  private static final String kEndGame = "End Game";
   private double armKp = 0.05;
   private double armMaxDrive = 0.85;
   private double armError;
@@ -43,6 +44,7 @@ public class Actions {
   private double actualHeight;
   private double lowerArmLimit = 70;
   private double upperArmLimit = 505;
+  private double endGameUpperArmLimit = 250;
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
@@ -231,7 +233,7 @@ public class Actions {
             areLightsAndVisionOn = lightsAndVisionToggle.toggle();
             setLightsAndVision(limelight11, areLightsAndVisionOn);
           }
-        AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis);
+        AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         drivingAdjust = aimAndRange.getDrivingAdjust();
         steeringAdjust = aimAndRange.getSteeringAdjust();
       }
@@ -300,10 +302,21 @@ public class Actions {
     double driverArmThrottle;
     if (oi.getDriveButtonY()) {
       driverArmThrottle = 1;
+      // Set arm limits
+      if (sensors.getArmHeight() > endGameUpperArmLimit && driverArmThrottle > 0){
+        driverArmThrottle = 0.0;
+      }
     } else if (oi.getDriveButtonB()) {
       driverArmThrottle = -1;
+      if (sensors.getArmHeight() < lowerArmLimit && driverArmThrottle < 0) {
+        driverArmThrottle = 0.0;
+      }
     } else {
       driverArmThrottle = 0;
+    }
+    if (sensors.getArmHeight() > 260) {
+      armControl(kEndGame);
+      driverArmThrottle = armThrottle;
     }
     robotmap.armKcap.set(driverArmThrottle);
 
@@ -442,6 +455,10 @@ public class Actions {
         break;
       case kPickupCargo:
         armDesiredHeight = 60;
+        break;
+      // End Game
+      case kEndGame:
+        armDesiredHeight = 250;
         break;
     }
 
