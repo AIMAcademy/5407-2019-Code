@@ -59,8 +59,8 @@ public class Actions {
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchactualHeight;
-  private double smallWinchLowerLimit = 450;
-  private double smallWinchUpperLimit = 510;
+  private double smallWinchLowerLimit = 465;
+  private double smallWinchUpperLimit = 575;
 
   public Actions(
       Air air,
@@ -477,11 +477,11 @@ public class Actions {
         // Set winch motor to operator joystick throttle
         smallWinchThrottle = -op_throttle;
         // Set winch limits
-        // if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
-        //   smallWinchThrottle = 0.0;
-        // } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
-        //   smallWinchThrottle = 0.0;
-        // }
+        if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+          smallWinchThrottle = 0.0;
+        } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+          smallWinchThrottle = 0.0;
+        }
     } else {
       smallWinchThrottle = 0.0;
     }
