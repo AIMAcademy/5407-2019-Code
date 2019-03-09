@@ -15,7 +15,7 @@ public class Actions {
   private Sensors sensors;
   private Toggle lightsAndVisionToggle;
 
-  private boolean useGyroNAVX = false;
+  // private boolean useGyroNAVX = false;
 
   // Limelight vision
   private final boolean isFlow;
@@ -24,6 +24,7 @@ public class Actions {
 
   // Defense mode
   public boolean defenseToggle = false;
+  private boolean isDefensePositionSet;
 
   // Potentiometer arm
   private double armThrottle;
@@ -210,6 +211,7 @@ public class Actions {
      */
     double drivingAdjust;
     double steeringAdjust;
+    double steeringAdjustKp = 0.5;
     // Drive forwards or backwards
     if (oi.getDriveLeftTrigger()) {
       drivingAdjust = -oi.getDriveThrottle();
@@ -249,7 +251,7 @@ public class Actions {
     //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
     // }
     // Finally drive
-    steeringAdjust = steeringAdjust * 0.5;
+    steeringAdjust = steeringAdjust * steeringAdjustKp;
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
     /**
@@ -260,6 +262,9 @@ public class Actions {
       setLightsAndVision(limelight10, areLightsAndVisionOn);
       setLightsAndVision(limelight11, areLightsAndVisionOn);
     }
+
+    // Set Defense Mode position variable to indicate not set
+    isDefensePositionSet = false;
   }
 
   public void endGameOp() {
@@ -355,23 +360,39 @@ public class Actions {
   }
 
   public void defenseMode() {
-    // set arm
-    // armControl(kPickupCargo);
-    // robotmap.armKcap.set(armThrottle);
-    // set winch
-    // smallWinchControl(ksmallWinchStowedLeft);
-    // robotmap.smallWinchMotor.set(smallWinchThrottle);
-    // set pistons
-    // boolean allPistonsOff = false;
-    // if (!allPistonsOff) {
-    //   air.setSolenoid0(false);
-    //   air.setSolenoid1(false);
-    //   air.setSolenoid2(false);
-    //   air.setSolenoid3(false);
-    //   air.setSolenoid4(false);
-    //   allPistonsOff = true;
-    // }
-    // set leds
+    if (isDefensePositionSet) {
+      // Just Drive
+      double drivingAdjust;
+      double steeringAdjust;
+      double steeringAdjustKp = 0.5;
+      // Drive forwards or backwards
+      if (oi.getDriveLeftTrigger()) {
+        drivingAdjust = -oi.getDriveThrottle();
+        steeringAdjust = oi.getDriveTurn();
+      } else {
+        drivingAdjust = oi.getDriveThrottle();
+        steeringAdjust = oi.getDriveTurn();
+      }
+      steeringAdjust = steeringAdjust * steeringAdjustKp;
+      robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
+      return;
+    }
+      // Set arm position
+      armControl(kPickupCargo);
+      robotmap.armKcap.set(armThrottle);
+      // Set winch position
+      smallWinchControl(ksmallWinchStowedLeft);
+      robotmap.smallWinchMotor.set(smallWinchThrottle);
+      // Set all pistons to off
+      air.setSolenoid0(false);
+      air.setSolenoid1(false);
+      air.setSolenoid2(false);
+      air.setSolenoid3(false);
+      air.setSolenoid4(false);
+      // Set LEDs
+      // TODO create this code
+      // Set defense position variable so that this code only runs once each time Defense Mode is engaged
+      isDefensePositionSet = true;
   }
 
   /**
