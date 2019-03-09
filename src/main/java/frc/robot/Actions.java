@@ -360,7 +360,16 @@ public class Actions {
   }
 
   public void defenseMode() {
+    double armHeight = sensors.getArmHeight();
+    double winchPosition = sensors.getSmallWinchPot();
     if (isDefensePositionSet) {
+      // Stop arm and winch motors)
+      if (armHeight < 60) {
+        robotmap.armKcap.set(0.0);
+      }
+      if (winchPosition < 468) {
+        robotmap.smallWinchMotor.set(0.0);
+      }
       // Just Drive
       double drivingAdjust;
       double steeringAdjust;
