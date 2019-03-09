@@ -114,7 +114,7 @@ public class Actions {
           smallWinchControl(ksmallWinchCargoPickup);
         } else {
           // Set small winch throttle to zero
-          smallWinchThrottle = 0.0;
+          setSmallWinch(op_throttle);
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
@@ -125,6 +125,7 @@ public class Actions {
           }
         }
       } else {
+        setSmallWinch(op_throttle);
         armThrottle = 0.0;
         // Get Y button to control Claw
         if (oi.getOpButtonPressedY()) {
@@ -162,7 +163,7 @@ public class Actions {
           smallWinchControl(ksmallWinchHatchRight);
         } else {
           // Set small winch throttle to zero
-          smallWinchThrottle = 0.0;
+          setSmallWinch(op_throttle);
           // Set arm motor to operator joystick throttle
           armThrottle = op_throttle;
           // Set arm limits
@@ -173,6 +174,7 @@ public class Actions {
           }
         }
       } else {
+        setSmallWinch(op_throttle);
         armThrottle = 0.0;
         // Get X Button to control hatch mechanisms
         if (oi.getOpButtonPressedX()) {
@@ -199,28 +201,6 @@ public class Actions {
       robotmap.armKcap.set(armThrottle);
     }
     // Small Winch
-    if (oi.getOpDpadLeft()) {
-      // Set winch to stowed
-      smallWinchControl(ksmallWinchStowedLeft);
-    } else if (oi.getOpDpadUp()) {
-      // Set winch to Cargo mode
-      smallWinchControl(ksmallWinchCargoUp);
-    } else if (oi.getOpDpadRight()) {
-      // Set winch to Hatch mode
-      smallWinchControl(ksmallWinchHatchRight);
-    } else if (oi.getOpButtonB()) {
-        // Set winch motor to operator joystick throttle
-        smallWinchThrottle = -op_throttle;
-        // Set winch limits
-        // if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
-        //   smallWinchThrottle = 0.0;
-        // } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
-        //   smallWinchThrottle = 0.0;
-        // }
-    } else {
-      if (oi.getOpLeftBumper()) { return; }
-      smallWinchThrottle = 0.0;
-    }
     robotmap.smallWinchMotor.set(smallWinchThrottle);
 
     /**
@@ -481,5 +461,29 @@ public class Actions {
     armThrottle = output;
 
     return armThrottle;
+  }
+
+  private void setSmallWinch(Double op_throttle) {
+    if (oi.getOpDpadLeft()) {
+      // Set winch to stowed
+      smallWinchControl(ksmallWinchStowedLeft);
+    } else if (oi.getOpDpadUp()) {
+      // Set winch to Cargo mode
+      smallWinchControl(ksmallWinchCargoUp);
+    } else if (oi.getOpDpadRight()) {
+      // Set winch to Hatch mode
+      smallWinchControl(ksmallWinchHatchRight);
+    } else if (oi.getOpButtonB()) {
+        // Set winch motor to operator joystick throttle
+        smallWinchThrottle = -op_throttle;
+        // Set winch limits
+        // if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+        //   smallWinchThrottle = 0.0;
+        // } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+        //   smallWinchThrottle = 0.0;
+        // }
+    } else {
+      smallWinchThrottle = 0.0;
+    }
   }
 }
