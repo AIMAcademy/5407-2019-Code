@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -102,6 +103,9 @@ public class Robot extends TimedRobot {
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
     soft_mounting_angle = Calculations.getSoftMountingAngle(cameraTargetYAxis, threeFeet);
+
+    // Start USB Camera
+    CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**

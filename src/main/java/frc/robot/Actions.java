@@ -432,7 +432,7 @@ public class Actions {
         smallWinchDesiredHeight = 575;
         break;
       case ksmallWinchCargoPickup:
-        smallWinchDesiredHeight = 525;
+        smallWinchDesiredHeight = 510;
         break;
       case ksmallWinchCargoTop:
         smallWinchDesiredHeight = 580;
@@ -486,7 +486,7 @@ public class Actions {
         armDesiredHeight = 175;
         break;
       case kPickupCargo:
-        armDesiredHeight = 65;
+        armDesiredHeight = 75;
         break;
       // End Game
       case kEndGame:
