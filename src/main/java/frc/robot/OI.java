@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
  * Add your docs here.
  */
 public class OI {
-	private Joystick driveStick;
+	private XboxController driveStick;
 	private double drive_throttle;
 	private double drive_turn;
 	private boolean drive_buttonA;
@@ -30,6 +30,7 @@ public class OI {
 
 	private XboxController opStick;
 	private double op_throttle;
+	private double op_rightThrottle;
 	private boolean op_buttonA;
 	private boolean op_buttonB;
 	private boolean op_buttonX;
@@ -46,9 +47,13 @@ public class OI {
 	private boolean op_rightTrigger;
 	private double d_pad;
 
+	private Joystick joystickEmulator;
+	private boolean em_button1;
+	private boolean em_button2;
+
 	public OI() {
 		// driveStick = new Joystick(0);
-		driveStick = new Joystick(0);
+		driveStick = new XboxController(0);
 		opStick = new XboxController(1);
 	}
 
@@ -90,6 +95,12 @@ public class OI {
 		} else {
 			op_throttle = 0;
 		}
+		// Operator Right Stick Y Axis 5 for Operator Right Throttle
+		if (opStick.getRawAxis(5) < -0.2 || opStick.getRawAxis(5) > 0.2) {
+			op_rightThrottle = -opStick.getRawAxis(5);
+		} else {
+			op_rightThrottle = 0;
+		}		
 		// Operator Left Trigger Axis 2
 		if (opStick.getRawAxis(2) > .5) {
 			op_leftTrigger = true;
@@ -111,7 +122,7 @@ public class OI {
 		drive_buttonX = driveStick.getRawButton(3);
 		drive_buttonY = driveStick.getRawButton(4);
 		drive_leftBumper = driveStick.getRawButton(5);
-		drive_rightBumper = driveStick.getRawButtonPressed(6);
+		drive_rightBumper = driveStick.getRawButton(6);
 		drive_back = driveStick.getRawButton(7);
 		drive_start = driveStick.getRawButton(8);
 
@@ -153,6 +164,7 @@ public class OI {
 	 * Get and return Operator buttons
 	 */
 	public double getOpThrottle() { return op_throttle; }
+	public double getOpRightThrottle() { return op_rightThrottle; }
 	public boolean getOpButtonA() { return op_buttonA; }
 	public boolean getOpButtonB() { return op_buttonB; }
 	public boolean getOpButtonX() { return op_buttonX; }
@@ -168,4 +180,6 @@ public class OI {
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
 	public double getDpad(){ return d_pad; }
+	public boolean getJoystickEmulatorButton1(){return em_button1; }
+	public boolean getJoystickEmulatorButton2(){return em_button2; }
 }

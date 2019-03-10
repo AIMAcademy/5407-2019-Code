@@ -56,21 +56,6 @@ public class Robot extends TimedRobot {
 
   // Potentiometer
   private double potValue;
-  private static final String kHighHatch = "High Hatch";
-  private static final String kMidHatch = "Mid Hatch";
-  private static final String kLowHatch = "Low Hatch";
-  private static final String kHighball = "High Ball";
-  private static final String kMidBall = "Mid Ball";
-  private static final String kLowBall = "Low Ball";
-  private static final String kCargoShipHatch = "Cargo Ship Hatch";
-  private static final String kCargoShipBall = "Cargo Ship Ball";
-  private String m_armControl;
-  private double armkp = 0;
-  private double armkd = 0;
-  private double armError = 0;
-  private double output;
-  private double armDistance = 0;
-  private double actualdistance;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -84,7 +69,10 @@ public class Robot extends TimedRobot {
     oi = new OI();
     robotmap = new RobotMap();
     sensors = new Sensors();
-    actions = new Actions(air, limelight10, limelight11, oi, robotmap);
+    actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
+
+    // Zero the NAVX
+    sensors.zeroNAVX();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -133,7 +121,7 @@ public class Robot extends TimedRobot {
     cameraTarget = currentLimelight.isTarget();
 
     // Update arm potentiometer value
-    potValue = sensors.getArmPotValue();
+    potValue = sensors.getArmHeight();
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
@@ -147,6 +135,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("PotVal", potValue);
 
     m_pipelineChoice = m_pipeline.getSelected();
+
+    robotmap.LED.set(.55);
   }
 
   /**
@@ -198,7 +188,7 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
-    if (oi.getOpBackButton()) { // TODO Change to hardware switch on driver station
+    if (oi.getJoystickEmulatorButton2()) {
       actions.endGameOp();
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
@@ -231,54 +221,4 @@ public class Robot extends TimedRobot {
     }
     currentLimelight.setPipeline(pipeline);
   }
-
-  public void armControl() {
- 
-    switch (m_armControl) {
-      //Rocket
-      case kHighHatch:
-        armDistance = 19 + 28 + 28; //150
-        break;
-      case kMidHatch:
-        armDistance = 19 + 28;
-        break;
-      case kLowHatch:
-        armDistance = 19; //305
-        break;
-      case kHighball:
-        armDistance = 27.5 + 28 + 28;
-      case kMidBall:
-        armDistance = 27.5 + 28;
-        break;
-      case kLowBall:
-        armDistance = 27.5;
-        break;
-
-      //Cargo Ship
-      case kCargoShipHatch: //Same As Pickup Might never need to use because of the tung
-        armDistance = 19;   //Also same as Low Rocket Hatch so This can go away
-        break;
-      case kCargoShipBall:
-        armDistance = 55;
-        break;
-    }
-
-    armDistance = sensors.getArmHight();
-    armError = armDistance - actualdistance;
-
-    output = armkp * armError + armkd;
-    if (robotmap.getIsFlow()) {
-      robotmap.armFlow.set(output);
-    } else {
-      robotmap.armKcap.set(output);
-    }
-  }
-
-  // public void driveStraight() {
-  // double turn = (sensors.kAngleSetpoint - sensors.gyro.getAngle()) *
-  // sensors.kP;
-  // turn = Math.copySign(turn, direction);
-  // robotmap.drive.arcadeDrive(-oi.getThrottle(), turn);
-  // }
 }
-

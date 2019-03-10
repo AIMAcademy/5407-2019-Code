@@ -12,18 +12,49 @@ public class Actions {
   private Limelight limelight11;
   private OI oi;
   private RobotMap robotmap;
+  private Sensors sensors;
   private Toggle lightsAndVisionToggle;
 
+  private boolean useGyroNAVX = false;
+
+  // Limelight vision
   private final boolean isFlow;
   private boolean areLightsAndVisionOn;
   public boolean visionStatus;
 
-  public Actions(Air air, Limelight limelight10, Limelight limelight11, OI oi, RobotMap robotmap) {
+  // Potentiometer arm
+  private double armThrottle;
+  private double cargoWheelsThrottle;
+  private static final String kHighHatch = "High Hatch";
+  private static final String kMidHatch = "Mid Hatch";
+  private static final String kLowHatch = "Low Hatch";
+  private static final String kHighCargo = "High Cargo";
+  private static final String kMidCargo = "Mid Cargo";
+  private static final String kLowCargo = "Low Cargo";
+  private static final String kPickupCargo = "Pick up Cargo";
+  private double armKp = 0.05;
+  private double armMaxDrive = 0.85;
+  private double armError;
+  private double output;
+  private double armDesiredHeight;
+  private double actualHeight;
+  private double lowerArmLimit = 115;
+  private double upperArmLimit = 570;
+
+  public Actions(
+      Air air,
+      Limelight limelight10,
+      Limelight limelight11,
+      OI oi,
+      RobotMap robotmap,
+      Sensors sensors
+    ) {
     this.air = air;
     this.limelight10 = limelight10;
     this.limelight11 = limelight11;
     this.oi = oi;
     this.robotmap = robotmap;
+    this.sensors = sensors;
 
     isFlow = robotmap.getIsFlow();
 
@@ -38,56 +69,119 @@ public class Actions {
       boolean cameraTarget
     ) {
     
-    // Get Operator Left Joystick Throttle
-    final double op_throttle = oi.getOpThrottle();
-
     /**
      * Operator controls during game operations
      */
-    // Get left bumper to control Arm
-    double armThrottle;
-    if (oi.getOpLeftBumper()) {
-      if (oi.getOpButtonY() || oi.getOpButtonX() || oi.getOpButtonA()) { return; }
-      armThrottle = op_throttle;
-    } else {
-      armThrottle = 0.0;
+    // Get Operator Left Stick Throttle
+    final double op_throttle = oi.getOpThrottle();
+    final double op_rightThrottle = oi.getOpRightThrottle();
+    /** CARGO MODE **/
+    if (oi.getJoystickEmulatorButton1()) {
+      // Get left bumper to control arm
+      if (oi.getOpLeftBumper()) {
+        if (oi.getOpButtonY()) {
+          armControl(kHighCargo);
+        } else if (oi.getOpButtonX()) {
+          armControl(kMidCargo);
+        } else if (oi.getOpButtonA()) {
+          armControl(kLowCargo);
+        } else if (oi.getOpButtonB()) {
+          armControl(kPickupCargo);
+        } else {
+          // Set arm motor to operator joystick throttle
+          armThrottle = op_throttle;
+          // Set arm limits
+          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
+            armThrottle = 0.0;
+          }
+        }
+      } else {
+        armThrottle = 0.0;
+        // Get Y button to control Claw
+        if (oi.getOpButtonPressedY()) {
+          final boolean solenoidStatus4 = !air.getSolenoid4();
+          air.setSolenoid4(solenoidStatus4);
+        }
+        // Get X Button to control Fangs
+        if (oi.getOpButtonPressedX()) {
+          final boolean solenoidStatus1 = !air.getSolenoid1();
+          air.setSolenoid1(solenoidStatus1);
+        }
+      }
+      // Get Driver Left Bumper for Cargo Wheels output
+      if (oi.getDriveLeftBumper()) {
+        cargoWheelsThrottle = 1;
+      // Get Driver Right Bumper for Cargo Wheels intake
+      } else if (oi.getDriveRightBumper()) {
+        cargoWheelsThrottle = -1;
+      } else {
+        cargoWheelsThrottle = op_rightThrottle;
+      }
+      // Set cargo wheels motors
+      robotmap.cargoWheels.set(cargoWheelsThrottle);
+    /** HATCH MODE **/
+    } else if (!oi.getJoystickEmulatorButton1()) {
+      if (oi.getOpLeftBumper()) {
+        if (oi.getOpButtonY()) {
+          armControl(kHighHatch);
+        } else if (oi.getOpButtonX()) {
+          armControl(kMidHatch);
+        } else if (oi.getOpButtonA()) {
+          armControl(kLowHatch);
+        } else {
+          // Set arm motor to operator joystick throttle
+          armThrottle = op_throttle;
+          // Set arm limits
+          if (sensors.getArmHeight() < upperArmLimit && op_throttle < 0) {
+            armThrottle = 0.0;
+          } else if (sensors.getArmHeight() > lowerArmLimit && op_throttle > 0){
+            armThrottle = 0.0;
+          }
+        }
+      } else {
+        armThrottle = 0.0;
+        // Get X Button to control hatch mechanisms
+        if (oi.getOpButtonPressedX()) {
+          if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+            final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
+            air.setSolenoid2(solenoidStatus2);
+          } else {
+            final boolean solenoidStatus0 = !air.getSolenoid0();  // Beak
+            air.setSolenoid0(solenoidStatus0);
+          }
+        }
+        // Get Right Trigger to fire back hatch tung pistons only if driving backwards
+        if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+          final boolean fireBackHatchTung = oi.getOpRightTrigger();
+          air.setSolenoid3(fireBackHatchTung);
+        }
+      }
     }
+    /** BOTH MODES **/
+    // Set arm motor
     if (isFlow) {
       robotmap.armFlow.set(armThrottle);
     } else {
       robotmap.armKcap.set(armThrottle);
     }
-
     // Get B Button to control Arm Small Winch
     double winchThrottle;
     if (oi.getOpButtonB()) {
+      if (oi.getOpLeftBumper()) { return; }
       winchThrottle = -op_throttle;
     } else {
       winchThrottle = 0.0;
     }
     robotmap.smallWinchMotor.set(winchThrottle);
 
-    // Get X Button Press to toggle front and back hatch solenoids
-    if (oi.getOpButtonPressedX()) {
-      final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
-      final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-      if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
-        air.setSolenoid2(solenoidStatus2);
-      } else {
-        air.setSolenoid0(solenoidStatus0);
-      }
-    }
-
-    // Get Right Trigger to fire back hatch tung pistons
-    final boolean fireBackHatchTung = oi.getOpRightTrigger();
-    air.setSolenoid3(fireBackHatchTung);
-
     /**
      * Driver controls during game operations
      */
     double drivingAdjust;
     double steeringAdjust;
-    
+    // Drive forwards or backwards
     if (oi.getDriveLeftTrigger()) {
       drivingAdjust = -oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
@@ -95,7 +189,7 @@ public class Actions {
       drivingAdjust = oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     }
-
+    // Aim and range forwards and backwards
     if (oi.getDriveRightTrigger()) {  // Auto targeting
       if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true and will use back camera for targeting
         if (!areLightsAndVisionOn) {
@@ -115,8 +209,22 @@ public class Actions {
         steeringAdjust = aimAndRange.getSteeringAdjust();
       }
     }
+    // If driving only forward or backward within a threshold enable NavX drive straight
+    if (oi.getDriveThrottle() == 0 || oi.getDriveTurn() != 0){
+      useGyroNAVX = false;
+    } else if (oi.getDriveTurn() == 0 && oi.getDriveThrottle() != 0){
+      if (useGyroNAVX == false) {
+        sensors.setFollowAngleNAVX(0);
+      }
+      useGyroNAVX = true;
+      steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
+    }
+    // Finally drive
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
+    /**
+     * Turn off Limelight lights and vision processing if not being used
+     */
     if (areLightsAndVisionOn && !oi.getDriveRightTrigger()) {
       areLightsAndVisionOn = lightsAndVisionToggle.toggle();
       setLightsAndVision(limelight10, areLightsAndVisionOn);
@@ -198,6 +306,9 @@ public class Actions {
     robotmap.climberLegs.set(climberLegsThrottle);
   }
 
+  /**
+   * Toggle the limelight lights and camera modes
+   */
 	public void setLightsAndVision(Limelight limelight, boolean areLightsAndVisionOn) {
     if (areLightsAndVisionOn) {
       limelight.setLedMode(LightMode.eOn);
@@ -208,5 +319,53 @@ public class Actions {
     limelight.setLedMode(LightMode.eOff);
     limelight.setCameraMode(CameraMode.eDriver);
     visionStatus = false;
+  }
+
+  /**
+   * Arm positioning using the potentiometer
+   */
+  public double armControl(String m_armControl) {
+    switch (m_armControl) {
+      // Hatch values
+      case kHighHatch:
+        armDesiredHeight = 555;
+        break;
+      case kMidHatch:
+        armDesiredHeight = 365;
+        break;
+      case kLowHatch:
+        armDesiredHeight = 180;
+        break;
+      // Cargo values
+      case kHighCargo:
+        armDesiredHeight = 545;
+        break;
+      case kMidCargo:
+        armDesiredHeight = 400;
+        break;
+      case kLowCargo:
+        armDesiredHeight = 200;
+        break;
+      case kPickupCargo:
+        armDesiredHeight = 120;
+        break;
+    }
+
+    // Get and set error values to drive towards target height
+    actualHeight = sensors.getArmHeight();
+    armError = armDesiredHeight - actualHeight;
+    output = armKp * armError;
+
+    // Don't let the arm drive too fast
+    if (output > armMaxDrive) {
+      output = armMaxDrive;
+    } else if (output < -armMaxDrive) {
+      output = -armMaxDrive;
+    }
+    
+    // Convert to armThrottle to send back to arm control function
+    armThrottle = output;
+
+    return armThrottle;
   }
 }

@@ -1,12 +1,14 @@
 ## To Do ##
-- Test Declan's auton
-- Make limelight targeting toggle LED and Vision automatically and switch camera based on driving direction
-- Create pipeline switching feature
+- Change pipeline based on cargo vs hatch modes
+- Tune auto aim functions
+- Update arm positions for kcap
+- Defense Mode and add defense button
+- Add winch potentiometer and position settings
+- Make sure that lights are turning off during init
 - Program Blinkin LEDs - http://www.revrobotics.com/rev-11-1105/
-- Test Potentiometer
-- Defense Mode
+- Test Declan's auton
 
 ## Others ##
-- Copy pipelines to each camera
+- Update pipelines for hatch and cargo and copy to each camera
 - Update shuffleboard
 - Label limelights

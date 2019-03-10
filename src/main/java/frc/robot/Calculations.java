@@ -119,7 +119,7 @@ public final class Calculations {
         final double STEER_K = 0.03;                    // how hard to turn toward the target
         final double DRIVE_K = 0.1;                     // how hard to drive fwd toward the target
         final double DESIRED_TARGET_AREA = 20.0;        // Area of the target when the robot reaches the wall
-        final double MAX_DRIVE = 0.65;                   // Simple speed limit so we don't drive too fast
+        final double MAX_DRIVE = 0.65;                  // Simple speed limit so we don't drive too fast
 
         // Start with proportional steering
         double steer_cmd = cameraTargetXAxis * STEER_K;
@@ -132,9 +132,10 @@ public final class Calculations {
         if (drive_cmd > MAX_DRIVE)
         {
             drive_cmd = MAX_DRIVE;
+        } else if (drive_cmd < -MAX_DRIVE) {
+            drive_cmd = -MAX_DRIVE;
         }
 
-        // double drivingError = (DESIRED_TARGET_AREA - cameraTargetArea);
         if (drive_cmd < 0) { drive_cmd = drive_cmd * 0.25; }
 
         double drivingAdjustBack = -drive_cmd;

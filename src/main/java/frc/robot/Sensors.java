@@ -19,12 +19,12 @@ public class Sensors {
   private double followAngle;
 
   public final double kAngleSetpoint = 0.0;
-  public final double kP = 0.005; // propotional turning constant
+  public final double kP = 0.075; // propotional turning constant
   public final double kVoltsPerDegreePerSecond = 0.0128; //adjust
 
   private Potentiometer armPot;
   private double armDegrees;
-  private double armHight;
+  private double armHeight;
   // public CANEncoder leftEncoder = new CANEncoder(robotmap.leftMotor_1);
   // public CANEncoder rightEncoder = new CANEncoder(robotmap.rightMotor_1);
 
@@ -69,13 +69,15 @@ public class Sensors {
     return armDegrees;
   }
 
-  public double getArmHight() {
-    double stringlength = 36; //TODO: Measure actual string length
-    double inperDegree;
+  // not using
+  public double getArmHeight() {
+    // double stringlength = 24;
+    // double inperDegree;
 
-    inperDegree = stringlength / 360; //TODO adjust this number or callabrate the potentiometer
-    armHight = getArmPotValue() * inperDegree;
-    return armHight;
+    // inperDegree = stringlength / 360;
+    // armHeight = getArmPotValue() * inperDegree;
+    armHeight = 1000 - getArmPotValue();
+    return armHeight;
   }
 
   public double getwintchheight(){
