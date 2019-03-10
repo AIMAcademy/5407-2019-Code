@@ -439,7 +439,7 @@ public class Actions {
         smallWinchDesiredHeight = 575;
         break;
       case ksmallWinchCargoPickup:
-        smallWinchDesiredHeight = 510;
+        smallWinchDesiredHeight = 515;
         break;
       case ksmallWinchCargoTop:
         smallWinchDesiredHeight = 580;
