@@ -246,7 +246,7 @@ public class Actions {
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
         drivingAdjust = oi.getDriveThrottle();
-        steeringAdjust = aimAndRange.getSteeringAdjust();
+        steeringAdjust = aimAndRange.getSteeringAdjust() * steeringAdjustKp;
       }
     }
     // If driving only forward or backward within a threshold enable NavX drive straight
@@ -260,7 +260,6 @@ public class Actions {
     //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
     // }
     // Finally drive
-    steeringAdjust = steeringAdjust * steeringAdjustKp;
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
     /**
