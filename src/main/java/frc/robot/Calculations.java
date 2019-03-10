@@ -12,7 +12,7 @@ public final class Calculations {
     private final static double h2 = 28.5; // inches from floor to center of target
     // Update these when the front camera moves.
     private final static double a1 = 0.2773; // the camera's mounting angle in radians
-    private final static double h1 = 8.75; // inches from floor to camera lens
+    private final static double h1 = 8.35; // inches from floor to camera lens
 
     // Constructor
     private Calculations() {}
@@ -163,7 +163,7 @@ public final class Calculations {
         boolean thisCameraTarget = cameraTarget;
 
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-        double KpAim = 0.045;
+        double KpAim = 0.04;
         double KpDist = 0.017;
         double AimMinCmd = 0.095;
         double distMinCmd = 0.04;
@@ -176,7 +176,7 @@ public final class Calculations {
         double steeringAdjustFront = KpAim * aim_error;
         if (aim_error > .2) {
           steeringAdjustFront = steeringAdjustFront + AimMinCmd;
-        } else if (aim_error < -.2f) {
+        } else if (aim_error < -.2) {
           steeringAdjustFront = steeringAdjustFront - AimMinCmd;
         }
 
