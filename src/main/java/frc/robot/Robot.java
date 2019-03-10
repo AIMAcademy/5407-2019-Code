@@ -157,6 +157,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("limelightTarget", cameraTarget);
     SmartDashboard.putBoolean("DEFENSE", actions.defenseToggle);
     SmartDashboard.putBoolean("Tung", isTungOpen);
+    SmartDashboard.putBoolean("BACKWARDS", actions.isRobotDrivingBackwards);
 
     // Get motor voltage values
     LM0 = robotmap.leftMotor_0.getOutputCurrent();

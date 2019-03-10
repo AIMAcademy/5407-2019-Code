@@ -17,6 +17,8 @@ public class Actions {
 
   // private boolean useGyroNAVX = false;
 
+  public boolean isRobotDrivingBackwards = false;
+
   // Limelight vision
   private final boolean isFlow;
   private boolean areLightsAndVisionOn;
@@ -93,6 +95,11 @@ public class Actions {
       boolean cameraTarget
     ) {
     
+    // driver update both triggers and both bumpers
+    if (oi.getDriveLeftBumperPressed()) {
+      isRobotDrivingBackwards = !isRobotDrivingBackwards;
+    }
+    
     /**
      * Operator controls during game operations
      */
@@ -142,10 +149,10 @@ public class Actions {
         }
       }
       // Get Driver Left Bumper for Cargo Wheels output
-      if (oi.getDriveLeftBumper()) {
+      if (oi.getDriveLeftTrigger()) {
         cargoWheelsThrottle = 1;
       // Get Driver Right Bumper for Cargo Wheels intake
-      } else if (oi.getDriveRightBumper()) {
+      } else if (oi.getDriveRightTrigger()) {
         cargoWheelsThrottle = -1;
       } else {
         cargoWheelsThrottle = op_rightThrottle;
@@ -183,14 +190,14 @@ public class Actions {
         if (oi.getOpButtonPressedX()) {
           final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
           final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-          if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+          if (isRobotDrivingBackwards) { // Returns true if driving backwards
             air.setSolenoid2(solenoidStatus2);
           } else {
             air.setSolenoid0(solenoidStatus0);
           }
         }
         // Get Right Trigger to fire back hatch tung pistons only if driving backwards
-        if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
+        if (isRobotDrivingBackwards) { // Returns true if driving backwards
           final boolean fireBackHatchTung = oi.getOpRightTrigger();
           air.setSolenoid3(fireBackHatchTung);
         }
@@ -213,7 +220,7 @@ public class Actions {
     double steeringAdjust;
     double steeringAdjustKp = 0.5;
     // Drive forwards or backwards
-    if (oi.getDriveLeftTrigger()) {
+    if (isRobotDrivingBackwards) {
       drivingAdjust = -oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn();
     } else {
@@ -221,8 +228,8 @@ public class Actions {
       steeringAdjust = oi.getDriveTurn();
     }
     // Aim and range forwards and backwards
-    if (oi.getDriveRightTrigger()) {  // Auto targeting
-      if (oi.getDriveLeftTrigger()) { // Drives backwards when returns true and will use back camera for targeting
+    if (oi.getDriveRightBumper()) {  // Auto targeting
+      if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
         if (!areLightsAndVisionOn) {
           areLightsAndVisionOn = lightsAndVisionToggle.toggle();
           setLightsAndVision(limelight10, areLightsAndVisionOn);
@@ -259,7 +266,7 @@ public class Actions {
     /**
      * Turn off Limelight lights and vision processing if not being used
      */
-    if (areLightsAndVisionOn && !oi.getDriveRightTrigger()) {
+    if (areLightsAndVisionOn && !oi.getDriveRightBumper()) {
       areLightsAndVisionOn = lightsAndVisionToggle.toggle();
       setLightsAndVision(limelight10, areLightsAndVisionOn);
       setLightsAndVision(limelight11, areLightsAndVisionOn);
@@ -376,7 +383,7 @@ public class Actions {
       double steeringAdjust;
       double steeringAdjustKp = 0.5;
       // Drive forwards or backwards
-      if (oi.getDriveLeftTrigger()) {
+      if (isRobotDrivingBackwards) {
         drivingAdjust = -oi.getDriveThrottle();
         steeringAdjust = oi.getDriveTurn();
       } else {
@@ -432,7 +439,7 @@ public class Actions {
         smallWinchDesiredHeight = 575;
         break;
       case ksmallWinchCargoPickup:
-        smallWinchDesiredHeight = 510;
+        smallWinchDesiredHeight = 515;
         break;
       case ksmallWinchCargoTop:
         smallWinchDesiredHeight = 580;
