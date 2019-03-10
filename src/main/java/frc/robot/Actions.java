@@ -375,7 +375,7 @@ public class Actions {
       if (armHeight < 60) {
         robotmap.armKcap.set(0.0);
       }
-      if (winchPosition < 468) {
+      if (winchPosition < 455) {
         robotmap.smallWinchMotor.set(0.0);
       }
       // Just Drive
@@ -430,7 +430,7 @@ public class Actions {
   private void smallWinchControl(String m_smallWinchControl) {
     switch (m_smallWinchControl) {
       case ksmallWinchStowedLeft:
-        smallWinchDesiredHeight = 468;
+        smallWinchDesiredHeight = 455;
         break;
       case ksmallWinchCargoUp:
         smallWinchDesiredHeight = 510;
