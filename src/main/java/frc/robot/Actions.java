@@ -17,6 +17,9 @@ public class Actions {
 
   // private boolean useGyroNAVX = false;
 
+  private boolean isRobotDrivingBackwards = false;
+  private boolean isTriggerPressed = false;
+
   // Limelight vision
   private final boolean isFlow;
   private boolean areLightsAndVisionOn;
@@ -92,6 +95,15 @@ public class Actions {
       double cameraTargetArea,
       boolean cameraTarget
     ) {
+    
+    if (oi.getDriveLeftTrigger()) {
+      if (isTriggerPressed) {
+        isTriggerPressed = !isTriggerPressed;
+        isRobotDrivingBackwards = !isRobotDrivingBackwards;
+        return;
+      }
+      isTriggerPressed = !isTriggerPressed;
+    }
     
     /**
      * Operator controls during game operations
