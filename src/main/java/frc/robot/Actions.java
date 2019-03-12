@@ -88,6 +88,10 @@ public class Actions {
     areLightsAndVisionOn = false;
   }
 
+  public void startGame() {
+    smallWinchControl(ksmallWinchHatchRight);
+  }
+
   public void gameOp(
       double cameraTargetXAxis,
       double cameraTargetYAxis,

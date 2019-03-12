@@ -196,6 +196,8 @@ public class Robot extends TimedRobot {
 
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
+
+    actions.startGame();
   }
 
   @Override
