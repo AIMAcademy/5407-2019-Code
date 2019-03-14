@@ -44,8 +44,8 @@
 - Dilation will slightly inflate the result of an HSV threshold. Use this to patch holes in thresholding results.
 ## Pipelines ##
 - 0: Dual target center
-- 1: Dual target right contour
-- 2: Dual target left contour
+- 1: Dual target left contour
+- 2: Dual target right contour
 - 3: Single target
 ## SKEW ##
 - Skew from the left goes up from 0 to -90

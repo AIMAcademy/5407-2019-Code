@@ -116,13 +116,22 @@ public final class Calculations {
         boolean thisCameraTarget = cameraTarget;
 
         // These numbers must be tuned for your Robot!  Be careful!
-        final double STEER_K = 0.06;                    // how hard to turn toward the target
+        final double STEER_K = 0.03;                    // how hard to turn toward the target
         final double DRIVE_K = 0.1;                     // how hard to drive fwd toward the target
         final double DESIRED_TARGET_AREA = 10.0;        // Area of the target when the robot reaches the wall
         final double MAX_DRIVE = 0.3;                  // Simple speed limit so we don't drive too fast
+        double MIN_TURN;
+        final double steerThreshold = 5;
+
 
         // Start with proportional steering
-        double steer_cmd = cameraTargetXAxis * STEER_K;
+        if (Math.abs(cameraTargetXAxis) > steerThreshold) {
+            MIN_TURN = 0;
+        } else {
+            MIN_TURN = 0.2;
+        }
+        double steer_cmd = cameraTargetXAxis * STEER_K + Math.copySign(MIN_TURN, cameraTargetXAxis);
+        
         double steeringAdjustBack = steer_cmd;
 
         // try to drive forward until the target area reaches our desired area

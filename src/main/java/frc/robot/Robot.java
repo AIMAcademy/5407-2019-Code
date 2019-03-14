@@ -29,16 +29,16 @@ public class Robot extends TimedRobot {
   public String hostNameTen = "limelight-ten";
   public String hostNameEleven = "limelight-eleven";
 
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // private static final String kDefaultAuto = "Default";
+  // private static final String kCustomAuto = "My Auto";
+  // private String m_autoSelected;
+  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private static final String kPipeline0 = "Pipeline 0";
-  private static final String kPipeline1 = "Pipeline 1";
-  private static final String kPipeline2 = "Pipeline 2";
-  private String m_pipelineChoice;
-  private final SendableChooser<String> m_pipeline = new SendableChooser<>();
+  // private static final String kPipeline0 = "Pipeline 0";
+  // private static final String kPipeline1 = "Pipeline 1";
+  // private static final String kPipeline2 = "Pipeline 2";
+  // private String m_pipelineChoice;
+  // private final SendableChooser<String> m_pipeline = new SendableChooser<>();
 
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
@@ -99,14 +99,14 @@ public class Robot extends TimedRobot {
     // Zero the NAVX
     sensors.zeroNAVX();
 
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    // m_chooser.addOption("My Auto", kCustomAuto);
+    // SmartDashboard.putData("Auto choices", m_chooser);
 
-    m_pipeline.setDefaultOption("Front-Tape", kPipeline2);
-    m_pipeline.addOption("Back-Tape", kPipeline0);
-    m_pipeline.addOption("Ball", kPipeline1);
-    SmartDashboard.putData("Pipeline", m_pipeline);
+    // m_pipeline.setDefaultOption("Front-Tape", kPipeline2);
+    // m_pipeline.addOption("Back-Tape", kPipeline0);
+    // m_pipeline.addOption("Ball", kPipeline1);
+    // SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
     // actions.setLightsAndVision(limelight10, true);
@@ -221,7 +221,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("RM1", RM1);
     SmartDashboard.putNumber("RM2", RM2);
     */
-    m_pipelineChoice = m_pipeline.getSelected();
+    // m_pipelineChoice = m_pipeline.getSelected();
   }
 
   /**
@@ -241,8 +241,8 @@ public class Robot extends TimedRobot {
     // Zero the NAVX before auton
     sensors.zeroNAVX();
 
-    m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
+    // m_autoSelected = m_chooser.getSelected();
+    // System.out.println("Auto selected: " + m_autoSelected);
 
     actions.startGame();
   }
@@ -287,19 +287,19 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public void updatePipelineChoice() {
-    int pipeline = 0;
-    switch (m_pipelineChoice) {
-      case kPipeline0:
-        pipeline = 0;
-        break;
-      case kPipeline1:
-        pipeline = 1;
-        break;
-      case kPipeline2:
-        pipeline = 2;
-        break;
-    }
-    currentLimelight.setPipeline(pipeline);
-  }
+  // public void updatePipelineChoice() {
+  //   int pipeline = 0;
+  //   switch (m_pipelineChoice) {
+  //     case kPipeline0:
+  //       pipeline = 0;
+  //       break;
+  //     case kPipeline1:
+  //       pipeline = 1;
+  //       break;
+  //     case kPipeline2:
+  //       pipeline = 2;
+  //       break;
+  //   }
+  //   currentLimelight.setPipeline(pipeline);
+  // }
 }

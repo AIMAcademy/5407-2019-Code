@@ -30,6 +30,9 @@ public class Actions {
   public boolean defenseToggle = false;
   private boolean isDefensePositionSet;
 
+  // Pixy2
+  private boolean pixyWhiteLine;
+
   // Potentiometer arm
   private double armThrottle;
   private double cargoWheelsThrottle;
@@ -239,9 +242,9 @@ public class Actions {
           areLightsAndVisionOn = lightsAndVisionToggle.toggle();
           setLightsAndVision(limelight10, areLightsAndVisionOn);
         }
-        if (limelight10.getTs() < 0 && limelight10.getTs() > -45) { // Approaching from the left
+        if (limelight10.getTs() < -2 && limelight10.getTs() > -45) { // Approaching from the left
           limelight10.setPipeline(1);       
-        } else if (limelight10.getTs() > -90 && limelight10.getTs() < -45) {  // Approaching from the right
+        } else if (limelight10.getTs() > -88 && limelight10.getTs() < -45) {  // Approaching from the right
           limelight10.setPipeline(2);  
         } else {
           limelight10.setPipeline(0);
@@ -251,6 +254,15 @@ public class Actions {
         drivingAdjust = -oi.getDriveThrottle();
         if (oi.getDriveButtonA()) {
           steeringAdjust = aimAndRange.getSteeringAdjust();
+          if (!cameraTarget) {
+            // Look for white line
+            pixyWhiteLine = sensors.getPixyOutput();
+            if (pixyWhiteLine) {
+              steeringAdjust = -0.5;
+            } else {
+              steeringAdjust = oi.getDriveTurn();
+            }
+          }
         } else {
           steeringAdjust = oi.getDriveTurn();
         }
