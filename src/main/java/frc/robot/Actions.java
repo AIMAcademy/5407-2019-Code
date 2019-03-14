@@ -269,13 +269,31 @@ public class Actions {
       } else {
           if (!areLightsAndVisionOn) {
             areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-            setLightsAndVision(limelight10, areLightsAndVisionOn);
+            setLightsAndVision(limelight11, areLightsAndVisionOn);
+          }
+          if (cameraTargetArea > 15) {
+            limelight11.setPipeline(3); 
+          } else if (limelight11.getTs() < -2 && limelight11.getTs() > -45) { // Approaching from the left
+            limelight11.setPipeline(1);       
+          } else if (limelight11.getTs() > -88 && limelight11.getTs() < -45) {  // Approaching from the right
+            limelight11.setPipeline(2);  
+          } else {
+            limelight11.setPipeline(0);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
         drivingAdjust = oi.getDriveThrottle();
         if (oi.getDriveButtonA()) {
           steeringAdjust = aimAndRange.getSteeringAdjust();
+          if (!cameraTarget) {
+            // Look for white line
+            pixyWhiteLine = sensors.getPixyOutput();
+            if (pixyWhiteLine) {
+              steeringAdjust = 0.5;
+            } else {
+              steeringAdjust = oi.getDriveTurn();
+            }
+          }
         } else {
           steeringAdjust = oi.getDriveTurn();
         }

@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
       currentLimelight = limelight10;
     } else {
       // Front camera
-      currentLimelight = limelight10;
+      currentLimelight = limelight11;
     }
 
     // Update limelight values
@@ -182,28 +182,28 @@ public class Robot extends TimedRobot {
 
     // double[] cornX = mLimelightTable.getEntry("tcornx").getDoubleArray(new double[0]);
     // double[] cornY = mLimelightTable.getEntry("tcorny").getDoubleArray(new double[0]);
-    double[] cornX = currentLimelight.getTcornX();
-    double[] cornY = currentLimelight.getTcornY();
-    System.out.println("X Array: " + Arrays.toString(cornX) + " | Y Array: " + Arrays.toString(cornY));
+    // double[] cornX = currentLimelight.getTcornX();
+    // double[] cornY = currentLimelight.getTcornY();
+    // System.out.println("X Array: " + Arrays.toString(cornX) + " | Y Array: " + Arrays.toString(cornY));
     // System.out.println(Arrays.toString(cornY));
 
     // Values go clockwise from bottom left of bounding box
-    double xValue0 = cornX[0];
-    double xValue1 = cornX[1];
-    double xValue2 = cornX[2];
-    double xValue3 = cornX[3];
-    double yValue0 = cornY[0];
-    double yValue1 = cornY[1];
-    double yValue2 = cornY[2];
-    double yValue3 = cornY[3];
-    SmartDashboard.putNumber("tcornx0", xValue0);
-    SmartDashboard.putNumber("tcornx1", xValue1);
-    SmartDashboard.putNumber("tcornx2", xValue2);
-    SmartDashboard.putNumber("tcornx3", xValue3);
-    SmartDashboard.putNumber("tcorny0", yValue0);
-    SmartDashboard.putNumber("tcorny1", yValue1);
-    SmartDashboard.putNumber("tcorny2", yValue2);
-    SmartDashboard.putNumber("tcorny3", yValue3);
+    // double xValue0 = cornX[0];
+    // double xValue1 = cornX[1];
+    // double xValue2 = cornX[2];
+    // double xValue3 = cornX[3];
+    // double yValue0 = cornY[0];
+    // double yValue1 = cornY[1];
+    // double yValue2 = cornY[2];
+    // double yValue3 = cornY[3];
+    // SmartDashboard.putNumber("tcornx0", xValue0);
+    // SmartDashboard.putNumber("tcornx1", xValue1);
+    // SmartDashboard.putNumber("tcornx2", xValue2);
+    // SmartDashboard.putNumber("tcornx3", xValue3);
+    // SmartDashboard.putNumber("tcorny0", yValue0);
+    // SmartDashboard.putNumber("tcorny1", yValue1);
+    // SmartDashboard.putNumber("tcorny2", yValue2);
+    // SmartDashboard.putNumber("tcorny3", yValue3);
 
     /*     
     // Get motor voltage values
