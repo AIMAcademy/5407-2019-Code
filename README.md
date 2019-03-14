@@ -48,7 +48,7 @@
 - 2: Dual target left contour
 - 3: Single target
 ## SKEW ##
-- Skew from the right goes down from -90 to 0
 - Skew from the left goes up from 0 to -90
+- Skew from the right goes down from -90 to 0
 ## Corner Values ##
 - Values go clockwise from bottom left of bounding box

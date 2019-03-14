@@ -239,6 +239,13 @@ public class Actions {
           areLightsAndVisionOn = lightsAndVisionToggle.toggle();
           setLightsAndVision(limelight10, areLightsAndVisionOn);
         }
+        if (limelight10.getTs() < 0 && limelight10.getTs() > -45) { // Approaching from the left
+          limelight10.setPipeline(1);       
+        } else if (limelight10.getTs() > -90 && limelight10.getTs() < -45) {  // Approaching from the right
+          limelight10.setPipeline(2);  
+        } else {
+          limelight10.setPipeline(0);
+        }
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
         drivingAdjust = -oi.getDriveThrottle();
