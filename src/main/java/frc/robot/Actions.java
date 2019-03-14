@@ -242,7 +242,11 @@ public class Actions {
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
         drivingAdjust = -oi.getDriveThrottle();
-        steeringAdjust = aimAndRange.getSteeringAdjust();
+        if (oi.getDriveButtonA()) {
+          steeringAdjust = aimAndRange.getSteeringAdjust();
+        } else {
+          steeringAdjust = oi.getDriveTurn();
+        }
       } else {
           if (!areLightsAndVisionOn) {
             areLightsAndVisionOn = lightsAndVisionToggle.toggle();
@@ -251,7 +255,11 @@ public class Actions {
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
         drivingAdjust = oi.getDriveThrottle();
-        steeringAdjust = aimAndRange.getSteeringAdjust() * steeringAdjustKp;
+        if (oi.getDriveButtonA()) {
+          steeringAdjust = aimAndRange.getSteeringAdjust();
+        } else {
+          steeringAdjust = oi.getDriveTurn();
+        }
       }
     }
     // If driving only forward or backward within a threshold enable NavX drive straight
