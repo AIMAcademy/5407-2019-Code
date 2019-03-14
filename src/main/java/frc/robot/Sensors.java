@@ -11,6 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -20,6 +21,9 @@ public class Sensors {
 
   private int armPotentiometer_ID = 0;
   private int smallWinchPotentiometer_ID = 1;
+
+  private DigitalInput pixy2;
+  private int pixy2_ID = 1;
   
   private Potentiometer s_WinchPot;
   private double s_winchPotValue;
@@ -47,6 +51,12 @@ public class Sensors {
 
     AnalogInput ai2 = new AnalogInput(smallWinchPotentiometer_ID);
     s_WinchPot = new AnalogPotentiometer(ai2, 1000, 0);
+
+    pixy2 = new DigitalInput(pixy2_ID);
+  }
+
+  public boolean getPixyOutput() {
+    return pixy2.get();
   }
 
   public void setFollowAngleNAVX(double offset){

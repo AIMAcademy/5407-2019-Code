@@ -166,6 +166,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("BACKWARDS", actions.isRobotDrivingBackwards);
     SmartDashboard.putNumber("DA", actions.drivingAdjust);
     SmartDashboard.putNumber("SA", actions.steeringAdjust);
+    SmartDashboard.putBoolean("PIXY", sensors.getPixyOutput());
 
     /*     
     // Get motor voltage values
