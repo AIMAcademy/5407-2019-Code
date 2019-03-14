@@ -18,6 +18,8 @@ public class Actions {
   // private boolean useGyroNAVX = false;
 
   public boolean isRobotDrivingBackwards = false;
+  public double drivingAdjust;
+  public double steeringAdjust;
 
   // Limelight vision
   private final boolean isFlow;
@@ -104,124 +106,123 @@ public class Actions {
       isRobotDrivingBackwards = !isRobotDrivingBackwards;
     }
     
-    /**
-     * Operator controls during game operations
-     */
-    // Get Operator Left Stick Throttle
-    final double op_throttle = oi.getOpThrottle();
-    final double op_rightThrottle = oi.getOpRightThrottle();
-    /** CARGO MODE **/
-    if (oi.getJoystickEmulatorButtonSwitch1()) {
-      // Get left bumper to control arm
-      if (oi.getOpLeftBumper()) {
-        if (oi.getOpButtonY()) {
-          armControl(kHighCargo);
-          smallWinchControl(ksmallWinchCargoTop);
-        } else if (oi.getOpButtonX()) {
-          armControl(kMidCargo);
-          smallWinchControl(ksmallWinchCargoMiddle);
-        } else if (oi.getOpButtonA()) {
-          armControl(kLowCargo);
-          smallWinchControl(ksmallWinchCargoBottom);
-        } else if (oi.getOpButtonB()) {
-          armControl(kPickupCargo);
-          smallWinchControl(ksmallWinchCargoPickup);
-        } else {
-          // Set small winch throttle to zero
-          setSmallWinch(op_throttle);
-          // Set arm motor to operator joystick throttle
-          armThrottle = op_throttle;
-          // Set arm limits
-          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
-            armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
-            armThrottle = 0.0;
-          }
-        }
-      } else {
-        setSmallWinch(op_throttle);
-        armThrottle = 0.0;
-        // Get Y button to control Claw
-        if (oi.getOpButtonPressedY()) {
-          final boolean solenoidStatus4 = !air.getSolenoid4();
-          air.setSolenoid4(solenoidStatus4);
-        }
-        // Get X Button to control Fangs
-        if (oi.getOpButtonPressedX()) {
-          final boolean solenoidStatus1 = !air.getSolenoid1();
-          air.setSolenoid1(solenoidStatus1);
-        }
-      }
-      // Get Driver Left Bumper for Cargo Wheels output
-      if (oi.getDriveLeftTrigger()) {
-        cargoWheelsThrottle = 1;
-      // Get Driver Right Bumper for Cargo Wheels intake
-      } else if (oi.getDriveRightTrigger()) {
-        cargoWheelsThrottle = -1;
-      } else {
-        cargoWheelsThrottle = op_rightThrottle;
-      }
-      // Set cargo wheels motors
-      robotmap.cargoWheels.set(cargoWheelsThrottle);
-    /** HATCH MODE **/
-    } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
-      if (oi.getOpLeftBumper()) {
-        if (oi.getOpButtonY()) {
-          armControl(kHighHatch);
-          smallWinchControl(ksmallWinchHatchRight);
-        } else if (oi.getOpButtonX()) {
-          armControl(kMidHatch);
-          smallWinchControl(ksmallWinchHatchRight);
-        } else if (oi.getOpButtonA()) {
-          armControl(kLowHatch);
-          smallWinchControl(ksmallWinchHatchRight);
-        } else {
-          // Set small winch throttle to zero
-          setSmallWinch(op_throttle);
-          // Set arm motor to operator joystick throttle
-          armThrottle = op_throttle;
-          // Set arm limits
-          if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
-            armThrottle = 0.0;
-          } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
-            armThrottle = 0.0;
-          }
-        }
-      } else {
-        setSmallWinch(op_throttle);
-        armThrottle = 0.0;
-        // Get X Button to control hatch mechanisms
-        if (oi.getOpButtonPressedX()) {
-          final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
-          final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-          if (isRobotDrivingBackwards) { // Returns true if driving backwards
-            air.setSolenoid2(solenoidStatus2);
+    if (!isFlow) {
+      /**
+       * Operator controls during game operations
+       */
+      // Get Operator Left Stick Throttle
+      final double op_throttle = oi.getOpThrottle();
+      final double op_rightThrottle = oi.getOpRightThrottle();
+      /** CARGO MODE **/
+      if (oi.getJoystickEmulatorButtonSwitch1()) {
+        // Get left bumper to control arm
+        if (oi.getOpLeftBumper()) {
+          if (oi.getOpButtonY()) {
+            armControl(kHighCargo);
+            smallWinchControl(ksmallWinchCargoTop);
+          } else if (oi.getOpButtonX()) {
+            armControl(kMidCargo);
+            smallWinchControl(ksmallWinchCargoMiddle);
+          } else if (oi.getOpButtonA()) {
+            armControl(kLowCargo);
+            smallWinchControl(ksmallWinchCargoBottom);
+          } else if (oi.getOpButtonB()) {
+            armControl(kPickupCargo);
+            smallWinchControl(ksmallWinchCargoPickup);
           } else {
-            air.setSolenoid0(solenoidStatus0);
+            // Set small winch throttle to zero
+            setSmallWinch(op_throttle);
+            // Set arm motor to operator joystick throttle
+            armThrottle = op_throttle;
+            // Set arm limits
+            if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
+              armThrottle = 0.0;
+            } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
+              armThrottle = 0.0;
+            }
+          }
+        } else {
+          setSmallWinch(op_throttle);
+          armThrottle = 0.0;
+          // Get Y button to control Claw
+          if (oi.getOpButtonPressedY()) {
+            final boolean solenoidStatus4 = !air.getSolenoid4();
+            air.setSolenoid4(solenoidStatus4);
+          }
+          // Get X Button to control Fangs
+          if (oi.getOpButtonPressedX()) {
+            final boolean solenoidStatus1 = !air.getSolenoid1();
+            air.setSolenoid1(solenoidStatus1);
           }
         }
-        // Get Right Trigger to fire back hatch tung pistons only if driving backwards
-        if (isRobotDrivingBackwards) { // Returns true if driving backwards
-          final boolean fireBackHatchTung = oi.getOpRightTrigger();
-          air.setSolenoid3(fireBackHatchTung);
+        // Get Driver Left Bumper for Cargo Wheels output
+        if (oi.getDriveLeftTrigger()) {
+          cargoWheelsThrottle = 1;
+        // Get Driver Right Bumper for Cargo Wheels intake
+        } else if (oi.getDriveRightTrigger()) {
+          cargoWheelsThrottle = -1;
+        } else {
+          cargoWheelsThrottle = op_rightThrottle;
+        }
+        // Set cargo wheels motors
+        robotmap.cargoWheels.set(cargoWheelsThrottle);
+      /** HATCH MODE **/
+      } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
+        if (oi.getOpLeftBumper()) {
+          if (oi.getOpButtonY()) {
+            armControl(kHighHatch);
+            smallWinchControl(ksmallWinchHatchRight);
+          } else if (oi.getOpButtonX()) {
+            armControl(kMidHatch);
+            smallWinchControl(ksmallWinchHatchRight);
+          } else if (oi.getOpButtonA()) {
+            armControl(kLowHatch);
+            smallWinchControl(ksmallWinchHatchRight);
+          } else {
+            // Set small winch throttle to zero
+            setSmallWinch(op_throttle);
+            // Set arm motor to operator joystick throttle
+            armThrottle = op_throttle;
+            // Set arm limits
+            if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
+              armThrottle = 0.0;
+            } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
+              armThrottle = 0.0;
+            }
+          }
+        } else {
+          setSmallWinch(op_throttle);
+          armThrottle = 0.0;
+          // Get X Button to control hatch mechanisms
+          if (oi.getOpButtonPressedX()) {
+            final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
+            final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
+            if (isRobotDrivingBackwards) { // Returns true if driving backwards
+              air.setSolenoid2(solenoidStatus2);
+            } else {
+              air.setSolenoid0(solenoidStatus0);
+            }
+          }
+          // Get Right Trigger to fire back hatch tung pistons only if driving backwards
+          if (isRobotDrivingBackwards) { // Returns true if driving backwards
+            final boolean fireBackHatchTung = oi.getOpRightTrigger();
+            air.setSolenoid3(fireBackHatchTung);
+          }
         }
       }
+      /** BOTH MODES **/
+      // Set arm motor
+      if (isFlow) {
+        robotmap.armFlow.set(armThrottle);
+      } else {
+        robotmap.armKcap.set(armThrottle);
+      }
+      // Small Winch
+      robotmap.smallWinchMotor.set(smallWinchThrottle);
     }
-    /** BOTH MODES **/
-    // Set arm motor
-    if (isFlow) {
-      robotmap.armFlow.set(armThrottle);
-    } else {
-      robotmap.armKcap.set(armThrottle);
-    }
-    // Small Winch
-    robotmap.smallWinchMotor.set(smallWinchThrottle);
-
     /**
      * Driver controls during game operations
      */
-    double drivingAdjust;
-    double steeringAdjust;
     double steeringAdjustKp = 0.5;
     // Drive forwards or backwards
     if (isRobotDrivingBackwards) {
@@ -245,7 +246,7 @@ public class Actions {
       } else {
           if (!areLightsAndVisionOn) {
             areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-            setLightsAndVision(limelight11, areLightsAndVisionOn);
+            setLightsAndVision(limelight10, areLightsAndVisionOn);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
@@ -264,6 +265,9 @@ public class Actions {
     //   steeringAdjust = (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * sensors.kP;
     // }
     // Finally drive
+    if (isFlow) {
+      drivingAdjust = -drivingAdjust;
+    }
     robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
 
     /**

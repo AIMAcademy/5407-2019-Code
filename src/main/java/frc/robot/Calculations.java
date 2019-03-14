@@ -116,7 +116,7 @@ public final class Calculations {
         boolean thisCameraTarget = cameraTarget;
 
         // These numbers must be tuned for your Robot!  Be careful!
-        final double STEER_K = 0.04;                    // how hard to turn toward the target
+        final double STEER_K = 0.06;                    // how hard to turn toward the target
         final double DRIVE_K = 0.1;                     // how hard to drive fwd toward the target
         final double DESIRED_TARGET_AREA = 10.0;        // Area of the target when the robot reaches the wall
         final double MAX_DRIVE = 0.3;                  // Simple speed limit so we don't drive too fast

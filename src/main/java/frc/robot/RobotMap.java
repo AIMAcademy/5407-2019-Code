@@ -49,6 +49,11 @@ public class RobotMap {
     private int arm_ID = 4; // (PWM)
     private int cargoWheels_ID = 3; // CARGO CLAW ROLLER WHEELS (PWM)
     private int smallWinchMotor_ID = 2; // S-WINCH (PWM)
+    // Flow Spark Motor IDs
+    private int flowMotorLeft0_ID = 0;
+    private int flowMotorLeft1_ID = 1;
+    private int flowMotorRight2_ID = 2;
+    private int flowMotorRight3_ID = 3;
 
     /*
      * Motor Controllers
@@ -71,10 +76,14 @@ public class RobotMap {
     public Spark cargoWheels; // CARGO CLAW ROLLER WHEELS
     public Spark smallWinchMotor; // S-WINCH
     // Flow Motors
-    public WPI_TalonSRX leftTalon;  // FLOW CHASSIS
-    public WPI_TalonSRX rightTalon;  // FLOW CHASSIS
-    public WPI_VictorSPX leftVictor;  // FLOW CHASSIS
-    public WPI_VictorSPX rightVictor;  // FLOW CHASSIS
+    // public WPI_TalonSRX leftTalon;  // FLOW CHASSIS
+    // public WPI_TalonSRX rightTalon;  // FLOW CHASSIS
+    // public WPI_VictorSPX leftVictor;  // FLOW CHASSIS
+    // public WPI_VictorSPX rightVictor;  // FLOW CHASSIS
+    public Spark flowMotorLeft0;
+    public Spark flowMotorLeft1;
+    public Spark flowMotorRight2;
+    public Spark flowMotorRight3;
 
     // Kcap Speed Controller Group
     public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
@@ -89,22 +98,29 @@ public class RobotMap {
 
         if (getIsFlow()) {
             // Use Flow chassis
-            leftTalon = new WPI_TalonSRX(13);
-            rightTalon = new WPI_TalonSRX(16);
-            leftVictor = new WPI_VictorSPX(17);
-            rightVictor = new WPI_VictorSPX(21);
-
+            // leftTalon = new WPI_TalonSRX(13);
+            // rightTalon = new WPI_TalonSRX(16);
+            // leftVictor = new WPI_VictorSPX(17);
+            // rightVictor = new WPI_VictorSPX(21);
             // Set slave motors
-            leftVictor.follow(leftTalon);
-            rightVictor.follow(rightTalon);
+            // leftVictor.follow(leftTalon);
+            // rightVictor.follow(rightTalon);
+            flowMotorLeft0 = new Spark(flowMotorLeft0_ID);
+            flowMotorLeft1 = new Spark(flowMotorLeft1_ID);
+            flowMotorRight2 = new Spark(flowMotorRight2_ID);
+            flowMotorRight3 = new Spark(flowMotorRight3_ID);
+
+            speedControllerGroupLeft = new SpeedControllerGroup(flowMotorLeft0, flowMotorLeft1);
+            speedControllerGroupRight = new SpeedControllerGroup(flowMotorRight2, flowMotorRight3);
 
             // Drive
-            drive = new DifferentialDrive(leftTalon, rightTalon);
+            // drive = new DifferentialDrive(leftTalon, rightTalon);
+            drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
 
             // Motor controllers for Flow too
-            armFlow = new Spark(arm_ID);
-            smallWinchMotor = new Spark(smallWinchMotor_ID);
-            cargoWheels = new Spark(cargoWheels_ID);
+            // armFlow = new Spark(arm_ID);
+            // smallWinchMotor = new Spark(smallWinchMotor_ID);
+            // cargoWheels = new Spark(cargoWheels_ID);
 
             return;
         }

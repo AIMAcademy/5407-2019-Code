@@ -84,6 +84,10 @@ public class Robot extends TimedRobot {
     sensors = new Sensors();
     actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
 
+    if (!robotmap.getIsFlow()) {
+      air.airInit();
+    }
+
     // Zero the NAVX
     sensors.zeroNAVX();
 
@@ -127,10 +131,10 @@ public class Robot extends TimedRobot {
       currentLimelight = limelight10;
     } else {
       // Front camera
-      currentLimelight = limelight11;
+      currentLimelight = limelight10;
     }
 
-    // Use front camera to update limelight values
+    // Update limelight values
     cameraTargetXAxis = currentLimelight.getTx();
     cameraTargetYAxis = currentLimelight.getTy();
     cameraTargetArea = currentLimelight.getTa();
@@ -141,7 +145,10 @@ public class Robot extends TimedRobot {
     winchPotValue = sensors.getSmallWinchPot();
 
     // Tung open or closed
-    isTungOpen = air.getSolenoid2();
+    if (!robotmap.getIsFlow()) {
+      isTungOpen = air.getSolenoid2();
+      SmartDashboard.putBoolean("Tung", isTungOpen);
+    }
 
     // Limelight post to smart dashboard periodically
     SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
@@ -156,9 +163,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("WinchPot", winchPotValue);
     SmartDashboard.putBoolean("limelightTarget", cameraTarget);
     SmartDashboard.putBoolean("DEFENSE", actions.defenseToggle);
-    SmartDashboard.putBoolean("Tung", isTungOpen);
     SmartDashboard.putBoolean("BACKWARDS", actions.isRobotDrivingBackwards);
+    SmartDashboard.putNumber("DA", actions.drivingAdjust);
+    SmartDashboard.putNumber("SA", actions.steeringAdjust);
 
+    /*     
     // Get motor voltage values
     LM0 = robotmap.leftMotor_0.getOutputCurrent();
     LM1 = robotmap.leftMotor_1.getOutputCurrent();
@@ -173,7 +182,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("RM0", RM0);
     SmartDashboard.putNumber("RM1", RM1);
     SmartDashboard.putNumber("RM2", RM2);
-
+    */
     m_pipelineChoice = m_pipeline.getSelected();
   }
 
