@@ -7,13 +7,13 @@
 
 package frc.robot;
 
-import java.util.Arrays;
+// import java.util.Arrays;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+// import edu.wpi.first.networktables.NetworkTable;
+// import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
   private double cameraTargetYAxis;
   private double cameraTargetArea;
   private boolean cameraTarget;
+  public double cameraTargetSkew;
 
   // For Range
   double distance;
@@ -67,14 +68,14 @@ public class Robot extends TimedRobot {
   private boolean isTungOpen;
 
   // Motor voltages
-  private double LM0;
-  private double LM1;
-  private double LM2;
-  private double RM0;
-  private double RM1;
-  private double RM2;
+  // private double LM0;
+  // private double LM1;
+  // private double LM2;
+  // private double RM0;
+  // private double RM1;
+  // private double RM2;
 
-  private NetworkTable mLimelightTable;
+  // private NetworkTable mLimelightTable;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -90,7 +91,7 @@ public class Robot extends TimedRobot {
     sensors = new Sensors();
     actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
 
-    mLimelightTable = NetworkTableInstance.getDefault().getTable("limelight10");
+    // mLimelightTable = NetworkTableInstance.getDefault().getTable("limelight10");
 
     if (!robotmap.getIsFlow()) {
       air.airInit();
@@ -134,7 +135,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
-    if (oi.getDriveLeftTrigger()) {
+    if (oi.getDriveLeftBumperPressed()) {
       // Back camera
       currentLimelight = limelight10;
     } else {
@@ -147,6 +148,7 @@ public class Robot extends TimedRobot {
     cameraTargetYAxis = currentLimelight.getTy();
     cameraTargetArea = currentLimelight.getTa();
     cameraTarget = currentLimelight.isTarget();
+    cameraTargetSkew = currentLimelight.getTs();
 
     // Update arm potentiometer value
     armPotValue = sensors.getArmHeight();
@@ -178,7 +180,7 @@ public class Robot extends TimedRobot {
 
     // Skew from the right goes from -90 to -45
     // Skew from the left goes from 0 to -45
-    SmartDashboard.putNumber("TS", currentLimelight.getTs());
+    SmartDashboard.putNumber("TS", cameraTargetSkew);
 
     // double[] cornX = mLimelightTable.getEntry("tcornx").getDoubleArray(new double[0]);
     // double[] cornY = mLimelightTable.getEntry("tcorny").getDoubleArray(new double[0]);

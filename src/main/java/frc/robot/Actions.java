@@ -17,6 +17,8 @@ public class Actions {
 
   // private boolean useGyroNAVX = false;
 
+  private Limelight currentLimelight;
+
   public boolean isRobotDrivingBackwards = false;
   public double drivingAdjust;
   public double steeringAdjust;
@@ -109,6 +111,14 @@ public class Actions {
       isRobotDrivingBackwards = !isRobotDrivingBackwards;
     }
     
+    if (oi.getDriveLeftBumperPressed()) {
+      // Back camera
+      currentLimelight = limelight10;
+    } else {
+      // Front camera
+      currentLimelight = limelight11;
+    }
+
     if (!isFlow) {
       /**
        * Operator controls during game operations
@@ -230,10 +240,10 @@ public class Actions {
     // Drive forwards or backwards
     if (isRobotDrivingBackwards) {
       drivingAdjust = -oi.getDriveThrottle();
-      steeringAdjust = oi.getDriveTurn();
+      steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
     } else {
       drivingAdjust = oi.getDriveThrottle();
-      steeringAdjust = oi.getDriveTurn();
+      steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
     }
     // Aim and range forwards and backwards
     if (oi.getDriveRightBumper()) {  // Auto targeting
@@ -260,11 +270,11 @@ public class Actions {
             if (pixyWhiteLine) {
               steeringAdjust = -0.5;
             } else {
-              steeringAdjust = oi.getDriveTurn();
+              steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
             }
           }
         } else {
-          steeringAdjust = oi.getDriveTurn();
+          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
         }
       } else {
           if (!areLightsAndVisionOn) {
@@ -291,11 +301,11 @@ public class Actions {
             if (pixyWhiteLine) {
               steeringAdjust = 0.5;
             } else {
-              steeringAdjust = oi.getDriveTurn();
+              steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
             }
           }
         } else {
-          steeringAdjust = oi.getDriveTurn();
+          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
         }
       }
     }
