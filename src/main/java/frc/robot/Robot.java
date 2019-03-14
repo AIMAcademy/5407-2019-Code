@@ -7,7 +7,11 @@
 
 package frc.robot;
 
+import java.util.Arrays;
+
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,6 +74,8 @@ public class Robot extends TimedRobot {
   private double RM1;
   private double RM2;
 
+  private NetworkTable mLimelightTable;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -83,6 +89,8 @@ public class Robot extends TimedRobot {
     robotmap = new RobotMap();
     sensors = new Sensors();
     actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
+
+    mLimelightTable = NetworkTableInstance.getDefault().getTable("limelight10");
 
     if (!robotmap.getIsFlow()) {
       air.airInit();
@@ -167,6 +175,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("DA", actions.drivingAdjust);
     SmartDashboard.putNumber("SA", actions.steeringAdjust);
     SmartDashboard.putBoolean("PIXY", sensors.getPixyOutput());
+
+    SmartDashboard.putNumber("TS", currentLimelight.getTs());
+
+    // double[] cornX = mLimelightTable.getEntry("tcornx").getDoubleArray(new double[0]);
+    // double[] cornY = mLimelightTable.getEntry("tcorny").getDoubleArray(new double[0]);
+    double[] cornX = currentLimelight.getTcornX();
+    double[] cornY = currentLimelight.getTcornY();
+    System.out.println("X Array: " + Arrays.toString(cornX) + " | Y Array: " + Arrays.toString(cornY));
+    // System.out.println(Arrays.toString(cornY));
 
     /*     
     // Get motor voltage values

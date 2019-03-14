@@ -97,6 +97,27 @@ public class Limelight {
 		return getValue("tl").getDouble(0.00);
 	}
 
+	// double[] cornX = mLimelightTable.getEntry("tcornx").getDoubleArray(new double[0]);
+    //     double[] cornY = mLimelightTable.getEntry("tcorny").getDoubleArray(new double[0]);
+
+	/**
+	 * Gets raw corner x.
+	 * 
+	 * @return Target latency.
+	 */
+	public double[] getTcornX() {
+		return getValue("tcornx").getDoubleArray(new double[0]);
+	}
+
+	/**
+	 * Gets raw corner y.
+	 * 
+	 * @return Target latency.
+	 */
+	public double[] getTcornY() {
+		return getValue("tcorny").getDoubleArray(new double[0]);
+	}
+
 	/**
 	 * Sets LED mode of Limelight.
 	 * 
