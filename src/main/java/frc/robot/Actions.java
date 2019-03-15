@@ -8,8 +8,8 @@ import frc.robot.Limelight.CameraMode;
  */
 public class Actions {
   private Air air;
-  private Limelight limelight10;
-  private Limelight limelight11;
+  private Limelight backLimelight;
+  private Limelight frontLimelight;
   private OI oi;
   private RobotMap robotmap;
   private Sensors sensors;
@@ -18,6 +18,7 @@ public class Actions {
   // private boolean useGyroNAVX = false;
 
   private Limelight currentLimelight;
+  private LimelightProvider limelightProvider;
 
   public boolean isRobotDrivingBackwards = false;
   public double drivingAdjust;
@@ -25,7 +26,6 @@ public class Actions {
 
   // Limelight vision
   private final boolean isFlow;
-  private boolean areLightsAndVisionOn;
   public boolean visionStatus;
 
   // Defense mode
@@ -76,23 +76,22 @@ public class Actions {
 
   public Actions(
       Air air,
-      Limelight limelight10,
-      Limelight limelight11,
       OI oi,
       RobotMap robotmap,
       Sensors sensors
     ) {
     this.air = air;
-    this.limelight10 = limelight10;
-    this.limelight11 = limelight11;
     this.oi = oi;
     this.robotmap = robotmap;
     this.sensors = sensors;
 
     isFlow = robotmap.getIsFlow();
 
+    limelightProvider = LimelightProvider.getProvider();
+    backLimelight = limelightProvider.getBackLimelight();
+    frontLimelight = limelightProvider.getFrontLimelight();
+
     lightsAndVisionToggle = new Toggle();
-    areLightsAndVisionOn = false;
   }
 
   public void startGame() {
@@ -110,14 +109,8 @@ public class Actions {
     if (oi.getDriveLeftBumperPressed()) {
       isRobotDrivingBackwards = !isRobotDrivingBackwards;
     }
-    
-    if (oi.getDriveLeftBumperPressed()) {
-      // Back camera
-      currentLimelight = limelight10;
-    } else {
-      // Front camera
-      currentLimelight = limelight11;
-    }
+
+    currentLimelight = limelightProvider.getCurrentLimelight(isRobotDrivingBackwards);
 
     if (!isFlow) {
       /**
@@ -248,17 +241,8 @@ public class Actions {
     // Aim and range forwards and backwards
     if (oi.getDriveRightBumper()) {  // Auto targeting
       if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
-        if (!areLightsAndVisionOn) {
-          areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-          setLightsAndVision(limelight10, areLightsAndVisionOn);
-        }
-        if (limelight10.getTs() < -2 && limelight10.getTs() > -45) { // Approaching from the left
-          limelight10.setPipeline(1);       
-        } else if (limelight10.getTs() > -88 && limelight10.getTs() < -45) {  // Approaching from the right
-          limelight10.setPipeline(2);  
-        } else {
-          limelight10.setPipeline(0);
-        }
+        turnOnLightsAndVision(backLimelight);
+        setPipelineBasedOnApproach(backLimelight);
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
         drivingAdjust = -oi.getDriveThrottle();
@@ -277,18 +261,11 @@ public class Actions {
           steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
         }
       } else {
-          if (!areLightsAndVisionOn) {
-            areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-            setLightsAndVision(limelight11, areLightsAndVisionOn);
-          }
+          turnOnLightsAndVision(frontLimelight);
           if (cameraTargetArea > 15) {
-            limelight11.setPipeline(3); 
-          } else if (limelight11.getTs() < -2 && limelight11.getTs() > -45) { // Approaching from the left
-            limelight11.setPipeline(1);       
-          } else if (limelight11.getTs() > -88 && limelight11.getTs() < -45) {  // Approaching from the right
-            limelight11.setPipeline(2);  
+            frontLimelight.setPipeline(3);
           } else {
-            limelight11.setPipeline(0);
+            setPipelineBasedOnApproach(frontLimelight);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         // drivingAdjust = aimAndRange.getDrivingAdjust();
@@ -328,10 +305,10 @@ public class Actions {
     /**
      * Turn off Limelight lights and vision processing if not being used
      */
-    if (areLightsAndVisionOn && !oi.getDriveRightBumper()) {
-      areLightsAndVisionOn = lightsAndVisionToggle.toggle();
-      setLightsAndVision(limelight10, areLightsAndVisionOn);
-      setLightsAndVision(limelight11, areLightsAndVisionOn);
+    if (lightsAndVisionToggle.get() && !oi.getDriveRightBumper()) {
+      final boolean areLightsAndVisionOn = lightsAndVisionToggle.toggle();
+      setLightsAndVision(backLimelight, areLightsAndVisionOn);
+      setLightsAndVision(frontLimelight, areLightsAndVisionOn);
     }
 
     // Set Defense Mode position variable to indicate not set
@@ -489,46 +466,6 @@ public class Actions {
     visionStatus = false;
   }
 
-  private void smallWinchControl(String m_smallWinchControl) {
-    switch (m_smallWinchControl) {
-      case ksmallWinchStowedLeft:
-        smallWinchDesiredHeight = 455;
-        break;
-      case ksmallWinchCargoUp:
-        smallWinchDesiredHeight = 510;
-        break;
-      case ksmallWinchHatchRight:
-        smallWinchDesiredHeight = 575;
-        break;
-      case ksmallWinchCargoPickup:
-        smallWinchDesiredHeight = 515;
-        break;
-      case ksmallWinchCargoTop:
-        smallWinchDesiredHeight = 580;
-        break;
-      case ksmallWinchCargoMiddle:
-        smallWinchDesiredHeight = 510;
-        break;
-      case ksmallWinchCargoBottom:
-        smallWinchDesiredHeight = 510;
-        break;
-    }
-
-    // Get and set error values to drive towards target height
-    smallWinchactualHeight = sensors.getSmallWinchPot();
-    smallWinchError = smallWinchDesiredHeight - smallWinchactualHeight;
-    smallWinchOutput = smallWinchkP * smallWinchError;
-
-    // Don't let the winch drive too fast
-    if (smallWinchOutput > smallWinchMaxDrive) {
-      smallWinchOutput = smallWinchMaxDrive;
-    } else if (smallWinchOutput < -smallWinchMaxDrive) {
-      smallWinchOutput = -smallWinchMaxDrive;
-    }
-    
-    smallWinchThrottle = -smallWinchOutput;
-  }
-
   /**
    * Arm positioning using the potentiometer
    */
@@ -581,6 +518,56 @@ public class Actions {
     return armThrottle;
   }
 
+  private void smallWinchControl(String m_smallWinchControl) {
+    switch (m_smallWinchControl) {
+      case ksmallWinchStowedLeft:
+        smallWinchDesiredHeight = 455;
+        break;
+      case ksmallWinchCargoUp:
+        smallWinchDesiredHeight = 510;
+        break;
+      case ksmallWinchHatchRight:
+        smallWinchDesiredHeight = 575;
+        break;
+      case ksmallWinchCargoPickup:
+        smallWinchDesiredHeight = 515;
+        break;
+      case ksmallWinchCargoTop:
+        smallWinchDesiredHeight = 580;
+        break;
+      case ksmallWinchCargoMiddle:
+        smallWinchDesiredHeight = 510;
+        break;
+      case ksmallWinchCargoBottom:
+        smallWinchDesiredHeight = 510;
+        break;
+    }
+
+    // Get and set error values to drive towards target height
+    smallWinchactualHeight = sensors.getSmallWinchPot();
+    smallWinchError = smallWinchDesiredHeight - smallWinchactualHeight;
+    smallWinchOutput = smallWinchkP * smallWinchError;
+
+    // Don't let the winch drive too fast
+    if (smallWinchOutput > smallWinchMaxDrive) {
+      smallWinchOutput = smallWinchMaxDrive;
+    } else if (smallWinchOutput < -smallWinchMaxDrive) {
+      smallWinchOutput = -smallWinchMaxDrive;
+    }
+
+    smallWinchThrottle = -smallWinchOutput;
+  }
+
+  private void setPipelineBasedOnApproach(Limelight limelight) {
+    if (limelight.getTs() < -2 && limelight.getTs() > -45) { // Approaching from the left
+      limelight.setPipeline(1);
+    } else if (limelight.getTs() > -88 && limelight.getTs() < -45) {  // Approaching from the right
+      limelight.setPipeline(2);
+    } else {
+      limelight.setPipeline(0);
+    }
+  }
+
   private void setSmallWinch(Double op_throttle) {
     if (oi.getOpDpadLeft()) {
       // Set winch to stowed
@@ -602,6 +589,12 @@ public class Actions {
         }
     } else {
       smallWinchThrottle = 0.0;
+    }
+  }
+
+  private void turnOnLightsAndVision(Limelight limelight) {
+    if (!lightsAndVisionToggle.get()) {
+      setLightsAndVision(limelight, lightsAndVisionToggle.toggle());
     }
   }
 }

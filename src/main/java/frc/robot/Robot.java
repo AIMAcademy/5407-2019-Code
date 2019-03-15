@@ -19,15 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   Actions actions;
   Air air;
-  Limelight currentLimelight;
-  Limelight limelight10;
-  Limelight limelight11;
+  static Limelight backLimelight;
+  static Limelight frontLimelight;
+  LimelightProvider limelightProvider;
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
-
-  public String hostNameTen = "limelight-ten";
-  public String hostNameEleven = "limelight-eleven";
 
   // private static final String kDefaultAuto = "Default";
   // private static final String kCustomAuto = "My Auto";
@@ -75,8 +72,6 @@ public class Robot extends TimedRobot {
   // private double RM1;
   // private double RM2;
 
-  // private NetworkTable mLimelightTable;
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -84,14 +79,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     air = new Air();
-    limelight10 = new Limelight(hostNameTen);
-    limelight11 = new Limelight(hostNameEleven);
     oi = new OI();
     robotmap = new RobotMap();
     sensors = new Sensors();
-    actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
+    actions = new Actions(air, oi, robotmap, sensors);
 
-    // mLimelightTable = NetworkTableInstance.getDefault().getTable("limelight10");
+    limelightProvider = LimelightProvider.getProvider();
+    backLimelight = limelightProvider.getBackLimelight();
+    frontLimelight = limelightProvider.getFrontLimelight();
 
     if (!robotmap.getIsFlow()) {
       air.airInit();
@@ -110,8 +105,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
-    // actions.setLightsAndVision(limelight10, true);
-    // actions.setLightsAndVision(limelight11, true);
+    // actions.setLightsAndVision(backLimelight, true);
+    // actions.setLightsAndVision(frontLimelight, true);
 
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
@@ -135,13 +130,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
-    if (oi.getDriveLeftBumperPressed()) {
-      // Back camera
-      currentLimelight = limelight10;
-    } else {
-      // Front camera
-      currentLimelight = limelight11;
-    }
+    // TODO: Mr. Rick inferred this reverse drive logic may need updating.
+    final boolean isReverseDrive = oi.getDriveLeftBumperPressed();
+    Limelight currentLimelight = limelightProvider.getCurrentLimelight(isReverseDrive);
 
     // Update limelight values
     cameraTargetXAxis = currentLimelight.getTx();
@@ -288,20 +279,4 @@ public class Robot extends TimedRobot {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }
   }
-
-  // public void updatePipelineChoice() {
-  //   int pipeline = 0;
-  //   switch (m_pipelineChoice) {
-  //     case kPipeline0:
-  //       pipeline = 0;
-  //       break;
-  //     case kPipeline1:
-  //       pipeline = 1;
-  //       break;
-  //     case kPipeline2:
-  //       pipeline = 2;
-  //       break;
-  //   }
-  //   currentLimelight.setPipeline(pipeline);
-  // }
 }
