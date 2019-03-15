@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.HttpCamera;
+
 // import java.util.Arrays;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -107,7 +109,7 @@ public class Robot extends TimedRobot {
     armPotValueEntry = driveFrontTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
     winchPotValueEntry = driveFrontTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
     tungOpenEntry = driveFrontTab.add("Tung", isTungOpen).withPosition(15, 1).withSize(2, 2).getEntry();
-    defenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
+    defenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 3).withSize(2, 2).getEntry();
     // Driving Back tab
     // cameraServerFront = driveBackTab.add("Back Limelight", backLimelight).getEntry();
     distanceEntry = driveBackTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
@@ -116,7 +118,7 @@ public class Robot extends TimedRobot {
     armPotValueEntry = driveBackTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
     winchPotValueEntry = driveBackTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
     tungOpenEntry = driveBackTab.add("Tung", isTungOpen).withPosition(15, 1).withSize(2, 2).getEntry();
-    defenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
+    defenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 3).withSize(2, 2).getEntry();
     // Coding tab
     hardMountingAngleEntry = codeTab.add("HardMA", hard_mounting_angle).getEntry();
     softMountingAngleEntry = codeTab.add("SoftMA", soft_mounting_angle).getEntry();
