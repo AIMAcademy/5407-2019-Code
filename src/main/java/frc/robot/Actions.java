@@ -230,40 +230,25 @@ public class Actions {
       // Small Winch
       robotmap.smallWinchMotor.set(smallWinchThrottle);
     }
+
     /**
      * Driver controls during game operations
      */
     double steeringAdjustKp = 0.5;
+    steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
+
     // Drive forwards or backwards
-    if (isRobotDrivingBackwards) {
-      drivingAdjust = -oi.getDriveThrottle();
-      steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-    } else {
-      drivingAdjust = oi.getDriveThrottle();
-      steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-    }
+    drivingAdjust = isRobotDrivingBackwards
+      ? -oi.getDriveThrottle()
+      : oi.getDriveThrottle();
+
     // Aim and range forwards and backwards
     if (oi.getDriveRightBumper()) {  // Auto targeting
       if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
         turnOnLightsAndVision(backLimelight);
         setPipelineBasedOnApproach(backLimelight);
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
-        // drivingAdjust = aimAndRange.getDrivingAdjust();
-        drivingAdjust = -oi.getDriveThrottle();
-        if (oi.getDriveButtonA()) {
-          steeringAdjust = aimAndRange.getSteeringAdjust();
-          if (!cameraTarget) {
-            // Look for white line
-            pixyWhiteLine = sensors.getPixyOutput();
-            if (pixyWhiteLine) {
-              steeringAdjust = -0.5;
-            } else {
-              steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-            }
-          }
-        } else {
-          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-        }
+        adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       } else {
           turnOnLightsAndVision(frontLimelight);
           if (cameraTargetArea > 15) {
@@ -272,22 +257,7 @@ public class Actions {
             setPipelineBasedOnApproach(frontLimelight);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
-        // drivingAdjust = aimAndRange.getDrivingAdjust();
-        drivingAdjust = oi.getDriveThrottle();
-        if (oi.getDriveButtonA()) {
-          steeringAdjust = aimAndRange.getSteeringAdjust();
-          if (!cameraTarget) {
-            // Look for white line
-            pixyWhiteLine = sensors.getPixyOutput();
-            if (pixyWhiteLine) {
-              steeringAdjust = 0.5;
-            } else {
-              steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-            }
-          }
-        } else {
-          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-        }
+        adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       }
     }
     // If driving only forward or backward within a threshold enable NavX drive straight
@@ -424,15 +394,10 @@ public class Actions {
       double drivingAdjust;
       double steeringAdjust;
       double steeringAdjustKp = 0.5;
+
       // Drive forwards or backwards
-      if (isRobotDrivingBackwards) {
-        drivingAdjust = -oi.getDriveThrottle();
-        steeringAdjust = oi.getDriveTurn();
-      } else {
-        drivingAdjust = oi.getDriveThrottle();
-        steeringAdjust = oi.getDriveTurn();
-      }
-      steeringAdjust = steeringAdjust * steeringAdjustKp;
+      drivingAdjust = isRobotDrivingBackwards ? -oi.getDriveThrottle() : oi.getDriveThrottle();
+      steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
       robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
       return;
     }
@@ -519,6 +484,26 @@ public class Actions {
     armThrottle = output;
 
     return armThrottle;
+  }
+
+  private void adjustSteering(AimAndRange aimAndRange, boolean cameraTarget, double steeringAdjustKp) {
+    final int inverter = isRobotDrivingBackwards ? -1 : 1;
+    // drivingAdjust = aimAndRange.getDrivingAdjust();
+    drivingAdjust = oi.getDriveThrottle() * inverter;
+    if (oi.getDriveButtonA()) {
+      steeringAdjust = aimAndRange.getSteeringAdjust();
+      if (!cameraTarget) {
+        // Look for white line
+        pixyWhiteLine = sensors.getPixyOutput();
+        if (pixyWhiteLine) {
+          steeringAdjust = 0.5 * inverter;
+        } else {
+          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
+        }
+      }
+    } else {
+      steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
+    }
   }
 
   private void setPipelineBasedOnApproach(Limelight limelight) {
