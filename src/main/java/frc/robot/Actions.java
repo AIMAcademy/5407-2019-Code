@@ -29,7 +29,7 @@ public class Actions {
   public boolean visionStatus;
 
   // Defense mode
-  public boolean defenseToggle = false;
+  public Toggle defenseModeToggle;
   private boolean isDefensePositionSet;
 
   // Pixy2
@@ -38,14 +38,16 @@ public class Actions {
   // Potentiometer arm
   private double armThrottle;
   private double cargoWheelsThrottle;
-  private static final String kHighHatch = "High Hatch";
-  private static final String kMidHatch = "Mid Hatch";
-  private static final String kLowHatch = "Low Hatch";
-  private static final String kHighCargo = "High Cargo";
-  private static final String kMidCargo = "Mid Cargo";
-  private static final String kLowCargo = "Low Cargo";
-  private static final String kPickupCargo = "Pick up Cargo";
-  private static final String kEndGame = "End Game";
+  private static enum ArmPosition {
+    HIGHHATCH,
+    MIDHATCH,
+    LOWHATCH,
+    HIGHCARGO,
+    MIDCARGO,
+    LOWCARGO,
+    PICKUPCARGO,
+    ENDGAME,
+  };
   private double armKp = 0.05;
   private double armMaxDrive = 0.85;
   private double armError;
@@ -58,13 +60,15 @@ public class Actions {
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
-  private static final String ksmallWinchStowedLeft = "Small Winch Up";
-  private static final String ksmallWinchCargoUp = "Small Winch Mid";
-  private static final String ksmallWinchHatchRight = "Small Winch Down";
-  private static final String ksmallWinchCargoPickup = "Small Winch Cargo Pickup";
-  private static final String ksmallWinchCargoTop = "Small Winch Cargo Top";
-  private static final String ksmallWinchCargoMiddle = "Small Winch Cargo Middle";
-  private static final String ksmallWinchCargoBottom = "Small Winch Cargo Bottom";
+  private static enum SmallWinchPosition {
+    STOWEDLEFT,
+    CARGOUP,
+    HATCHRIGHT,
+    CARGOPICKUP,
+    CARGOTOP,
+    CARGOMIDDLE,
+    CARGOBOTTOM,
+  };
   private double smallWinchkP = 0.05;
   private double smallWinchMaxDrive = 1;
   private double smallWinchError;
@@ -95,7 +99,7 @@ public class Actions {
   }
 
   public void startGame() {
-    smallWinchControl(ksmallWinchHatchRight);
+    smallWinchControl(SmallWinchPosition.HATCHRIGHT);
   }
 
   public void gameOp(
@@ -124,17 +128,17 @@ public class Actions {
         // Get left bumper to control arm
         if (oi.getOpLeftBumper()) {
           if (oi.getOpButtonY()) {
-            armControl(kHighCargo);
-            smallWinchControl(ksmallWinchCargoTop);
+            armControl(ArmPosition.HIGHCARGO);
+            smallWinchControl(SmallWinchPosition.CARGOTOP);
           } else if (oi.getOpButtonX()) {
-            armControl(kMidCargo);
-            smallWinchControl(ksmallWinchCargoMiddle);
+            armControl(ArmPosition.MIDCARGO);
+            smallWinchControl(SmallWinchPosition.CARGOMIDDLE);
           } else if (oi.getOpButtonA()) {
-            armControl(kLowCargo);
-            smallWinchControl(ksmallWinchCargoBottom);
+            armControl(ArmPosition.LOWCARGO);
+            smallWinchControl(SmallWinchPosition.CARGOBOTTOM);
           } else if (oi.getOpButtonB()) {
-            armControl(kPickupCargo);
-            smallWinchControl(ksmallWinchCargoPickup);
+            armControl(ArmPosition.PICKUPCARGO);
+            smallWinchControl(SmallWinchPosition.CARGOPICKUP);
           } else {
             // Set small winch throttle to zero
             setSmallWinch(op_throttle);
@@ -176,14 +180,14 @@ public class Actions {
       } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
         if (oi.getOpLeftBumper()) {
           if (oi.getOpButtonY()) {
-            armControl(kHighHatch);
-            smallWinchControl(ksmallWinchHatchRight);
+            armControl(ArmPosition.HIGHHATCH);
+            smallWinchControl(SmallWinchPosition.HATCHRIGHT);
           } else if (oi.getOpButtonX()) {
-            armControl(kMidHatch);
-            smallWinchControl(ksmallWinchHatchRight);
+            armControl(ArmPosition.MIDHATCH);
+            smallWinchControl(SmallWinchPosition.HATCHRIGHT);
           } else if (oi.getOpButtonA()) {
-            armControl(kLowHatch);
-            smallWinchControl(ksmallWinchHatchRight);
+            armControl(ArmPosition.LOWHATCH);
+            smallWinchControl(SmallWinchPosition.HATCHRIGHT);
           } else {
             // Set small winch throttle to zero
             setSmallWinch(op_throttle);
@@ -366,7 +370,7 @@ public class Actions {
         driverArmThrottle = 0.0;
       }
     } else if (sensors.getArmHeight() > endGameUpperArmLimit) {
-      armControl(kEndGame);
+      armControl(ArmPosition.ENDGAME);
       driverArmThrottle = armThrottle;
     } else {
       driverArmThrottle = 0;
@@ -400,10 +404,9 @@ public class Actions {
   }
 
   public boolean checkDefenseMode() {
-    if (oi.getJoystickEmulatorButtonPressed3()) {
-      defenseToggle = !defenseToggle;
-    }
-    return defenseToggle;
+    return oi.getJoystickEmulatorButtonPressed3()
+     ? defenseModeToggle.toggle()
+     : defenseModeToggle.get();
   }
 
   public void defenseMode() {
@@ -434,10 +437,10 @@ public class Actions {
       return;
     }
       // Set arm position
-      armControl(kPickupCargo);
+      armControl(ArmPosition.PICKUPCARGO);
       robotmap.armKcap.set(armThrottle);
       // Set winch position
-      smallWinchControl(ksmallWinchStowedLeft);
+      smallWinchControl(SmallWinchPosition.STOWEDLEFT);
       robotmap.smallWinchMotor.set(smallWinchThrottle);
       // Set all pistons to off
       air.setSolenoid0(false);
@@ -469,33 +472,33 @@ public class Actions {
   /**
    * Arm positioning using the potentiometer
    */
-  public double armControl(String m_armControl) {
-    switch (m_armControl) {
+  public double armControl(ArmPosition armPosition) {
+    switch (armPosition) {
       // Hatch values
-      case kHighHatch:
+      case HIGHHATCH:
         armDesiredHeight = 500;
         break;
-      case kMidHatch:
+      case MIDHATCH:
         armDesiredHeight = 291;
         break;
-      case kLowHatch:
+      case LOWHATCH:
         armDesiredHeight = 112;
         break;
       // Cargo values
-      case kHighCargo:
+      case HIGHCARGO:
         armDesiredHeight = 465;
         break;
-      case kMidCargo:
+      case MIDCARGO:
         armDesiredHeight = 315;
         break;
-      case kLowCargo:
+      case LOWCARGO:
         armDesiredHeight = 175;
         break;
-      case kPickupCargo:
+      case PICKUPCARGO:
         armDesiredHeight = 75;
         break;
       // End Game
-      case kEndGame:
+      case ENDGAME:
         armDesiredHeight = 140;
         break;
     }
@@ -518,27 +521,61 @@ public class Actions {
     return armThrottle;
   }
 
-  private void smallWinchControl(String m_smallWinchControl) {
-    switch (m_smallWinchControl) {
-      case ksmallWinchStowedLeft:
+  private void setPipelineBasedOnApproach(Limelight limelight) {
+    if (limelight.getTs() < -2 && limelight.getTs() > -45) { // Approaching from the left
+      limelight.setPipeline(1);
+    } else if (limelight.getTs() > -88 && limelight.getTs() < -45) {  // Approaching from the right
+      limelight.setPipeline(2);
+    } else {
+      limelight.setPipeline(0);
+    }
+  }
+
+  private void setSmallWinch(Double op_throttle) {
+    if (oi.getOpDpadLeft()) {
+      // Set winch to stowed
+      smallWinchControl(SmallWinchPosition.STOWEDLEFT);
+    } else if (oi.getOpDpadUp()) {
+      // Set winch to Cargo mode
+      smallWinchControl(SmallWinchPosition.CARGOUP);
+    } else if (oi.getOpDpadRight()) {
+      // Set winch to Hatch mode
+      smallWinchControl(SmallWinchPosition.HATCHRIGHT);
+    } else if (oi.getOpButtonB()) {
+        // Set winch motor to operator joystick throttle
+        smallWinchThrottle = -op_throttle;
+        // Set winch limits
+        if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+          smallWinchThrottle = 0.0;
+        } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+          smallWinchThrottle = 0.0;
+        }
+    } else {
+      smallWinchThrottle = 0.0;
+    }
+  }
+
+  private void smallWinchControl(SmallWinchPosition smallWinchPosition) {
+    switch (smallWinchPosition) {
+      case STOWEDLEFT:
         smallWinchDesiredHeight = 455;
         break;
-      case ksmallWinchCargoUp:
+      case CARGOUP:
         smallWinchDesiredHeight = 510;
         break;
-      case ksmallWinchHatchRight:
+      case HATCHRIGHT:
         smallWinchDesiredHeight = 575;
         break;
-      case ksmallWinchCargoPickup:
+      case CARGOPICKUP:
         smallWinchDesiredHeight = 515;
         break;
-      case ksmallWinchCargoTop:
+      case CARGOTOP:
         smallWinchDesiredHeight = 580;
         break;
-      case ksmallWinchCargoMiddle:
+      case CARGOMIDDLE:
         smallWinchDesiredHeight = 510;
         break;
-      case ksmallWinchCargoBottom:
+      case CARGOBOTTOM:
         smallWinchDesiredHeight = 510;
         break;
     }
@@ -556,40 +593,6 @@ public class Actions {
     }
 
     smallWinchThrottle = -smallWinchOutput;
-  }
-
-  private void setPipelineBasedOnApproach(Limelight limelight) {
-    if (limelight.getTs() < -2 && limelight.getTs() > -45) { // Approaching from the left
-      limelight.setPipeline(1);
-    } else if (limelight.getTs() > -88 && limelight.getTs() < -45) {  // Approaching from the right
-      limelight.setPipeline(2);
-    } else {
-      limelight.setPipeline(0);
-    }
-  }
-
-  private void setSmallWinch(Double op_throttle) {
-    if (oi.getOpDpadLeft()) {
-      // Set winch to stowed
-      smallWinchControl(ksmallWinchStowedLeft);
-    } else if (oi.getOpDpadUp()) {
-      // Set winch to Cargo mode
-      smallWinchControl(ksmallWinchCargoUp);
-    } else if (oi.getOpDpadRight()) {
-      // Set winch to Hatch mode
-      smallWinchControl(ksmallWinchHatchRight);
-    } else if (oi.getOpButtonB()) {
-        // Set winch motor to operator joystick throttle
-        smallWinchThrottle = -op_throttle;
-        // Set winch limits
-        if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
-          smallWinchThrottle = 0.0;
-        } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
-          smallWinchThrottle = 0.0;
-        }
-    } else {
-      smallWinchThrottle = 0.0;
-    }
   }
 
   private void turnOnLightsAndVision(Limelight limelight) {

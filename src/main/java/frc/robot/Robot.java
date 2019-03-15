@@ -163,7 +163,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("ArmPot", armPotValue);
     SmartDashboard.putNumber("WinchPot", winchPotValue);
     SmartDashboard.putBoolean("limelightTarget", cameraTarget);
-    SmartDashboard.putBoolean("DEFENSE", actions.defenseToggle);
+    SmartDashboard.putBoolean("DEFENSE", actions.defenseModeToggle.get());
     SmartDashboard.putBoolean("BACKWARDS", actions.isRobotDrivingBackwards);
     SmartDashboard.putNumber("DA", actions.drivingAdjust);
     SmartDashboard.putNumber("SA", actions.steeringAdjust);
