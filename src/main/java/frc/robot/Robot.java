@@ -10,9 +10,10 @@ package frc.robot;
 // import java.util.Arrays;
 
 import edu.wpi.first.cameraserver.CameraServer;
-// import edu.wpi.first.networktables.NetworkTable;
-// import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
@@ -24,6 +25,27 @@ public class Robot extends TimedRobot {
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
+
+  // Shuffleboard
+  private ShuffleboardTab driveFrontTab = Shuffleboard.getTab("Front");
+  private ShuffleboardTab driveBackTab = Shuffleboard.getTab("Back");
+  private ShuffleboardTab codeTab = Shuffleboard.getTab("Coding");
+  private NetworkTableEntry defenseModeEntry;
+  private NetworkTableEntry cameraTargetXAxisEntry;
+  private NetworkTableEntry cameraTargetYAxisEntry;
+  private NetworkTableEntry cameraTargetAreaEntry;
+  private NetworkTableEntry cameraTargetSkewEntry;
+  private NetworkTableEntry cameraTargetEntry;
+  private NetworkTableEntry armPotValueEntry;
+  private NetworkTableEntry winchPotValueEntry;
+  private NetworkTableEntry tungOpenEntry;
+  private NetworkTableEntry drivingAdjustEntry;
+  private NetworkTableEntry steeringAdjustEntry;
+  private NetworkTableEntry pixyOutputEntry;
+  private NetworkTableEntry hardMountingAngleEntry;
+  private NetworkTableEntry softMountingAngleEntry;
+  private NetworkTableEntry distanceEntry;
+  private NetworkTableEntry reverseDriveEntry;
 
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
@@ -37,14 +59,6 @@ public class Robot extends TimedRobot {
   double hard_mounting_angle;
   double soft_mounting_angle;
 
-  // For Aim And Range Back
-  double steeringAdjustBack;
-  double drivingAdjustBack;
-
-  // For Aim and Range Front
-  double drivingAdjustFront;
-  double steeringAdjustFront;
-
   // Potentiometer
   private double armPotValue;
   private double winchPotValue;
@@ -54,6 +68,14 @@ public class Robot extends TimedRobot {
 
   // Reverse drive
   private boolean isReverseDrive;
+
+  // Other values
+  private boolean isDefenseModeEngaged;
+  private double drivingAdjust;
+  private double steeringAdjust;
+  private boolean pixyOutput;
+
+  private boolean selectCodingTab;
 
   // Motor voltages
   // private double LM0;
@@ -75,6 +97,35 @@ public class Robot extends TimedRobot {
     sensors = new Sensors();
     actions = new Actions(air, oi, robotmap, sensors);
 
+    // Set up shuffleboard
+    // Driving Front tab
+    distanceEntry = driveFrontTab.add("Distance", distance).getEntry();
+    reverseDriveEntry = driveFrontTab.add("BACK", isReverseDrive).getEntry();
+    pixyOutputEntry = driveFrontTab.add("Pixy", pixyOutput).getEntry();
+    armPotValueEntry = driveFrontTab.add("ArmPot", armPotValue).getEntry();
+    winchPotValueEntry = driveFrontTab.add("WinchPot", winchPotValue).getEntry();
+    tungOpenEntry = driveFrontTab.add("Tung", isTungOpen).getEntry();
+    defenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
+    // Driving Back tab
+    distanceEntry = driveBackTab.add("Distance", distance).getEntry();
+    reverseDriveEntry = driveBackTab.add("BACK", isReverseDrive).getEntry();
+    pixyOutputEntry = driveBackTab.add("Pixy", pixyOutput).getEntry();
+    armPotValueEntry = driveBackTab.add("ArmPot", armPotValue).getEntry();
+    winchPotValueEntry = driveBackTab.add("WinchPot", winchPotValue).getEntry();
+    tungOpenEntry = driveBackTab.add("Tung", isTungOpen).getEntry();
+    defenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
+    // Coding tab
+    hardMountingAngleEntry = codeTab.add("HardMA", hard_mounting_angle).getEntry();
+    softMountingAngleEntry = codeTab.add("SoftMA", soft_mounting_angle).getEntry();
+    drivingAdjustEntry = codeTab.add("DA", drivingAdjust).getEntry();
+    steeringAdjustEntry = codeTab.add("SA", steeringAdjust).getEntry();
+    cameraTargetXAxisEntry = codeTab.add("LL X", cameraTargetXAxis).getEntry();
+    cameraTargetYAxisEntry = codeTab.add("LL Y", cameraTargetYAxis).getEntry();
+    cameraTargetAreaEntry = codeTab.add("LL A", cameraTargetArea).getEntry();
+    cameraTargetSkewEntry = codeTab.add("LL S", cameraTargetSkew).getEntry();
+    cameraTargetEntry = codeTab.add("LL T", cameraTarget).getEntry();
+
+    // Instantiate limelights
     limelightProvider = LimelightProvider.getProvider();
     backLimelight = limelightProvider.getBackLimelight();
     frontLimelight = limelightProvider.getFrontLimelight();
@@ -112,10 +163,26 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
+    // Reverse drive when driver toggles the left bumper
+    // This reverses driving motors, switches limelights, and switches shuffleboard tabs
     if (oi.getDriveLeftBumperPressed()) {
       isReverseDrive = !isReverseDrive;
     }
     Limelight currentLimelight = limelightProvider.getCurrentLimelight(isReverseDrive);
+
+    // Select shuffleboard tab
+    if (oi.getDriveBackButtonPressed()) {
+      selectCodingTab = !selectCodingTab;
+    }
+    if (selectCodingTab) {
+      Shuffleboard.selectTab("Coding");
+    } else if (isReverseDrive) {
+      Shuffleboard.selectTab("Back");
+    } else if (!isReverseDrive) {
+      Shuffleboard.selectTab("Front");
+    } else {
+      Shuffleboard.selectTab("SmartDashboard");
+    }
 
     // Update limelight values
     cameraTargetXAxis = currentLimelight.getTx();
@@ -134,27 +201,49 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("Tung", isTungOpen);
     }
 
+    // Update values
+    isDefenseModeEngaged = actions.defenseModeToggle.get();
+    drivingAdjust = actions.drivingAdjust;
+    steeringAdjust = actions.steeringAdjust;
+    pixyOutput = sensors.getPixyOutput();
+  
     // Limelight post to smart dashboard periodically
-    SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
-    SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
-    SmartDashboard.putNumber("limelightArea", cameraTargetArea);
-    SmartDashboard.putBoolean("limelightTarget", cameraTarget);
-    SmartDashboard.putNumber("Distance", distance);
-    SmartDashboard.putNumber("hardMA", hard_mounting_angle);
-    SmartDashboard.putNumber("softMA", soft_mounting_angle);
-    SmartDashboard.putBoolean("visionStatus", actions.visionStatus);
-    SmartDashboard.putNumber("ArmPot", armPotValue);
-    SmartDashboard.putNumber("WinchPot", winchPotValue);
-    SmartDashboard.putBoolean("limelightTarget", cameraTarget);
-    SmartDashboard.putBoolean("DEFENSE", actions.defenseModeToggle.get());
-    SmartDashboard.putBoolean("BACKWARDS", actions.isRobotDrivingBackwards);
-    SmartDashboard.putNumber("DA", actions.drivingAdjust);
-    SmartDashboard.putNumber("SA", actions.steeringAdjust);
-    SmartDashboard.putBoolean("PIXY", sensors.getPixyOutput());
+    // SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
+    // SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
+    // SmartDashboard.putNumber("limelightArea", cameraTargetArea);
+    // SmartDashboard.putBoolean("limelightTarget", cameraTarget);
+    // SmartDashboard.putNumber("Distance", distance);
+    // SmartDashboard.putNumber("hardMA", hard_mounting_angle);
+    // SmartDashboard.putNumber("softMA", soft_mounting_angle);
+    // SmartDashboard.putBoolean("visionStatus", visionStatus);
+    // SmartDashboard.putNumber("ArmPot", armPotValue);
+    // SmartDashboard.putNumber("WinchPot", winchPotValue);
+    // SmartDashboard.putBoolean("DEFENSE", isDefenseModeEngaged);
+    // SmartDashboard.putBoolean("BACKWARDS", isReverseDrive);
+    // SmartDashboard.putNumber("DA", drivingAdjust);
+    // SmartDashboard.putNumber("SA", steeringAdjust);
+    // SmartDashboard.putBoolean("PIXY", pixyOutput);
+    // SmartDashboard.putNumber("TS", cameraTargetSkew);
 
-    // Skew from the right goes from -90 to -45
-    // Skew from the left goes from 0 to -45
-    SmartDashboard.putNumber("TS", cameraTargetSkew);
+    // Update shuffleboard
+    // Driving tab
+    distanceEntry.setDouble(distance);
+    reverseDriveEntry.setBoolean(isReverseDrive);
+    pixyOutputEntry.setBoolean(pixyOutput);
+    armPotValueEntry.setDouble(armPotValue);
+    winchPotValueEntry.setDouble(winchPotValue);
+    tungOpenEntry.setBoolean(isTungOpen);
+    defenseModeEntry.setBoolean(isDefenseModeEngaged);
+    // Coding tab
+    hardMountingAngleEntry.setDouble(hard_mounting_angle);
+    softMountingAngleEntry.setDouble(soft_mounting_angle);
+    drivingAdjustEntry.setDouble(drivingAdjust);
+    steeringAdjustEntry.setDouble(steeringAdjust);
+    cameraTargetXAxisEntry.setDouble(cameraTargetXAxis);
+    cameraTargetYAxisEntry.setDouble(cameraTargetYAxis);
+    cameraTargetAreaEntry.setDouble(cameraTargetArea);
+    cameraTargetSkewEntry.setDouble(cameraTargetSkew);
+    cameraTargetEntry.setBoolean(cameraTarget);
 
     // double[] cornX = currentLimelight.getTcornX();
     // double[] cornY = currentLimelight.getTcornY();

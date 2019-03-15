@@ -26,6 +26,7 @@ public class OI {
 	private boolean drive_rightBumper;
 	private boolean drive_rightBumperPressed;
 	private boolean drive_back;
+	private boolean drive_backPressed;
 	private boolean drive_start;
 	private boolean drive_leftTrigger;
 	private boolean drive_rightTrigger;	
@@ -124,6 +125,7 @@ public class OI {
 		drive_leftBumper = driveStick.getRawButton(5);
 		drive_rightBumper = driveStick.getRawButton(6);
 		drive_back = driveStick.getRawButton(7);
+		drive_backPressed = driveStick.getRawButtonPressed(7);
 		drive_start = driveStick.getRawButton(8);
 
 		/**
@@ -164,6 +166,7 @@ public class OI {
 	public boolean getDriveRightBumperPressed() { return drive_rightBumperPressed; }
 	public boolean getDriveRightBumper() { return drive_rightBumper; }
 	public boolean getDriveBackButton() { return drive_back; }
+	public boolean getDriveBackButtonPressed() { return drive_backPressed; }
 	public boolean getDriveStartButton() { return drive_start; }
 	public boolean getDriveLeftTrigger() { return drive_leftTrigger; }
 	public boolean getDriveRightTrigger() { return drive_rightTrigger; }
