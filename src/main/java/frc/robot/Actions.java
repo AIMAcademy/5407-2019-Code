@@ -234,9 +234,8 @@ public class Actions {
     /**
      * Driver controls during game operations
      */
-    double steeringAdjustKp = 0.5;
+    final double steeringAdjustKp = isFlow ? 1 : 0.5;
     steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-
     // Drive forwards or backwards
     drivingAdjust = isRobotDrivingBackwards
       ? -oi.getDriveThrottle()
@@ -245,16 +244,16 @@ public class Actions {
     // Aim and range forwards and backwards
     if (oi.getDriveRightBumper()) {  // Auto targeting
       if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
-        turnOnLightsAndVision(backLimelight);
-        setPipelineBasedOnApproach(backLimelight);
+        turnOnLightsAndVision(currentLimelight);
+        setPipelineBasedOnApproach(currentLimelight);
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       } else {
-          turnOnLightsAndVision(frontLimelight);
+          turnOnLightsAndVision(currentLimelight);
           if (cameraTargetArea > 15) {
-            frontLimelight.setPipeline(3);
+            currentLimelight.setPipeline(3);
           } else {
-            setPipelineBasedOnApproach(frontLimelight);
+            setPipelineBasedOnApproach(currentLimelight);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);

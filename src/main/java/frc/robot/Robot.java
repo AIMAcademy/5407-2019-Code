@@ -64,6 +64,9 @@ public class Robot extends TimedRobot {
   // Tung open or closed
   private boolean isTungOpen;
 
+  // Reverse drive
+  private boolean isReverseDrive;
+
   // Motor voltages
   // private double LM0;
   // private double LM1;
@@ -130,8 +133,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
-    // TODO: Mr. Rick inferred this reverse drive logic may need updating.
-    final boolean isReverseDrive = oi.getDriveLeftBumperPressed();
+    if (oi.getDriveLeftBumperPressed()) {
+      isReverseDrive = !isReverseDrive;
+    }
     Limelight currentLimelight = limelightProvider.getCurrentLimelight(isReverseDrive);
 
     // Update limelight values
