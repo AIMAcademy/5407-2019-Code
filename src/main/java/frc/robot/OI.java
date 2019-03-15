@@ -80,17 +80,9 @@ public class OI {
 			drive_turn = 0;
 		}
 		// Driver Left Trigger Axis 2
-		if (driveStick.getRawAxis(2) > .5) {
-			drive_leftTrigger = true;
-		} else {
-			drive_leftTrigger = false;
-		}
+		drive_leftTrigger = (driveStick.getRawAxis(2) > .5);
 		// Driver Right Trigger Axis 3
-		if (driveStick.getRawAxis(3) > .5) {
-			drive_rightTrigger = true;
-		} else {
-			drive_rightTrigger = false;
-		}
+		drive_rightTrigger = (driveStick.getRawAxis(3) > .5);
 
 		/**
 		 * Read Operator joystick axes
@@ -108,41 +100,17 @@ public class OI {
 			op_rightThrottle = 0;
 		}		
 		// Operator Left Trigger Axis 2
-		if (opStick.getRawAxis(2) > .5) {
-			op_leftTrigger = true;
-		} else {
-			op_leftTrigger = false;
-		}
+		op_leftTrigger = (opStick.getRawAxis(2) > .5);
 		// Operator Right Trigger Axis 3
-		if (opStick.getRawAxis(3) > 0.5) {
-			op_rightTrigger = true;
-		} else {
-			op_rightTrigger = false;
-		}
+		op_rightTrigger = (opStick.getRawAxis(3) > 0.5);
 		// Operator Dpad Up 
-		if ((opStick.getPOV(0) >= 315 && opStick.getPOV(0) <= 45) && opStick.getPOV(0) != -1) {
-			op_dpadUp = true;
-		} else {
-			op_dpadUp = false;
-		}
+		op_dpadUp = ((opStick.getPOV(0) >= 315 && opStick.getPOV(0) <= 45) && opStick.getPOV(0) != -1);
 		// Operator Dpad Right
-		if ((opStick.getPOV(0) >= 45 && opStick.getPOV(0) <= 135) && opStick.getPOV(0) != -1) {
-			op_dpadRight = true;
-		} else {
-			op_dpadRight = false;
-		}
+		op_dpadRight = ((opStick.getPOV(0) >= 45 && opStick.getPOV(0) <= 135) && opStick.getPOV(0) != -1);
 		// Operator Dpad Down
-		if ((opStick.getPOV(0) >= 135 && opStick.getPOV(0) <= 225) && opStick.getPOV(0) != -1) {
-			op_dpadDown = true;
-		} else {
-			op_dpadDown = false;
-		}
+		op_dpadDown = ((opStick.getPOV(0) >= 135 && opStick.getPOV(0) <= 225) && opStick.getPOV(0) != -1);
 		// Operator Dpad Left
-		if ((opStick.getPOV(0) >= 225 && opStick.getPOV(0) <= 315) && opStick.getPOV(0) != -1) {
-			op_dpadLeft = true;
-		} else {
-			op_dpadLeft = false;
-		}
+		op_dpadLeft = ((opStick.getPOV(0) >= 225 && opStick.getPOV(0) <= 315) && opStick.getPOV(0) != -1);
 
 		/**
 		 * Read Driver joystick buttons

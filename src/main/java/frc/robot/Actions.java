@@ -39,14 +39,14 @@ public class Actions {
   private double armThrottle;
   private double cargoWheelsThrottle;
   private static enum ArmPosition {
-    HIGHHATCH,
-    MIDHATCH,
-    LOWHATCH,
-    HIGHCARGO,
-    MIDCARGO,
-    LOWCARGO,
-    PICKUPCARGO,
-    ENDGAME,
+    HighHatch,
+    MidHatch,
+    LowHatch,
+    HighCargo,
+    MidCargo,
+    LowCargo,
+    PickUpCargo,
+    EndGame,
   };
   private double armKp = 0.05;
   private double armMaxDrive = 0.85;
@@ -61,13 +61,13 @@ public class Actions {
   // Potentiometer smallWinch
   private double smallWinchThrottle;
   private static enum SmallWinchPosition {
-    STOWEDLEFT,
-    CARGOUP,
-    HATCHRIGHT,
-    CARGOPICKUP,
-    CARGOTOP,
-    CARGOMIDDLE,
-    CARGOBOTTOM,
+    StowedLeft,
+    CargoUp,
+    HatchRight,
+    CargoPickup,
+    CargoTop,
+    CargoMiddle,
+    CargoBottom,
   };
   private double smallWinchkP = 0.05;
   private double smallWinchMaxDrive = 1;
@@ -99,7 +99,7 @@ public class Actions {
   }
 
   public void startGame() {
-    smallWinchControl(SmallWinchPosition.HATCHRIGHT);
+    smallWinchControl(SmallWinchPosition.HatchRight);
   }
 
   public void gameOp(
@@ -128,17 +128,17 @@ public class Actions {
         // Get left bumper to control arm
         if (oi.getOpLeftBumper()) {
           if (oi.getOpButtonY()) {
-            armControl(ArmPosition.HIGHCARGO);
-            smallWinchControl(SmallWinchPosition.CARGOTOP);
+            armControl(ArmPosition.HighCargo);
+            smallWinchControl(SmallWinchPosition.CargoTop);
           } else if (oi.getOpButtonX()) {
-            armControl(ArmPosition.MIDCARGO);
-            smallWinchControl(SmallWinchPosition.CARGOMIDDLE);
+            armControl(ArmPosition.MidCargo);
+            smallWinchControl(SmallWinchPosition.CargoMiddle);
           } else if (oi.getOpButtonA()) {
-            armControl(ArmPosition.LOWCARGO);
-            smallWinchControl(SmallWinchPosition.CARGOBOTTOM);
+            armControl(ArmPosition.LowCargo);
+            smallWinchControl(SmallWinchPosition.CargoBottom);
           } else if (oi.getOpButtonB()) {
-            armControl(ArmPosition.PICKUPCARGO);
-            smallWinchControl(SmallWinchPosition.CARGOPICKUP);
+            armControl(ArmPosition.PickUpCargo);
+            smallWinchControl(SmallWinchPosition.CargoPickup);
           } else {
             // Set small winch throttle to zero
             setSmallWinch(op_throttle);
@@ -180,14 +180,14 @@ public class Actions {
       } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
         if (oi.getOpLeftBumper()) {
           if (oi.getOpButtonY()) {
-            armControl(ArmPosition.HIGHHATCH);
-            smallWinchControl(SmallWinchPosition.HATCHRIGHT);
+            armControl(ArmPosition.HighHatch);
+            smallWinchControl(SmallWinchPosition.HatchRight);
           } else if (oi.getOpButtonX()) {
-            armControl(ArmPosition.MIDHATCH);
-            smallWinchControl(SmallWinchPosition.HATCHRIGHT);
+            armControl(ArmPosition.MidHatch);
+            smallWinchControl(SmallWinchPosition.HatchRight);
           } else if (oi.getOpButtonA()) {
-            armControl(ArmPosition.LOWHATCH);
-            smallWinchControl(SmallWinchPosition.HATCHRIGHT);
+            armControl(ArmPosition.LowHatch);
+            smallWinchControl(SmallWinchPosition.HatchRight);
           } else {
             // Set small winch throttle to zero
             setSmallWinch(op_throttle);
@@ -340,7 +340,7 @@ public class Actions {
         driverArmThrottle = 0.0;
       }
     } else if (sensors.getArmHeight() > endGameUpperArmLimit) {
-      armControl(ArmPosition.ENDGAME);
+      armControl(ArmPosition.EndGame);
       driverArmThrottle = armThrottle;
     } else {
       driverArmThrottle = 0;
@@ -402,10 +402,10 @@ public class Actions {
       return;
     }
       // Set arm position
-      armControl(ArmPosition.PICKUPCARGO);
+      armControl(ArmPosition.PickUpCargo);
       robotmap.armKcap.set(armThrottle);
       // Set winch position
-      smallWinchControl(SmallWinchPosition.STOWEDLEFT);
+      smallWinchControl(SmallWinchPosition.StowedLeft);
       robotmap.smallWinchMotor.set(smallWinchThrottle);
       // Set all pistons to off
       air.setSolenoid0(false);
@@ -440,30 +440,30 @@ public class Actions {
   public double armControl(ArmPosition armPosition) {
     switch (armPosition) {
       // Hatch values
-      case HIGHHATCH:
+      case HighHatch:
         armDesiredHeight = 500;
         break;
-      case MIDHATCH:
+      case MidHatch:
         armDesiredHeight = 291;
         break;
-      case LOWHATCH:
+      case LowHatch:
         armDesiredHeight = 112;
         break;
       // Cargo values
-      case HIGHCARGO:
+      case HighCargo:
         armDesiredHeight = 465;
         break;
-      case MIDCARGO:
+      case MidCargo:
         armDesiredHeight = 315;
         break;
-      case LOWCARGO:
+      case LowCargo:
         armDesiredHeight = 175;
         break;
-      case PICKUPCARGO:
+      case PickUpCargo:
         armDesiredHeight = 75;
         break;
       // End Game
-      case ENDGAME:
+      case EndGame:
         armDesiredHeight = 140;
         break;
     }
@@ -519,13 +519,13 @@ public class Actions {
   private void setSmallWinch(Double op_throttle) {
     if (oi.getOpDpadLeft()) {
       // Set winch to stowed
-      smallWinchControl(SmallWinchPosition.STOWEDLEFT);
+      smallWinchControl(SmallWinchPosition.StowedLeft);
     } else if (oi.getOpDpadUp()) {
       // Set winch to Cargo mode
-      smallWinchControl(SmallWinchPosition.CARGOUP);
+      smallWinchControl(SmallWinchPosition.CargoUp);
     } else if (oi.getOpDpadRight()) {
       // Set winch to Hatch mode
-      smallWinchControl(SmallWinchPosition.HATCHRIGHT);
+      smallWinchControl(SmallWinchPosition.HatchRight);
     } else if (oi.getOpButtonB()) {
         // Set winch motor to operator joystick throttle
         smallWinchThrottle = -op_throttle;
@@ -542,25 +542,25 @@ public class Actions {
 
   private void smallWinchControl(SmallWinchPosition smallWinchPosition) {
     switch (smallWinchPosition) {
-      case STOWEDLEFT:
+      case StowedLeft:
         smallWinchDesiredHeight = 455;
         break;
-      case CARGOUP:
+      case CargoUp:
         smallWinchDesiredHeight = 510;
         break;
-      case HATCHRIGHT:
+      case HatchRight:
         smallWinchDesiredHeight = 575;
         break;
-      case CARGOPICKUP:
+      case CargoPickup:
         smallWinchDesiredHeight = 515;
         break;
-      case CARGOTOP:
+      case CargoTop:
         smallWinchDesiredHeight = 580;
         break;
-      case CARGOMIDDLE:
+      case CargoMiddle:
         smallWinchDesiredHeight = 510;
         break;
-      case CARGOBOTTOM:
+      case CargoBottom:
         smallWinchDesiredHeight = 510;
         break;
     }

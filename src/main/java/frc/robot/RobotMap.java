@@ -205,12 +205,13 @@ public class RobotMap {
         rightMotor_2.setClosedLoopRampRate(closedLoopRampRate);
     }
     public void setIdleMode() {
-        leftMotor_0.setIdleMode(IdleMode.kBrake);
-        leftMotor_1.setIdleMode(IdleMode.kBrake);
-        leftMotor_2.setIdleMode(IdleMode.kBrake);
-        rightMotor_0.setIdleMode(IdleMode.kBrake);
-        rightMotor_1.setIdleMode(IdleMode.kBrake);
-        rightMotor_2.setIdleMode(IdleMode.kBrake);
+        final IdleMode idleMode = IdleMode.kBrake;
+        leftMotor_0.setIdleMode(idleMode);
+        leftMotor_1.setIdleMode(idleMode);
+        leftMotor_2.setIdleMode(idleMode);
+        rightMotor_0.setIdleMode(idleMode);
+        rightMotor_1.setIdleMode(idleMode);
+        rightMotor_2.setIdleMode(idleMode);
     }
 
     /**

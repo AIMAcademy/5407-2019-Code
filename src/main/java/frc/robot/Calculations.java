@@ -119,7 +119,7 @@ public final class Calculations {
         final double STEER_K = 0.03;                    // how hard to turn toward the target
         final double DRIVE_K = 0.1;                     // how hard to drive fwd toward the target
         final double DESIRED_TARGET_AREA = 10.0;        // Area of the target when the robot reaches the wall
-        final double MAX_DRIVE = 0.3;                  // Simple speed limit so we don't drive too fast
+        final double MAX_DRIVE = 0.3;                   // Simple speed limit so we don't drive too fast
         double MIN_TURN;
         final double steerThreshold = 5;
 
@@ -138,8 +138,7 @@ public final class Calculations {
         double drive_cmd = (DESIRED_TARGET_AREA - cameraTargetArea) * DRIVE_K;
 
         // don't let the robot drive too fast into the goal
-        if (drive_cmd > MAX_DRIVE)
-        {
+        if (drive_cmd > MAX_DRIVE) {
             drive_cmd = MAX_DRIVE;
         } else if (drive_cmd < -MAX_DRIVE) {
             drive_cmd = -MAX_DRIVE;
@@ -152,8 +151,7 @@ public final class Calculations {
         double drivingErrorThreshold = Math.abs(DESIRED_TARGET_AREA - cameraTargetArea);
         if (drivingErrorThreshold < 3) { drivingAdjustBack = 0.0; }
 
-        if (thisCameraTarget == false)
-        {
+        if (thisCameraTarget == false) {
             // boolean m_LimelightHasValidTarget = false;
             drivingAdjustBack = 0.0;
             steeringAdjustBack = 0.0;
@@ -192,8 +190,7 @@ public final class Calculations {
         // Distance adjust, drive to the correct distance from the goal
         double drivingAdjustFront = (KpDist * dist_error) + distMinCmd;
 
-        if (thisCameraTarget == false)
-        {
+        if (thisCameraTarget == false) {
             // boolean m_LimelightHasValidTarget = false;
             drivingAdjustFront = 0.0;
             steeringAdjustFront = 0.0;
