@@ -13,7 +13,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.networktables.NetworkTable;
 // import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
-// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
@@ -25,17 +24,6 @@ public class Robot extends TimedRobot {
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
-
-  // private static final String kDefaultAuto = "Default";
-  // private static final String kCustomAuto = "My Auto";
-  // private String m_autoSelected;
-  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  // private static final String kPipeline0 = "Pipeline 0";
-  // private static final String kPipeline1 = "Pipeline 1";
-  // private static final String kPipeline2 = "Pipeline 2";
-  // private String m_pipelineChoice;
-  // private final SendableChooser<String> m_pipeline = new SendableChooser<>();
 
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
@@ -97,15 +85,6 @@ public class Robot extends TimedRobot {
 
     // Zero the NAVX
     sensors.zeroNAVX();
-
-    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    // m_chooser.addOption("My Auto", kCustomAuto);
-    // SmartDashboard.putData("Auto choices", m_chooser);
-
-    // m_pipeline.setDefaultOption("Front-Tape", kPipeline2);
-    // m_pipeline.addOption("Back-Tape", kPipeline0);
-    // m_pipeline.addOption("Ball", kPipeline1);
-    // SmartDashboard.putData("Pipeline", m_pipeline);
 
     // Turn off Limelight LEDs during init
     // actions.setLightsAndVision(backLimelight, true);
@@ -177,12 +156,9 @@ public class Robot extends TimedRobot {
     // Skew from the left goes from 0 to -45
     SmartDashboard.putNumber("TS", cameraTargetSkew);
 
-    // double[] cornX = mLimelightTable.getEntry("tcornx").getDoubleArray(new double[0]);
-    // double[] cornY = mLimelightTable.getEntry("tcorny").getDoubleArray(new double[0]);
     // double[] cornX = currentLimelight.getTcornX();
     // double[] cornY = currentLimelight.getTcornY();
     // System.out.println("X Array: " + Arrays.toString(cornX) + " | Y Array: " + Arrays.toString(cornY));
-    // System.out.println(Arrays.toString(cornY));
 
     // Values go clockwise from bottom left of bounding box
     // double xValue0 = cornX[0];
@@ -218,7 +194,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("RM1", RM1);
     SmartDashboard.putNumber("RM2", RM2);
     */
-    // m_pipelineChoice = m_pipeline.getSelected();
   }
 
   /**
@@ -237,27 +212,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // Zero the NAVX before auton
     sensors.zeroNAVX();
-
-    // m_autoSelected = m_chooser.getSelected();
-    // System.out.println("Auto selected: " + m_autoSelected);
-
+  
+    // Set winch position
     actions.startGame();
   }
 
   @Override
   public void autonomousPeriodic() {
     teleopPeriodic();
-    // switch (m_autoSelected) {
-    // case kCustomAuto:
-    //   // Put custom auto code here
-    //   break;
-    // case kDefaultAuto:
-    // default:
-    //   // Put default auto code here
-    //   sensors.setFollowAngleNAVX(0);
-    //   robotmap.drive.arcadeDrive(0, (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
-    //   break;
-    // }
   }
 
   @Override
