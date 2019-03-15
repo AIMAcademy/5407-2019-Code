@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   private NetworkTableEntry softMountingAngleEntry;
   private NetworkTableEntry distanceEntry;
   private NetworkTableEntry reverseDriveEntry;
+  private NetworkTableEntry cameraServerFront;
 
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
@@ -99,21 +100,23 @@ public class Robot extends TimedRobot {
 
     // Set up shuffleboard
     // Driving Front tab
-    distanceEntry = driveFrontTab.add("Distance", distance).getEntry();
-    reverseDriveEntry = driveFrontTab.add("BACK", isReverseDrive).getEntry();
-    pixyOutputEntry = driveFrontTab.add("Pixy", pixyOutput).getEntry();
-    armPotValueEntry = driveFrontTab.add("ArmPot", armPotValue).getEntry();
-    winchPotValueEntry = driveFrontTab.add("WinchPot", winchPotValue).getEntry();
-    tungOpenEntry = driveFrontTab.add("Tung", isTungOpen).getEntry();
-    defenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
+    // cameraServerFront = driveFrontTab.add("Front Limelight", ).getEntry();
+    distanceEntry = driveFrontTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
+    reverseDriveEntry = driveFrontTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 1).getEntry();
+    pixyOutputEntry = driveFrontTab.add("Pixy", pixyOutput).withPosition(15, 5).withSize(2, 2).getEntry();
+    armPotValueEntry = driveFrontTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
+    winchPotValueEntry = driveFrontTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
+    tungOpenEntry = driveFrontTab.add("Tung", isTungOpen).withPosition(15, 1).withSize(2, 2).getEntry();
+    defenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
     // Driving Back tab
-    distanceEntry = driveBackTab.add("Distance", distance).getEntry();
-    reverseDriveEntry = driveBackTab.add("BACK", isReverseDrive).getEntry();
-    pixyOutputEntry = driveBackTab.add("Pixy", pixyOutput).getEntry();
-    armPotValueEntry = driveBackTab.add("ArmPot", armPotValue).getEntry();
-    winchPotValueEntry = driveBackTab.add("WinchPot", winchPotValue).getEntry();
-    tungOpenEntry = driveBackTab.add("Tung", isTungOpen).getEntry();
-    defenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
+    // cameraServerFront = driveBackTab.add("Back Limelight", backLimelight).getEntry();
+    distanceEntry = driveBackTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
+    reverseDriveEntry = driveBackTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 1).getEntry();
+    pixyOutputEntry = driveBackTab.add("Pixy", pixyOutput).withPosition(15, 5).withSize(2, 2).getEntry();
+    armPotValueEntry = driveBackTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
+    winchPotValueEntry = driveBackTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
+    tungOpenEntry = driveBackTab.add("Tung", isTungOpen).withPosition(15, 1).withSize(2, 2).getEntry();
+    defenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
     // Coding tab
     hardMountingAngleEntry = codeTab.add("HardMA", hard_mounting_angle).getEntry();
     softMountingAngleEntry = codeTab.add("SoftMA", soft_mounting_angle).getEntry();

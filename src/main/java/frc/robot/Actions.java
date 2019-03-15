@@ -29,8 +29,9 @@ public class Actions {
   public boolean visionStatus;
 
   // Defense mode
+  public boolean defenseToggle = false;
   public Toggle defenseModeToggle;
-  private boolean isDefensePositionSet;
+  public boolean isDefensePositionSet;
 
   // Pixy2
   private boolean pixyWhiteLine;
@@ -64,6 +65,9 @@ public class Actions {
     StowedLeft,
     CargoUp,
     HatchRight,
+    HatchLow,
+    HatchMid,
+    HatchHigh,
     CargoPickup,
     CargoTop,
     CargoMiddle,
@@ -96,6 +100,7 @@ public class Actions {
     frontLimelight = limelightProvider.getFrontLimelight();
 
     lightsAndVisionToggle = new Toggle();
+    defenseModeToggle = new Toggle();
   }
 
   public void startGame() {
@@ -181,13 +186,13 @@ public class Actions {
         if (oi.getOpLeftBumper()) {
           if (oi.getOpButtonY()) {
             armControl(ArmPosition.HighHatch);
-            smallWinchControl(SmallWinchPosition.HatchRight);
+            smallWinchControl(SmallWinchPosition.HatchLow);
           } else if (oi.getOpButtonX()) {
             armControl(ArmPosition.MidHatch);
-            smallWinchControl(SmallWinchPosition.HatchRight);
+            smallWinchControl(SmallWinchPosition.HatchMid);
           } else if (oi.getOpButtonA()) {
             armControl(ArmPosition.LowHatch);
-            smallWinchControl(SmallWinchPosition.HatchRight);
+            smallWinchControl(SmallWinchPosition.HatchHigh);
           } else {
             // Set small winch throttle to zero
             setSmallWinch(op_throttle);
@@ -378,6 +383,13 @@ public class Actions {
      : defenseModeToggle.get();
   }
 
+  // public boolean checkDefenseMode() {
+  //   if (oi.getJoystickEmulatorButtonPressed3()) {
+  //     defenseToggle = !defenseToggle;
+  //   }
+  //   return defenseToggle;
+  // }
+
   public void defenseMode() {
     double armHeight = sensors.getArmHeight();
     double winchPosition = sensors.getSmallWinchPot();
@@ -548,6 +560,15 @@ public class Actions {
         smallWinchDesiredHeight = 510;
         break;
       case HatchRight:
+        smallWinchDesiredHeight = 575;
+        break;
+      case HatchLow:
+        smallWinchDesiredHeight = 555;
+        break;
+      case HatchMid:
+        smallWinchDesiredHeight = 575;
+        break;
+      case HatchHigh:
         smallWinchDesiredHeight = 575;
         break;
       case CargoPickup:

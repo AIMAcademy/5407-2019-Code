@@ -52,3 +52,14 @@
 - Skew from the right goes down from -90 to 0
 ## Corner Values ##
 - Values go clockwise from bottom left of bounding box
+
+## Winch Values ##
+- Stowed: 439
+- HATCH MODE:
+- Low: 555
+- Mid: 575
+- High: 575
+- CARGO MODE:
+- Low: 
+- Mid: 
+- High: 
