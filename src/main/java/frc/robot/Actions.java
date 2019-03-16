@@ -526,7 +526,8 @@ public class Actions {
         // TODO: need to reverse the logic so that it looks for the white line when it looses the target and otherwise drives
         pixyWhiteLine = sensors.getPixyOutput();
         if (pixyWhiteLine) {
-          steeringAdjust = 0.5 * inverter;
+          // steeringAdjust = 0.5 * inverter;
+          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
         } else {
           steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
         }
