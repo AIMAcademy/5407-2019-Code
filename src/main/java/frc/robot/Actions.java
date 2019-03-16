@@ -145,10 +145,10 @@ public class Actions {
             armControl(ArmPosition.PickUpCargo);
             smallWinchControl(SmallWinchPosition.CargoPickup);
           } else {
-            // Set small winch throttle to zero
-            setSmallWinch(op_throttle);
             // Set arm motor to operator joystick throttle
             armThrottle = op_throttle;
+            // Set small winch throttle to zero
+            setSmallWinch(op_throttle);
             // Set arm limits
             if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
               armThrottle = 0.0;
@@ -157,8 +157,8 @@ public class Actions {
             }
           }
         } else {
-          setSmallWinch(op_throttle);
           armThrottle = 0.0;
+          setSmallWinch(op_throttle);
           // Get Y button to control Claw
           if (oi.getOpButtonPressedY()) {
             if (air.getSolenoid1()) {
@@ -201,10 +201,10 @@ public class Actions {
             armControl(ArmPosition.LowHatch);
             smallWinchControl(SmallWinchPosition.HatchLow);
           } else {
-            // Set small winch throttle to zero
-            setSmallWinch(op_throttle);
             // Set arm motor to operator joystick throttle
             armThrottle = op_throttle;
+            // Set small winch throttle to zero
+            setSmallWinch(op_throttle);
             // Set arm limits
             if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
               armThrottle = 0.0;
@@ -213,8 +213,8 @@ public class Actions {
             }
           }
         } else {
-          setSmallWinch(op_throttle);
           armThrottle = 0.0;
+          setSmallWinch(op_throttle);
           // Get X Button to control hatch mechanisms
           if (oi.getOpButtonPressedX()) {
             final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
@@ -557,6 +557,10 @@ public class Actions {
     } else if (oi.getOpDpadRight()) {
       // Set winch to Hatch mode
       smallWinchControl(SmallWinchPosition.HatchRight);
+    } else if (oi.getOpDpadDown()) {
+      // Set winch and arm to stowed
+      smallWinchControl(SmallWinchPosition.StowedLeft);
+      armControl(ArmPosition.PickUpCargo);
     } else if (oi.getOpButtonB()) {
         // Set winch motor to operator joystick throttle
         smallWinchThrottle = -op_throttle;
@@ -608,7 +612,8 @@ public class Actions {
     // Get and set error values to drive towards target height
     smallWinchactualHeight = sensors.getSmallWinchPot();
     smallWinchError = smallWinchDesiredHeight - smallWinchactualHeight;
-    smallWinchOutput = smallWinchkP * smallWinchError;
+    // smallWinchOutput = smallWinchkP * smallWinchError;
+    smallWinchOutput = smallWinchError;
 
     // Don't let the winch drive too fast
     if (smallWinchOutput > smallWinchMaxDrive) {
