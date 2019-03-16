@@ -114,6 +114,9 @@ public class Actions {
       boolean cameraTarget
     ) {
     
+    // Blinkin
+    robotmap.blinkin.set(0.43);
+    
     // driver update both triggers and both bumpers
     if (oi.getDriveLeftBumperPressed()) {
       isRobotDrivingBackwards = !isRobotDrivingBackwards;
@@ -257,12 +260,14 @@ public class Actions {
     if (oi.getDriveRightBumper()) {  // Auto targeting
       if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
         turnOnLightsAndVision(currentLimelight);
+        robotmap.blinkin.set(-0.61);
         // setPipelineBasedOnApproach(currentLimelight);
         currentLimelight.setPipeline(0);  // Always look for center
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       } else {
           turnOnLightsAndVision(currentLimelight);
+          robotmap.blinkin.set(-0.61);
           currentLimelight.setPipeline(1);  // Always look for left contour
           // if (cameraTargetArea > 15) {
           //   currentLimelight.setPipeline(3);

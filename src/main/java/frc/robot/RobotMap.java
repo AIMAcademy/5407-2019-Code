@@ -54,6 +54,9 @@ public class RobotMap {
     private int flowMotorRight2_ID = 2;
     private int flowMotorRight3_ID = 3;
 
+    // Blinkin
+    private int blinkin_ID = 5;
+
     /*
      * Motor Controllers
      */
@@ -83,6 +86,9 @@ public class RobotMap {
     public Spark flowMotorLeft1;
     public Spark flowMotorRight2;
     public Spark flowMotorRight3;
+
+    // Blinkin
+    public Spark blinkin;
 
     // Kcap Speed Controller Group
     public SpeedControllerGroup speedControllerGroupLeft, speedControllerGroupRight;
@@ -142,6 +148,9 @@ public class RobotMap {
         armKcap = new VictorSP(arm_ID);
         cargoWheels = new Spark(cargoWheels_ID);
         smallWinchMotor = new Spark(smallWinchMotor_ID);
+
+        // Blinkin
+        blinkin = new Spark(blinkin_ID);
 
         // Speed controller groups
         speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
