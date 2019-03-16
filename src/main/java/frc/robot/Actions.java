@@ -161,13 +161,20 @@ public class Actions {
           armThrottle = 0.0;
           // Get Y button to control Claw
           if (oi.getOpButtonPressedY()) {
+            if (air.getSolenoid1()) {
+              return;
+            }
             final boolean solenoidStatus4 = !air.getSolenoid4();
             air.setSolenoid4(solenoidStatus4);
           }
           // Get X Button to control Fangs
           if (oi.getOpButtonPressedX()) {
-            final boolean solenoidStatus1 = !air.getSolenoid1();
-            air.setSolenoid1(solenoidStatus1);
+            if (air.getSolenoid4()) {
+              final boolean solenoidStatus1 = !air.getSolenoid1();
+              air.setSolenoid1(solenoidStatus1);
+            } else {
+              air.setSolenoid1(false);
+            }
           }
         }
         // Get Driver Left Bumper for Cargo Wheels output
@@ -585,7 +592,7 @@ public class Actions {
         smallWinchDesiredHeight = 575;
         break;
       case CargoPickup:
-        smallWinchDesiredHeight = 515;
+        smallWinchDesiredHeight = 500;
         break;
       case CargoTop:
         smallWinchDesiredHeight = 580;
