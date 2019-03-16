@@ -250,17 +250,19 @@ public class Actions {
     if (oi.getDriveRightBumper()) {  // Auto targeting
       if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
         turnOnLightsAndVision(currentLimelight);
-        setPipelineBasedOnApproach(currentLimelight);
+        // setPipelineBasedOnApproach(currentLimelight);
+        currentLimelight.setPipeline(0);  // Always look for center
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       } else {
           turnOnLightsAndVision(currentLimelight);
-          if (cameraTargetArea > 15) {
-            currentLimelight.setPipeline(3);
-          } else {
-            currentLimelight.setPipeline(2);
-            // setPipelineBasedOnApproach(currentLimelight);
-          }
+          currentLimelight.setPipeline(1);  // Always look for left contour
+          // if (cameraTargetArea > 15) {
+          //   currentLimelight.setPipeline(3);
+          // } else {
+          //   currentLimelight.setPipeline(2);
+          //   // setPipelineBasedOnApproach(currentLimelight);
+          // }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       }
