@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
   private boolean isTungOpen;
 
   // Reverse drive
-  private boolean isReverseDrive;
+  private boolean isReverseDrive = true;
 
   // Other values
   private boolean isDefenseModeEngaged;

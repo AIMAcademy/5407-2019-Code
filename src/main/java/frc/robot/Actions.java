@@ -20,7 +20,7 @@ public class Actions {
   private Limelight currentLimelight;
   private LimelightProvider limelightProvider;
 
-  public boolean isRobotDrivingBackwards = false;
+  public boolean isRobotDrivingBackwards = true;
   public double drivingAdjust;
   public double steeringAdjust;
 
@@ -99,8 +99,11 @@ public class Actions {
     backLimelight = limelightProvider.getBackLimelight();
     frontLimelight = limelightProvider.getFrontLimelight();
 
-    lightsAndVisionToggle = new Toggle();
     defenseModeToggle = new Toggle();
+    lightsAndVisionToggle = new Toggle();
+    lightsAndVisionToggle.toggle();
+    setLightsAndVision(backLimelight, false);
+    setLightsAndVision(frontLimelight, false);
   }
 
   public void startGame() {
