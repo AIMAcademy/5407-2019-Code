@@ -79,7 +79,7 @@ public class Actions {
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchactualHeight;
-  private double smallWinchLowerLimit = 455;
+  private double smallWinchLowerLimit = 445;
   private double smallWinchUpperLimit = 575;
 
   public Actions(
@@ -186,13 +186,13 @@ public class Actions {
         if (oi.getOpLeftBumper()) {
           if (oi.getOpButtonY()) {
             armControl(ArmPosition.HighHatch);
-            smallWinchControl(SmallWinchPosition.HatchLow);
+            smallWinchControl(SmallWinchPosition.HatchHigh);
           } else if (oi.getOpButtonX()) {
             armControl(ArmPosition.MidHatch);
             smallWinchControl(SmallWinchPosition.HatchMid);
           } else if (oi.getOpButtonA()) {
             armControl(ArmPosition.LowHatch);
-            smallWinchControl(SmallWinchPosition.HatchHigh);
+            smallWinchControl(SmallWinchPosition.HatchLow);
           } else {
             // Set small winch throttle to zero
             setSmallWinch(op_throttle);
@@ -258,7 +258,8 @@ public class Actions {
           if (cameraTargetArea > 15) {
             currentLimelight.setPipeline(3);
           } else {
-            setPipelineBasedOnApproach(currentLimelight);
+            currentLimelight.setPipeline(2);
+            // setPipelineBasedOnApproach(currentLimelight);
           }
         AimAndRange aimAndRange = Calculations.getAimAndRangeFront(cameraTargetXAxis, cameraTargetYAxis, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
@@ -505,6 +506,7 @@ public class Actions {
       steeringAdjust = aimAndRange.getSteeringAdjust();
       if (!cameraTarget) {
         // Look for white line
+        // TODO: need to reverse the logic so that it looks for the white line when it looses the target and otherwise drives
         pixyWhiteLine = sensors.getPixyOutput();
         if (pixyWhiteLine) {
           steeringAdjust = 0.5 * inverter;
@@ -524,6 +526,15 @@ public class Actions {
       limelight.setPipeline(2);
     } else {
       limelight.setPipeline(0);
+    }
+  }
+  private void setPipelineBasedOnApproachFront(Limelight limelight) {
+    if (limelight.getTs() < -2 && limelight.getTs() > -45) { // Approaching from the left
+      limelight.setPipeline(2);
+    } else if (limelight.getTs() > -88 && limelight.getTs() < -45) {  // Approaching from the right
+      limelight.setPipeline(2);
+    } else {
+      limelight.setPipeline(2);
     }
   }
 
@@ -554,7 +565,7 @@ public class Actions {
   private void smallWinchControl(SmallWinchPosition smallWinchPosition) {
     switch (smallWinchPosition) {
       case StowedLeft:
-        smallWinchDesiredHeight = 455;
+        smallWinchDesiredHeight = 445;
         break;
       case CargoUp:
         smallWinchDesiredHeight = 510;
@@ -563,7 +574,7 @@ public class Actions {
         smallWinchDesiredHeight = 575;
         break;
       case HatchLow:
-        smallWinchDesiredHeight = 555;
+        smallWinchDesiredHeight = 560;
         break;
       case HatchMid:
         smallWinchDesiredHeight = 575;
