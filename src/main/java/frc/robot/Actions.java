@@ -586,10 +586,10 @@ public class Actions {
         smallWinchDesiredHeight = 560;
         break;
       case HatchMid:
-        smallWinchDesiredHeight = 575;
+        smallWinchDesiredHeight = 560;
         break;
       case HatchHigh:
-        smallWinchDesiredHeight = 575;
+        smallWinchDesiredHeight = 555;
         break;
       case CargoPickup:
         smallWinchDesiredHeight = 500;

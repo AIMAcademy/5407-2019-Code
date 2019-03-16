@@ -170,9 +170,9 @@ public final class Calculations {
         boolean thisCameraTarget = cameraTarget;
 
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-        double KpAim = 0.04;
+        double KpAim = 0.015;
         double KpDist = 0.017;
-        double AimMinCmd = 0.095;
+        double AimMinCmd = 0.15;
         double distMinCmd = 0.04;
 
         // Aim error and distance error based on calibrated limelight cross-hair
