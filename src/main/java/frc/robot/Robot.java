@@ -185,7 +185,7 @@ public class Robot extends TimedRobot {
     soft_mounting_angle = Calculations.getSoftMountingAngle(cameraTargetYAxis, threeFeet);
 
     // Start USB Camera
-    CameraServer.getInstance().startAutomaticCapture();
+    // CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**

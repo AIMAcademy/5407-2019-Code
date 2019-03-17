@@ -36,6 +36,9 @@ public class Actions {
   // Pixy2
   private boolean pixyWhiteLine;
 
+  // Blinkin
+  private double ledColor;
+
   // Potentiometer arm
   private double armThrottle;
   private double cargoWheelsThrottle;
@@ -79,7 +82,7 @@ public class Actions {
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchactualHeight;
-  private double smallWinchLowerLimit = 445;
+  private double smallWinchLowerLimit = 444;
   private double smallWinchUpperLimit = 575;
 
   public Actions(
@@ -263,14 +266,14 @@ public class Actions {
     if (oi.getDriveRightBumper()) {  // Auto targeting
       if (isRobotDrivingBackwards) { // Drives backwards when returns true and will use back camera for targeting
         turnOnLightsAndVision(currentLimelight);
-        robotmap.blinkin.set(-0.61);
+        robotmap.blinkin.set(-0.71);
         // setPipelineBasedOnApproach(currentLimelight);
         currentLimelight.setPipeline(0);  // Always look for center
         AimAndRange aimAndRange = Calculations.getAimAndRangeBackArea(cameraTargetXAxis, cameraTargetArea, cameraTarget);
         adjustSteering(aimAndRange, cameraTarget, steeringAdjustKp);
       } else {
           turnOnLightsAndVision(currentLimelight);
-          robotmap.blinkin.set(-0.61);
+          robotmap.blinkin.set(-0.71);
           currentLimelight.setPipeline(1);  // Always look for left contour
           // if (cameraTargetArea > 15) {
           //   currentLimelight.setPipeline(3);
@@ -313,6 +316,9 @@ public class Actions {
 
   public void endGameOp() {
     robotmap.drive.arcadeDrive(oi.getDriveThrottle(), oi.getDriveTurn());
+
+    // Blinkin
+    robotmap.blinkin.set(-0.83);  // Shot Climb
 
     if (isFlow) {
       /**
@@ -413,10 +419,10 @@ public class Actions {
     double winchPosition = sensors.getSmallWinchPot();
     if (isDefensePositionSet) {
       // Stop arm and winch motors)
-      if (armHeight < 60) { // Value of kPickupCargo
+      if (armHeight < 70) { // Value of kPickupCargo
         robotmap.armKcap.set(0.0);
       }
-      if (winchPosition < 455) {  // Value of ksmallWinchStowedLeft
+      if (winchPosition < 444) {  // Value of ksmallWinchStowedLeft
         robotmap.smallWinchMotor.set(0.0);
       }
       // Just Drive
@@ -428,22 +434,39 @@ public class Actions {
       drivingAdjust = isRobotDrivingBackwards ? -oi.getDriveThrottle() : oi.getDriveThrottle();
       steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
       robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
+
+      // LED Control
+      if (oi.getOpButtonA()) {
+        ledColor = -0.05; // Strobe, White
+      } else if (oi.getOpButtonB()) {
+        ledColor = -0.11; // Strobe, Red
+      } else if (oi.getOpButtonX()) {
+        ledColor = -0.09; // Strobe, Blue
+      } else if (oi.getOpButtonY()) {
+        ledColor = -0.07; // Strobe, Gold
+      } else {
+        ledColor = -0.59;  // Fire, Large
+      }
+      robotmap.blinkin.set(ledColor);
+
       return;
     }
       // Set arm position
-      armControl(ArmPosition.PickUpCargo);
-      robotmap.armKcap.set(armThrottle);
+      if (armHeight > 65) {
+        armControl(ArmPosition.PickUpCargo);
+        robotmap.armKcap.set(armThrottle);
+      }
       // Set winch position
-      smallWinchControl(SmallWinchPosition.StowedLeft);
-      robotmap.smallWinchMotor.set(smallWinchThrottle);
+      if (winchPosition > 444) {
+        smallWinchControl(SmallWinchPosition.StowedLeft);
+        robotmap.smallWinchMotor.set(smallWinchThrottle);
+      }
       // Set all pistons to off
       air.setSolenoid0(false);
       air.setSolenoid1(false);
       air.setSolenoid2(false);
       air.setSolenoid3(false);
       air.setSolenoid4(false);
-      // Set LEDs
-      // TODO create this code
       // Set defense position variable so that this code only runs once each time Defense Mode is engaged
       isDefensePositionSet = true;
   }
@@ -587,7 +610,7 @@ public class Actions {
   private void smallWinchControl(SmallWinchPosition smallWinchPosition) {
     switch (smallWinchPosition) {
       case StowedLeft:
-        smallWinchDesiredHeight = 445;
+        smallWinchDesiredHeight = 444;
         break;
       case CargoUp:
         smallWinchDesiredHeight = 510;
