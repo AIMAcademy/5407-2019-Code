@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
   private NetworkTableEntry softMountingAngleEntry;
   private NetworkTableEntry distanceEntry;
   private NetworkTableEntry reverseDriveEntry;
+  private NetworkTableEntry gyroEntry;
   // Front Tab
   private NetworkTableEntry FRONTdefenseModeEntry;
   private NetworkTableEntry FRONTtungOpenEntry;
@@ -65,6 +66,7 @@ public class Robot extends TimedRobot {
   private boolean isTungOpen;
   private double armPotValue;
   private double winchPotValue;
+  private double gryoAngleValue;
 
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
@@ -130,6 +132,7 @@ public class Robot extends TimedRobot {
     reverseDriveEntry = codeTab.add("BACK", isReverseDrive).getEntry();
     tungOpenEntry = codeTab.add("Tung", isTungOpen).getEntry();
     defenseModeEntry = codeTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
+    gyroEntry = codeTab.add("Gyro", gryoAngleValue).getEntry();
     
     // Instantiate limelights
     limelightProvider = LimelightProvider.getProvider();
@@ -153,8 +156,10 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
+
+    // Get angle of NAVX
+    gryoAngleValue = sensors.getPresentAngleNAVX();
 
     // Reverse drive when driver toggles the left bumper
     // This reverses driving motors, switches limelights, and switches shuffleboard tabs
@@ -225,6 +230,7 @@ public class Robot extends TimedRobot {
     reverseDriveEntry.setBoolean(isReverseDrive);
     tungOpenEntry.setBoolean(isTungOpen);
     defenseModeEntry.setBoolean(isDefenseModeEngaged);
+    gyroEntry.setDouble(gryoAngleValue);
   }
 
   @Override

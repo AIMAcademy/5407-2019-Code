@@ -76,12 +76,11 @@ public class Actions {
     CargoMiddle,
     CargoBottom,
   };
-  private double smallWinchkP = 0.05;
   private double smallWinchMaxDrive = 1;
   private double smallWinchError;
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
-  private double smallWinchactualHeight;
+  private double smallWinchActualHight;
   private double smallWinchLowerLimit = 444;
   private double smallWinchUpperLimit = 575;
 
@@ -407,13 +406,6 @@ public class Actions {
      : defenseModeToggle.get();
   }
 
-  // public boolean checkDefenseMode() {
-  //   if (oi.getJoystickEmulatorButtonPressed3()) {
-  //     defenseToggle = !defenseToggle;
-  //   }
-  //   return defenseToggle;
-  // }
-
   public void defenseMode() {
     double armHeight = sensors.getArmHeight();
     double winchPosition = sensors.getSmallWinchPot();
@@ -486,75 +478,23 @@ public class Actions {
     visionStatus = false;
   }
 
-  /**
-   * Arm positioning using the potentiometer
-   */
-  public double armControl(ArmPosition armPosition) {
-    switch (armPosition) {
-      // Hatch values
-      case HighHatch:
-        armDesiredHeight = 500;
-        break;
-      case MidHatch:
-        armDesiredHeight = 291;
-        break;
-      case LowHatch:
-        armDesiredHeight = 112;
-        break;
-      // Cargo values
-      case HighCargo:
-        armDesiredHeight = 465;
-        break;
-      case MidCargo:
-        armDesiredHeight = 315;
-        break;
-      case LowCargo:
-        armDesiredHeight = 175;
-        break;
-      case PickUpCargo:
-        armDesiredHeight = 75;
-        break;
-      // End Game
-      case EndGame:
-        armDesiredHeight = 140;
-        break;
-    }
-
-    // Get and set error values to drive towards target height
-    actualHeight = sensors.getArmHeight();
-    armError = armDesiredHeight - actualHeight;
-    output = armKp * armError;
-
-    // Don't let the arm drive too fast
-    if (output > armMaxDrive) {
-      output = armMaxDrive;
-    } else if (output < -armMaxDrive) {
-      output = -armMaxDrive;
-    }
-    
-    // Convert to armThrottle to send back to arm control function
-    armThrottle = output;
-
-    return armThrottle;
-  }
-
   private void adjustSteering(AimAndRange aimAndRange, boolean cameraTarget, double steeringAdjustKp) {
     final int inverter = isRobotDrivingBackwards ? -1 : 1;
     // drivingAdjust = aimAndRange.getDrivingAdjust();
     drivingAdjust = oi.getDriveThrottle() * inverter;
     if (oi.getDriveButtonA()) {
       steeringAdjust = aimAndRange.getSteeringAdjust();
-      if (!cameraTarget) {
+      // if (!cameraTarget) {
         // Look for white line
         // TODO: need to reverse the logic so that it looks for the white line when it looses the target and otherwise drives
-        pixyWhiteLine = sensors.getPixyOutput();
-        if (pixyWhiteLine) {
-          // steeringAdjust = 0.5 * inverter;
-          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-        } else {
-          steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
-        }
-      }
+        // pixyWhiteLine = sensors.getPixyOutput();
+        // if (pixyWhiteLine) {
+        //   // steeringAdjust = 0.5 * inverter;
+        //   steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
+        // } else {
+        //   steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
+        // }
+      // }
     } else {
       steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
     }
@@ -607,6 +547,58 @@ public class Actions {
     }
   }
 
+  /**
+   * Arm positioning using the potentiometer
+   */
+  public double armControl(ArmPosition armPosition) {
+    switch (armPosition) {
+      // Hatch values
+      case HighHatch:
+        armDesiredHeight = 500;
+        break;
+      case MidHatch:
+        armDesiredHeight = 291;
+        break;
+      case LowHatch:
+        armDesiredHeight = 112;
+        break;
+      // Cargo values
+      case HighCargo:
+        armDesiredHeight = 465;
+        break;
+      case MidCargo:
+        armDesiredHeight = 315;
+        break;
+      case LowCargo:
+        armDesiredHeight = 175;
+        break;
+      case PickUpCargo:
+        armDesiredHeight = 75;
+        break;
+      // End Game
+      case EndGame:
+        armDesiredHeight = 140;
+        break;
+    }
+
+    // Get and set error values to drive towards target height
+    actualHeight = sensors.getArmHeight();
+    armError = armDesiredHeight - actualHeight;
+    output = armKp * armError;
+
+    // Don't let the arm drive too fast
+    if (output > armMaxDrive) {
+      output = armMaxDrive;
+    } else if (output < -armMaxDrive) {
+      output = -armMaxDrive;
+    }
+    
+    // Convert to armThrottle to send back to arm control function
+    armThrottle = output;
+
+    return armThrottle;
+  }
+
   private void smallWinchControl(SmallWinchPosition smallWinchPosition) {
     switch (smallWinchPosition) {
       case StowedLeft:
@@ -642,9 +634,8 @@ public class Actions {
     }
 
     // Get and set error values to drive towards target height
-    smallWinchactualHeight = sensors.getSmallWinchPot();
-    smallWinchError = smallWinchDesiredHeight - smallWinchactualHeight;
-    // smallWinchOutput = smallWinchkP * smallWinchError;
+    smallWinchActualHight = sensors.getSmallWinchPot();
+    smallWinchError = smallWinchDesiredHeight - smallWinchActualHight;
     smallWinchOutput = smallWinchError;
 
     // Don't let the winch drive too fast
