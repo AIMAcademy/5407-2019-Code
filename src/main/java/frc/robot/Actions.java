@@ -486,7 +486,6 @@ public class Actions {
       steeringAdjust = aimAndRange.getSteeringAdjust();
       // if (!cameraTarget) {
         // Look for white line
-        // TODO: need to reverse the logic so that it looks for the white line when it looses the target and otherwise drives
         // pixyWhiteLine = sensors.getPixyOutput();
         // if (pixyWhiteLine) {
         //   // steeringAdjust = 0.5 * inverter;

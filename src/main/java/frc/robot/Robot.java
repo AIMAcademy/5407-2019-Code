@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
   private boolean isDefenseModeEngaged;
   private double drivingAdjust;
   private double steeringAdjust;
-  private boolean pixyOutput;
+  private boolean pixyOutput = false;
   private boolean isTungOpen;
   private double armPotValue;
   private double winchPotValue;
@@ -133,6 +133,7 @@ public class Robot extends TimedRobot {
     tungOpenEntry = codeTab.add("Tung", isTungOpen).getEntry();
     defenseModeEntry = codeTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
     gyroEntry = codeTab.add("Gyro", gryoAngleValue).getEntry();
+    pixyOutputEntry = codeTab.add("Pixy", pixyOutput).getEntry();
     
     // Instantiate limelights
     limelightProvider = LimelightProvider.getProvider();
@@ -196,20 +197,19 @@ public class Robot extends TimedRobot {
     // Tung open or closed
     if (!robotmap.getIsFlow()) {
       isTungOpen = air.getSolenoid2();
+      pixyOutput = sensors.getPixyOutput();
     }
 
     // Update values
     isDefenseModeEngaged = actions.defenseModeToggle.get();
     drivingAdjust = actions.drivingAdjust;
     steeringAdjust = actions.steeringAdjust;
-    pixyOutput = sensors.getPixyOutput();
 
     // Update shuffleboard
     // Driving tabs
     FRONTreverseDriveEntry.setBoolean(isReverseDrive);
     FRONTtungOpenEntry.setBoolean(isTungOpen);
     FRONTdefenseModeEntry.setBoolean(isDefenseModeEngaged);
-    
     BACKreverseDriveEntry.setBoolean(isReverseDrive);
     BACKtungOpenEntry.setBoolean(isTungOpen);
     BACKdefenseModeEntry.setBoolean(isDefenseModeEngaged);
