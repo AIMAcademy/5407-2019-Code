@@ -122,6 +122,9 @@ public class RobotMap {
             // drive = new DifferentialDrive(leftTalon, rightTalon);
             drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
 
+            // Blinkin
+            blinkin = new Spark(blinkin_ID);
+
             // Motor controllers for Flow too
             // armFlow = new Spark(arm_ID);
             // smallWinchMotor = new Spark(smallWinchMotor_ID);

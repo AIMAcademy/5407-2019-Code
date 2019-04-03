@@ -7,9 +7,14 @@
 
 package frc.robot;
 
+import java.util.Map;
+
+import edu.wpi.cscore.HttpCamera;
+import edu.wpi.cscore.MjpegServer;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -61,6 +66,7 @@ public class Robot extends TimedRobot {
   private NetworkTableEntry FRONTsoftMountingAngleEntry;
   private NetworkTableEntry FRONTdistanceEntry;
   private NetworkTableEntry FRONTreverseDriveEntry;
+  private NetworkTableEntry FRONTlimelightEntry;
   //
   private NetworkTableEntry BACKdefenseModeEntry;
   private NetworkTableEntry BACKcameraTargetXAxisEntry;
@@ -109,6 +115,9 @@ public class Robot extends TimedRobot {
 
   private boolean selectCodingTab;
 
+  private HttpCamera limelightFeed10;
+  private HttpCamera limelightFeed11;
+
   // Motor voltages
   // private double LM0;
   // private double LM1;
@@ -129,30 +138,33 @@ public class Robot extends TimedRobot {
     sensors = new Sensors();
     actions = new Actions(air, oi, robotmap, sensors);
 
+    limelightFeed10 = new HttpCamera("limelight-ten", "http://limelight-ten.local:5800/stream.mjpg");
+    limelightFeed11 = new HttpCamera("limelight-eleven", "http://limelight-eleven.local:5800/stream.mjpg");
+
+    driveFrontTab.add("eleven", limelightFeed11).withPosition(0, 0).withSize(15, 8).withProperties(Map.of("Show Crosshair", true, "Show Controls", false));
+    driveBackTab.add("ten", limelightFeed10).withPosition(0, 0).withSize(15, 8).withProperties(Map.of("Show Crosshair", true, "Show Controls", false));
+
     // Set up shuffleboard
     // Driving Front tab
-    // cameraServerFront = driveFrontTab.add("Front Limelight", ).getEntry();
-    FRONTdistanceEntry = driveFrontTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
-    FRONTreverseDriveEntry = driveFrontTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 1).getEntry();
-    FRONTpixyOutputEntry = driveFrontTab.add("Pixy", pixyOutput).withPosition(15, 5).withSize(2, 2).getEntry();
-    FRONTarmPotValueEntry = driveFrontTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
-    FRONTwinchPotValueEntry = driveFrontTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
-    FRONTtungOpenEntry = driveFrontTab.add("Tung", isTungOpen).withPosition(15, 1).withSize(2, 2).getEntry();
-    FRONTdefenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 3).withSize(2, 2).getEntry();
-    FRONTcameraTargetSkewEntry = driveFrontTab.add("ts", cameraTargetSkew).withPosition(14, 3).withSize(1, 1).getEntry();
-    FRONTcameraTargetAreaEntry = driveFrontTab.add("ta", cameraTargetArea).withPosition(14, 4).withSize(1, 1).getEntry();
+    FRONTreverseDriveEntry = driveFrontTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 2).getEntry();
+    FRONTtungOpenEntry = driveFrontTab.add("Tung", isTungOpen).withPosition(15, 2).withSize(2, 2).getEntry();
+    FRONTdefenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();    // FRONTdistanceEntry = driveFrontTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
+    // FRONTpixyOutputEntry = driveFrontTab.add("Pixy", pixyOutput).withPosition(15, 5).withSize(2, 2).getEntry();
+    // FRONTarmPotValueEntry = driveFrontTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
+    // FRONTwinchPotValueEntry = driveFrontTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
 
+    // FRONTcameraTargetSkewEntry = driveFrontTab.add("ts", cameraTargetSkew).withPosition(14, 3).withSize(1, 1).getEntry();
+    // FRONTcameraTargetAreaEntry = driveFrontTab.add("ta", cameraTargetArea).withPosition(14, 4).withSize(1, 1).getEntry();
     // Driving Back tab
-    BACKdistanceEntry = driveBackTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
-    BACKreverseDriveEntry = driveBackTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 1).getEntry();
-    BACKpixyOutputEntry = driveBackTab.add("Pixy", pixyOutput).withPosition(15, 5).withSize(2, 2).getEntry();
-    BACKarmPotValueEntry = driveBackTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
-    BACKwinchPotValueEntry = driveBackTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
-    BACKtungOpenEntry = driveBackTab.add("Tung", isTungOpen).withPosition(15, 1).withSize(2, 2).getEntry();
-    BACKdefenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 3).withSize(2, 2).getEntry();
-    BACKcameraTargetSkewEntry = driveBackTab.add("tS", cameraTargetSkew).withPosition(14, 3).withSize(1, 1).getEntry();
-    BACKcameraTargetAreaEntry = driveBackTab.add("ta", cameraTargetArea).withPosition(14, 4).withSize(1, 1).getEntry();
-
+    BACKreverseDriveEntry = driveBackTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 2).getEntry();
+    BACKtungOpenEntry = driveBackTab.add("Tung", isTungOpen).withPosition(15, 2).withSize(2, 2).getEntry();
+    BACKdefenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
+    // BACKdistanceEntry = driveBackTab.add("Distance", distance).withPosition(14, 2).withSize(1, 1).getEntry();
+    // BACKpixyOutputEntry = driveBackTab.add("Pixy", pixyOutput).withPosition(15, 5).withSize(2, 2).getEntry();
+    // BACKarmPotValueEntry = driveBackTab.add("ArmPot", armPotValue).withPosition(14, 1).withSize(1, 1).getEntry();
+    // BACKwinchPotValueEntry = driveBackTab.add("WinchPot", winchPotValue).withPosition(14, 0).withSize(1, 1).getEntry();
+    // BACKcameraTargetSkewEntry = driveBackTab.add("tS", cameraTargetSkew).withPosition(14, 3).withSize(1, 1).getEntry();
+    // BACKcameraTargetAreaEntry = driveBackTab.add("ta", cameraTargetArea).withPosition(14, 4).withSize(1, 1).getEntry();
     // Coding tab
     // hardMountingAngleEntry = codeTab.add("HardMA", hard_mounting_angle).getEntry();
     // softMountingAngleEntry = codeTab.add("SoftMA", soft_mounting_angle).getEntry();
@@ -266,25 +278,23 @@ public class Robot extends TimedRobot {
 
     // Update shuffleboard
     // Driving tab
-    FRONTdistanceEntry.setDouble(distance);
     FRONTreverseDriveEntry.setBoolean(isReverseDrive);
-    FRONTpixyOutputEntry.setBoolean(pixyOutput);
-    FRONTarmPotValueEntry.setDouble(armPotValue);
-    FRONTwinchPotValueEntry.setDouble(winchPotValue);
     FRONTtungOpenEntry.setBoolean(isTungOpen);
-    FRONTdefenseModeEntry.setBoolean(isDefenseModeEngaged);
-    FRONTcameraTargetSkewEntry.setDouble(cameraTargetSkew);
-    FRONTcameraTargetAreaEntry.setDouble(cameraTargetArea);
+    FRONTdefenseModeEntry.setBoolean(isDefenseModeEngaged);    // FRONTdistanceEntry.setDouble(distance);
+    // FRONTpixyOutputEntry.setBoolean(pixyOutput);
+    // FRONTarmPotValueEntry.setDouble(armPotValue);
+    // FRONTwinchPotValueEntry.setDouble(winchPotValue);
+    // FRONTcameraTargetSkewEntry.setDouble(cameraTargetSkew);
+    // FRONTcameraTargetAreaEntry.setDouble(cameraTargetArea);
     //
-    BACKdistanceEntry.setDouble(distance);
+    // BACKdistanceEntry.setDouble(distance);
     BACKreverseDriveEntry.setBoolean(isReverseDrive);
-    BACKpixyOutputEntry.setBoolean(pixyOutput);
-    BACKarmPotValueEntry.setDouble(armPotValue);
-    BACKwinchPotValueEntry.setDouble(winchPotValue);
     BACKtungOpenEntry.setBoolean(isTungOpen);
-    BACKdefenseModeEntry.setBoolean(isDefenseModeEngaged);
-    BACKcameraTargetSkewEntry.setDouble(cameraTargetSkew);
-    BACKcameraTargetAreaEntry.setDouble(cameraTargetArea);
+    BACKdefenseModeEntry.setBoolean(isDefenseModeEngaged);    // BACKpixyOutputEntry.setBoolean(pixyOutput);
+    // BACKarmPotValueEntry.setDouble(armPotValue);
+    // BACKwinchPotValueEntry.setDouble(winchPotValue);
+    // BACKcameraTargetSkewEntry.setDouble(cameraTargetSkew);
+    // BACKcameraTargetAreaEntry.setDouble(cameraTargetArea);
 
     // Coding tab
     // hardMountingAngleEntry.setDouble(hard_mounting_angle);
