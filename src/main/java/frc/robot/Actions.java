@@ -60,7 +60,7 @@ public class Actions {
   private double actualHeight;
   private double lowerArmLimit = 70;
   private double upperArmLimit = 505;
-  private double endGameUpperArmLimit = 140;
+  private double endGameUpperArmLimit = 150;
 
   // Potentiometer smallWinch
   private double smallWinchThrottle;
@@ -320,7 +320,8 @@ public class Actions {
   }
 
   public void endGameOp() {
-    robotmap.drive.arcadeDrive(oi.getDriveThrottle(), oi.getDriveTurn());
+    final double steeringAdjustKp = 0.5;
+    robotmap.drive.arcadeDrive(oi.getDriveThrottle(), oi.getDriveTurn() * steeringAdjustKp);
 
     // Blinkin
     robotmap.blinkin.set(-0.83);  // Shot Climb
@@ -591,7 +592,7 @@ public class Actions {
         break;
       // End Game
       case EndGame:
-        armDesiredHeight = 140;
+        armDesiredHeight = 150;
         break;
     }
 
