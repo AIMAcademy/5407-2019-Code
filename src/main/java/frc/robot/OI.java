@@ -47,7 +47,9 @@ public class OI {
 	private boolean op_back;
 	private boolean op_start;
 	private boolean op_leftTrigger;
+	private double op_leftTriggerValue;
 	private boolean op_rightTrigger;
+	private double op_rightTriggerValue;
 	private boolean op_dpadUp;
 	private boolean op_dpadRight;
 	private boolean op_dpadDown;
@@ -101,9 +103,11 @@ public class OI {
 			op_rightThrottle = 0;
 		}		
 		// Operator Left Trigger Axis 2
-		op_leftTrigger = (opStick.getRawAxis(2) > .5);
+		op_leftTrigger = (opStick.getRawAxis(2) > 0.5);
+		op_leftTriggerValue = opStick.getRawAxis(2);
 		// Operator Right Trigger Axis 3
 		op_rightTrigger = (opStick.getRawAxis(3) > 0.5);
+		op_rightTriggerValue = opStick.getRawAxis(3);
 		// Operator Dpad Up 
 		op_dpadUp = ((opStick.getPOV(0) >= 315 && opStick.getPOV(0) <= 45) && opStick.getPOV(0) != -1);
 		// Operator Dpad Right
@@ -190,6 +194,8 @@ public class OI {
 	public boolean getOpStartButton() { return op_start; }
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
+	public double getOpLeftTriggerValue() { return op_leftTriggerValue; }
+	public double getOpRightTriggerValue() { return op_rightTriggerValue; }
 	public boolean getOpDpadUp() { return op_dpadUp; }
 	public boolean getOpDpadRight() { return op_dpadRight; }
 	public boolean getOpDpadDown() { return op_dpadDown; }

@@ -189,10 +189,10 @@ public class Actions {
           }
         }
         // Get Triggers for Cargo Wheels
-        if (oi.getOpLeftTrigger()) {
-        cargoWheelsThrottle = -1;
-        } else if (oi.getOpRightTrigger()) {
-        cargoWheelsThrottle = 1;
+        if (oi.getOpLeftTriggerValue() != 0) {
+          cargoWheelsThrottle = -oi.getOpLeftTriggerValue();
+        } else if (oi.getOpRightTriggerValue() != 0) {
+          cargoWheelsThrottle = oi.getOpRightTriggerValue();
         } else if (oi.getDriveLeftTrigger()) {
           cargoWheelsThrottle = -1;
         } else if (oi.getDriveRightTrigger()) {
