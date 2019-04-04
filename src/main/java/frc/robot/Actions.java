@@ -578,13 +578,13 @@ public class Actions {
         break;
       // Cargo values
       case HighCargo:
-        armDesiredHeight = 465;
+        armDesiredHeight = 525; //465;
         break;
       case MidCargo:
-        armDesiredHeight = 315;
+        armDesiredHeight = 440; //315;
         break;
       case LowCargo:
-        armDesiredHeight = 175;
+        armDesiredHeight = 140; //175;
         break;
       case PickUpCargo:
         armDesiredHeight = 85;
