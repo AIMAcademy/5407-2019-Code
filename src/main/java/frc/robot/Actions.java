@@ -122,7 +122,7 @@ public class Actions {
     // Blinkin
     robotmap.blinkin.set(0.43);
     
-    // driver update both triggers and both bumpers
+    // Toggle reverse drive
     if (oi.getDriveLeftBumperPressed()) {
       isRobotDrivingBackwards = !isRobotDrivingBackwards;
     }
@@ -152,11 +152,14 @@ public class Actions {
           } else if (oi.getOpButtonB()) {
             armControl(ArmPosition.PickUpCargo);
             smallWinchControl(SmallWinchPosition.CargoPickup);
+          } else if (oi.getOpRightBumper()) {
+            armControl(ArmPosition.MidCargo);
+            smallWinchControl(SmallWinchPosition.CargoUp);
           } else {
             // Set arm motor to operator joystick throttle
             armThrottle = op_throttle;
             // Set small winch throttle to zero
-            setSmallWinch(op_throttle);
+            setSmallWinch(op_throttle, op_rightThrottle);
             // Set arm limits
             if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
               armThrottle = 0.0;
@@ -166,7 +169,7 @@ public class Actions {
           }
         } else {
           armThrottle = 0.0;
-          setSmallWinch(op_throttle);
+          setSmallWinch(op_throttle, op_rightThrottle);
           // Get Y button to control Claw
           if (oi.getOpButtonPressedY()) {
             if (air.getSolenoid1()) {
@@ -185,14 +188,17 @@ public class Actions {
             }
           }
         }
-        // Get Driver Left Bumper for Cargo Wheels output
-        if (oi.getDriveLeftTrigger()) {
-          cargoWheelsThrottle = 1;
-        // Get Driver Right Bumper for Cargo Wheels intake
-        } else if (oi.getDriveRightTrigger()) {
+        // Get Triggers for Cargo Wheels
+        if (oi.getOpLeftTrigger()) {
+        cargoWheelsThrottle = -1;
+        } else if (oi.getOpRightTrigger()) {
+        cargoWheelsThrottle = 1;
+        } else if (oi.getDriveLeftTrigger()) {
           cargoWheelsThrottle = -1;
+        } else if (oi.getDriveRightTrigger()) {
+          cargoWheelsThrottle = 1;
         } else {
-          cargoWheelsThrottle = op_rightThrottle;
+          cargoWheelsThrottle = 0;
         }
         // Set cargo wheels motors
         robotmap.cargoWheels.set(cargoWheelsThrottle);
@@ -212,7 +218,7 @@ public class Actions {
             // Set arm motor to operator joystick throttle
             armThrottle = op_throttle;
             // Set small winch throttle to zero
-            setSmallWinch(op_throttle);
+            setSmallWinch(op_throttle, op_rightThrottle);
             // Set arm limits
             if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
               armThrottle = 0.0;
@@ -222,7 +228,7 @@ public class Actions {
           }
         } else {
           armThrottle = 0.0;
-          setSmallWinch(op_throttle);
+          setSmallWinch(op_throttle, op_rightThrottle);
           // Get X Button to control hatch mechanisms
           if (oi.getOpButtonPressedX()) {
             final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
@@ -518,7 +524,7 @@ public class Actions {
     }
   }
 
-  private void setSmallWinch(Double op_throttle) {
+  private void setSmallWinch(Double op_throttle, Double op_rightThrottle) {
     if (oi.getOpDpadLeft()) {
       // Set winch to stowed
       smallWinchControl(SmallWinchPosition.StowedLeft);
@@ -533,16 +539,25 @@ public class Actions {
       smallWinchControl(SmallWinchPosition.StowedLeft);
       armControl(ArmPosition.PickUpCargo);
     } else if (oi.getOpButtonB()) {
-        // Set winch motor to operator joystick throttle
-        smallWinchThrottle = -op_throttle;
-        // Set winch limits
-        if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
-          smallWinchThrottle = 0.0;
-        } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
-          smallWinchThrottle = 0.0;
-        }
+      // Set winch motor to operator joystick throttle
+      smallWinchThrottle = -op_throttle;
+      // Set winch limits
+      if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_throttle < 0) {
+        smallWinchThrottle = 0.0;
+      } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_throttle > 0){
+        smallWinchThrottle = 0.0;
+      }
+    } else if (op_rightThrottle !=0) {
+      // Set winch motor to operator joystick right throttle
+      smallWinchThrottle = -op_rightThrottle;
+      // Set winch limits
+      if (sensors.getSmallWinchPot() < smallWinchLowerLimit && op_rightThrottle < 0) {
+        smallWinchThrottle = 0.0;
+      } else if (sensors.getSmallWinchPot() > smallWinchUpperLimit && op_rightThrottle > 0){
+        smallWinchThrottle = 0.0;
+      }
     } else {
-      smallWinchThrottle = 0.0;
+    smallWinchThrottle = 0.0;
     }
   }
 
@@ -572,7 +587,7 @@ public class Actions {
         armDesiredHeight = 175;
         break;
       case PickUpCargo:
-        armDesiredHeight = 75;
+        armDesiredHeight = 85;
         break;
       // End Game
       case EndGame:
@@ -603,7 +618,7 @@ public class Actions {
       case StowedLeft:
         smallWinchDesiredHeight = 444;
         break;
-      case CargoUp:
+      case CargoUp: //using this for cargo ship cargo deploy
         smallWinchDesiredHeight = 510;
         break;
       case HatchRight:
@@ -622,13 +637,13 @@ public class Actions {
         smallWinchDesiredHeight = 500;
         break;
       case CargoTop:
-        smallWinchDesiredHeight = 580;
+        smallWinchDesiredHeight = 445;
         break;
       case CargoMiddle:
-        smallWinchDesiredHeight = 510;
+        smallWinchDesiredHeight = 450;
         break;
       case CargoBottom:
-        smallWinchDesiredHeight = 510;
+        smallWinchDesiredHeight = 450;
         break;
     }
 
