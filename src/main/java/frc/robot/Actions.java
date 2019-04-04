@@ -50,6 +50,8 @@ public class Actions {
     MidCargo,
     LowCargo,
     PickUpCargo,
+    ShipCargo,
+    HumanPlayerCargo,
     EndGame,
   };
   private double armKp = 0.05;
@@ -81,7 +83,7 @@ public class Actions {
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchActualHight;
-  private double smallWinchLowerLimit = 444;
+  private double smallWinchLowerLimit = 440;
   private double smallWinchUpperLimit = 575;
 
   public Actions(
@@ -153,8 +155,11 @@ public class Actions {
             armControl(ArmPosition.PickUpCargo);
             smallWinchControl(SmallWinchPosition.CargoPickup);
           } else if (oi.getOpRightBumper()) {
-            armControl(ArmPosition.MidCargo);
+            armControl(ArmPosition.ShipCargo);
             smallWinchControl(SmallWinchPosition.CargoUp);
+          } else if (oi.getOpDpadUp() || oi.getOpDpadRight() || oi.getOpDpadDown() || oi.getOpDpadLeft()) {
+            armControl(ArmPosition.HumanPlayerCargo);
+            smallWinchControl(SmallWinchPosition.CargoTop);
           } else {
             // Set arm motor to operator joystick throttle
             armThrottle = op_throttle;
@@ -172,20 +177,8 @@ public class Actions {
           setSmallWinch(op_throttle, op_rightThrottle);
           // Get Y button to control Claw
           if (oi.getOpButtonPressedY()) {
-            if (air.getSolenoid1()) {
-              return;
-            }
             final boolean solenoidStatus4 = !air.getSolenoid4();
             air.setSolenoid4(solenoidStatus4);
-          }
-          // Get X Button to control Fangs
-          if (oi.getOpButtonPressedX()) {
-            if (air.getSolenoid4()) {
-              final boolean solenoidStatus1 = !air.getSolenoid1();
-              air.setSolenoid1(solenoidStatus1);
-            } else {
-              air.setSolenoid1(false);
-            }
           }
         }
         // Get Triggers for Cargo Wheels
@@ -321,7 +314,13 @@ public class Actions {
 
   public void endGameOp() {
     final double steeringAdjustKp = 0.5;
-    robotmap.drive.arcadeDrive(oi.getDriveThrottle(), oi.getDriveTurn() * steeringAdjustKp);
+    double endGameThrottle = oi.getDriveThrottle();
+
+    if (endGameThrottle < -0.25) {
+      endGameThrottle = -0.25;
+    }
+
+    robotmap.drive.arcadeDrive(endGameThrottle, oi.getDriveTurn() * steeringAdjustKp);
 
     // Blinkin
     robotmap.blinkin.set(-0.83);  // Shot Climb
@@ -421,7 +420,7 @@ public class Actions {
       if (armHeight < 70) { // Value of kPickupCargo
         robotmap.armKcap.set(0.0);
       }
-      if (winchPosition < 444) {  // Value of ksmallWinchStowedLeft
+      if (winchPosition < 440) {  // Value of ksmallWinchStowedLeft
         robotmap.smallWinchMotor.set(0.0);
       }
       // Just Drive
@@ -526,20 +525,7 @@ public class Actions {
   }
 
   private void setSmallWinch(Double op_throttle, Double op_rightThrottle) {
-    if (oi.getOpDpadLeft()) {
-      // Set winch to stowed
-      smallWinchControl(SmallWinchPosition.StowedLeft);
-    } else if (oi.getOpDpadUp()) {
-      // Set winch to Cargo mode
-      smallWinchControl(SmallWinchPosition.CargoUp);
-    } else if (oi.getOpDpadRight()) {
-      // Set winch to Hatch mode
-      smallWinchControl(SmallWinchPosition.HatchRight);
-    } else if (oi.getOpDpadDown()) {
-      // Set winch and arm to stowed
-      smallWinchControl(SmallWinchPosition.StowedLeft);
-      armControl(ArmPosition.PickUpCargo);
-    } else if (oi.getOpButtonB()) {
+    if (oi.getOpButtonB()) {
       // Set winch motor to operator joystick throttle
       smallWinchThrottle = -op_throttle;
       // Set winch limits
@@ -582,13 +568,19 @@ public class Actions {
         armDesiredHeight = 525; //465;
         break;
       case MidCargo:
-        armDesiredHeight = 440; //315;
+        armDesiredHeight = 340; //315;
         break;
       case LowCargo:
-        armDesiredHeight = 140; //175;
+        armDesiredHeight = 145; //175;
         break;
       case PickUpCargo:
         armDesiredHeight = 85;
+        break;
+      case ShipCargo:
+        armDesiredHeight = 305;
+        break;
+      case HumanPlayerCargo:
+        armDesiredHeight = 230;
         break;
       // End Game
       case EndGame:
@@ -638,7 +630,7 @@ public class Actions {
         smallWinchDesiredHeight = 500;
         break;
       case CargoTop:
-        smallWinchDesiredHeight = 445;
+        smallWinchDesiredHeight = 440;
         break;
       case CargoMiddle:
         smallWinchDesiredHeight = 450;
