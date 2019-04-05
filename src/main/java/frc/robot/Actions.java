@@ -561,7 +561,7 @@ public class Actions {
         armDesiredHeight = 291;
         break;
       case LowHatch:
-        armDesiredHeight = 112;
+        armDesiredHeight = 100;
         break;
       // Cargo values
       case HighCargo:
@@ -574,7 +574,7 @@ public class Actions {
         armDesiredHeight = 145; //175;
         break;
       case PickUpCargo:
-        armDesiredHeight = 85;
+        armDesiredHeight = 75;
         break;
       case ShipCargo:
         armDesiredHeight = 305;
@@ -618,7 +618,7 @@ public class Actions {
         smallWinchDesiredHeight = 575;
         break;
       case HatchLow:
-        smallWinchDesiredHeight = 560;
+        smallWinchDesiredHeight = 555;
         break;
       case HatchMid:
         smallWinchDesiredHeight = 560;
