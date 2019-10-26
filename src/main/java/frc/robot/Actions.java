@@ -197,9 +197,9 @@ public class Actions {
         robotmap.cargoWheels.set(cargoWheelsThrottle);
         // Fang Servo
         double fangServoPower;
-        if (oi.getOpButtonPressedX()) {
+        if (oi.getOpButtonX()) {
           fangServoPower = 1;
-        } else if (oi.getOpButtonPressedA()) {
+        } else if (oi.getOpButtonA()) {
           fangServoPower = 0;
         } else {
           fangServoPower = 0.5;
