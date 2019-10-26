@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
@@ -48,6 +49,7 @@ public class RobotMap {
     private int arm_ID = 4; // (PWM)
     private int cargoWheels_ID = 3; // CARGO CLAW ROLLER WHEELS (PWM)
     private int smallWinchMotor_ID = 2; // S-WINCH (PWM)
+    private int fangServo_ID = 6;  // FANG SERVO (PWN)
     // Flow Spark Motor IDs
     private int flowMotorLeft0_ID = 0;
     private int flowMotorLeft1_ID = 1;
@@ -77,6 +79,7 @@ public class RobotMap {
     public Spark armFlow;   // FLOW'S ARM
     public Spark cargoWheels; // CARGO CLAW ROLLER WHEELS
     public Spark smallWinchMotor; // S-WINCH
+    public Servo fangServo; // PULLS FANGS BACK IN
     // Flow Motors
     // public WPI_TalonSRX leftTalon;  // FLOW CHASSIS
     // public WPI_TalonSRX rightTalon;  // FLOW CHASSIS
@@ -151,6 +154,7 @@ public class RobotMap {
         armKcap = new VictorSP(arm_ID);
         cargoWheels = new Spark(cargoWheels_ID);
         smallWinchMotor = new Spark(smallWinchMotor_ID);
+        fangServo = new Servo(fangServo_ID);
 
         // Blinkin
         blinkin = new Spark(blinkin_ID);

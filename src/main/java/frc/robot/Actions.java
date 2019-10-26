@@ -195,6 +195,16 @@ public class Actions {
         }
         // Set cargo wheels motors
         robotmap.cargoWheels.set(cargoWheelsThrottle);
+        // Fang Servo
+        double fangServoPower;
+        if (oi.getOpButtonPressedX()) {
+          fangServoPower = 1;
+        } else if (oi.getOpButtonPressedA()) {
+          fangServoPower = 0;
+        } else {
+          fangServoPower = 0.5;
+        }
+        robotmap.fangServo.set(fangServoPower);
       /** HATCH MODE **/
       } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
         if (oi.getOpLeftBumper()) {
