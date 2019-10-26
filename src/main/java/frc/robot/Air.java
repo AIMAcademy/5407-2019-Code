@@ -28,8 +28,6 @@ public class Air {
         solenoid2 = new Solenoid(solenoid2_ID);
         solenoid3 = new Solenoid(solenoid3_ID);
         solenoid4 = new Solenoid(solenoid4_ID);
-
-        airInit();
     }
 
     public void airInit() {

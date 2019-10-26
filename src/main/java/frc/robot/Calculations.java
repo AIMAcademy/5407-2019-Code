@@ -11,8 +11,8 @@ public final class Calculations {
     // Front camera properties
     private final static double h2 = 28.5; // inches from floor to center of target
     // Update these when the front camera moves.
-    private final static double a1 = 0.5017; // the camera's mounting angle in radians
-    private final static double h1 = 8.75; // inches from floor to camera lens
+    private final static double a1 = 0.2773; // the camera's mounting angle in radians
+    private final static double h1 = 8.35; // inches from floor to camera lens
 
     // Constructor
     private Calculations() {}
@@ -116,21 +116,29 @@ public final class Calculations {
         boolean thisCameraTarget = cameraTarget;
 
         // These numbers must be tuned for your Robot!  Be careful!
-        final double STEER_K = 0.03;                    // how hard to turn toward the target
+        final double STEER_K = 0.025;                    // how hard to turn toward the target
         final double DRIVE_K = 0.1;                     // how hard to drive fwd toward the target
-        final double DESIRED_TARGET_AREA = 20.0;        // Area of the target when the robot reaches the wall
-        final double MAX_DRIVE = 0.65;                  // Simple speed limit so we don't drive too fast
+        final double DESIRED_TARGET_AREA = 10.0;        // Area of the target when the robot reaches the wall
+        final double MAX_DRIVE = 0.3;                   // Simple speed limit so we don't drive too fast
+        double MIN_TURN;
+        final double steerThreshold = 5;
+
 
         // Start with proportional steering
-        double steer_cmd = cameraTargetXAxis * STEER_K;
+        if (Math.abs(cameraTargetXAxis) > steerThreshold) {
+            MIN_TURN = 0;
+        } else {
+            MIN_TURN = 0.15;
+        }
+        double steer_cmd = cameraTargetXAxis * STEER_K + Math.copySign(MIN_TURN, cameraTargetXAxis);
+        
         double steeringAdjustBack = steer_cmd;
 
         // try to drive forward until the target area reaches our desired area
         double drive_cmd = (DESIRED_TARGET_AREA - cameraTargetArea) * DRIVE_K;
 
         // don't let the robot drive too fast into the goal
-        if (drive_cmd > MAX_DRIVE)
-        {
+        if (drive_cmd > MAX_DRIVE) {
             drive_cmd = MAX_DRIVE;
         } else if (drive_cmd < -MAX_DRIVE) {
             drive_cmd = -MAX_DRIVE;
@@ -143,8 +151,7 @@ public final class Calculations {
         double drivingErrorThreshold = Math.abs(DESIRED_TARGET_AREA - cameraTargetArea);
         if (drivingErrorThreshold < 3) { drivingAdjustBack = 0.0; }
 
-        if (thisCameraTarget == false)
-        {
+        if (thisCameraTarget == false) {
             // boolean m_LimelightHasValidTarget = false;
             drivingAdjustBack = 0.0;
             steeringAdjustBack = 0.0;
@@ -159,11 +166,13 @@ public final class Calculations {
      * @param cameraTargetYAxis The Y axis of the camera's current target
      * @return An object containing drivingAdjust and steeringAdjust
      */
-    public static AimAndRange getAimAndRangeFront(Double cameraTargetXAxis, Double cameraTargetYAxis) {
+    public static AimAndRange getAimAndRangeFront(Double cameraTargetXAxis, Double cameraTargetYAxis, boolean cameraTarget) {
+        boolean thisCameraTarget = cameraTarget;
+
         // Code from http://docs.limelightvision.io/en/latest/cs_aimandrange.html
-        double KpAim = 0.045;
+        double KpAim = 0.015;
         double KpDist = 0.017;
-        double AimMinCmd = 0.095;
+        double AimMinCmd = 0.15;
         double distMinCmd = 0.04;
 
         // Aim error and distance error based on calibrated limelight cross-hair
@@ -174,12 +183,18 @@ public final class Calculations {
         double steeringAdjustFront = KpAim * aim_error;
         if (aim_error > .2) {
           steeringAdjustFront = steeringAdjustFront + AimMinCmd;
-        } else if (aim_error < -.2f) {
+        } else if (aim_error < -.2) {
           steeringAdjustFront = steeringAdjustFront - AimMinCmd;
         }
 
         // Distance adjust, drive to the correct distance from the goal
         double drivingAdjustFront = (KpDist * dist_error) + distMinCmd;
+
+        if (thisCameraTarget == false) {
+            // boolean m_LimelightHasValidTarget = false;
+            drivingAdjustFront = 0.0;
+            steeringAdjustFront = 0.0;
+        }
 
         return new AimAndRange(drivingAdjustFront, steeringAdjustFront);
     }

@@ -22,8 +22,11 @@ public class OI {
 	private boolean drive_buttonX;
 	private boolean drive_buttonY;
 	private boolean drive_leftBumper;
+	private boolean drive_leftBumperPressed;
 	private boolean drive_rightBumper;
+	private boolean drive_rightBumperPressed;
 	private boolean drive_back;
+	private boolean drive_backPressed;
 	private boolean drive_start;
 	private boolean drive_leftTrigger;
 	private boolean drive_rightTrigger;	
@@ -44,11 +47,18 @@ public class OI {
 	private boolean op_back;
 	private boolean op_start;
 	private boolean op_leftTrigger;
+	private double op_leftTriggerValue;
 	private boolean op_rightTrigger;
+	private double op_rightTriggerValue;
+	private boolean op_dpadUp;
+	private boolean op_dpadRight;
+	private boolean op_dpadDown;
+	private boolean op_dpadLeft;
 
 	private Joystick joystickEmulator;
-	private boolean em_button1;
-	private boolean em_button2;
+	private boolean em_buttonSwitch1;
+	private boolean em_buttonSwitch2;
+	private boolean em_buttonPressed3;
 
 	public OI() {
 		driveStick = new XboxController(0);
@@ -73,17 +83,9 @@ public class OI {
 			drive_turn = 0;
 		}
 		// Driver Left Trigger Axis 2
-		if (driveStick.getRawAxis(2) > .5) {
-			drive_leftTrigger = true;
-		} else {
-			drive_leftTrigger = false;
-		}
+		drive_leftTrigger = (driveStick.getRawAxis(2) > .5);
 		// Driver Right Trigger Axis 3
-		if (driveStick.getRawAxis(3) > .5) {
-			drive_rightTrigger = true;
-		} else {
-			drive_rightTrigger = false;
-		}
+		drive_rightTrigger = (driveStick.getRawAxis(3) > .5);
 
 		/**
 		 * Read Operator joystick axes
@@ -101,17 +103,19 @@ public class OI {
 			op_rightThrottle = 0;
 		}		
 		// Operator Left Trigger Axis 2
-		if (opStick.getRawAxis(2) > .5) {
-			op_leftTrigger = true;
-		} else {
-			op_leftTrigger = false;
-		}
+		op_leftTrigger = (opStick.getRawAxis(2) > 0.5);
+		op_leftTriggerValue = opStick.getRawAxis(2);
 		// Operator Right Trigger Axis 3
-		if (opStick.getRawAxis(3) > 0.5) {
-			op_rightTrigger = true;
-		} else {
-			op_rightTrigger = false;
-		}
+		op_rightTrigger = (opStick.getRawAxis(3) > 0.5);
+		op_rightTriggerValue = opStick.getRawAxis(3);
+		// Operator Dpad Up 
+		op_dpadUp = ((opStick.getPOV(0) >= 315 && opStick.getPOV(0) <= 45) && opStick.getPOV(0) != -1);
+		// Operator Dpad Right
+		op_dpadRight = ((opStick.getPOV(0) >= 45 && opStick.getPOV(0) <= 135) && opStick.getPOV(0) != -1);
+		// Operator Dpad Down
+		op_dpadDown = ((opStick.getPOV(0) >= 135 && opStick.getPOV(0) <= 225) && opStick.getPOV(0) != -1);
+		// Operator Dpad Left
+		op_dpadLeft = ((opStick.getPOV(0) >= 225 && opStick.getPOV(0) <= 315) && opStick.getPOV(0) != -1);
 
 		/**
 		 * Read Driver joystick buttons
@@ -120,9 +124,12 @@ public class OI {
 		drive_buttonB = driveStick.getRawButton(2);
 		drive_buttonX = driveStick.getRawButton(3);
 		drive_buttonY = driveStick.getRawButton(4);
+		drive_leftBumperPressed = driveStick.getRawButtonPressed(5);
+		drive_rightBumperPressed = driveStick.getRawButtonPressed(6);
 		drive_leftBumper = driveStick.getRawButton(5);
 		drive_rightBumper = driveStick.getRawButton(6);
 		drive_back = driveStick.getRawButton(7);
+		drive_backPressed = driveStick.getRawButtonPressed(7);
 		drive_start = driveStick.getRawButton(8);
 
 		/**
@@ -144,8 +151,9 @@ public class OI {
 		/**
 		 * Read Joystick Emulator buttons
 		 */
-		em_button1 = joystickEmulator.getRawButton(1);
-		em_button2 = joystickEmulator.getRawButton(2);
+		em_buttonSwitch1 = joystickEmulator.getRawButton(1);
+		em_buttonSwitch2 = joystickEmulator.getRawButton(2);
+		em_buttonPressed3 = joystickEmulator.getRawButtonPressed(3);
 	}
 
 	/**
@@ -157,9 +165,12 @@ public class OI {
 	public boolean getDriveButtonB() { return drive_buttonB; }
 	public boolean getDriveButtonX() { return drive_buttonX; }
 	public boolean getDriveButtonY() { return drive_buttonY; }
+	public boolean getDriveLeftBumperPressed() { return drive_leftBumperPressed; }
 	public boolean getDriveLeftBumper() { return drive_leftBumper; }
+	public boolean getDriveRightBumperPressed() { return drive_rightBumperPressed; }
 	public boolean getDriveRightBumper() { return drive_rightBumper; }
 	public boolean getDriveBackButton() { return drive_back; }
+	public boolean getDriveBackButtonPressed() { return drive_backPressed; }
 	public boolean getDriveStartButton() { return drive_start; }
 	public boolean getDriveLeftTrigger() { return drive_leftTrigger; }
 	public boolean getDriveRightTrigger() { return drive_rightTrigger; }
@@ -183,10 +194,17 @@ public class OI {
 	public boolean getOpStartButton() { return op_start; }
 	public boolean getOpLeftTrigger() { return op_leftTrigger; }
 	public boolean getOpRightTrigger() { return op_rightTrigger; }
+	public double getOpLeftTriggerValue() { return op_leftTriggerValue; }
+	public double getOpRightTriggerValue() { return op_rightTriggerValue; }
+	public boolean getOpDpadUp() { return op_dpadUp; }
+	public boolean getOpDpadRight() { return op_dpadRight; }
+	public boolean getOpDpadDown() { return op_dpadDown; }
+	public boolean getOpDpadLeft() { return op_dpadLeft; }
 
 	/**
 	 * Get and return Joystick Emulator buttons
 	 */
-	public boolean getJoystickEmulatorButton1() { return em_button1; }
-	public boolean getJoystickEmulatorButton2() { return em_button2; }
+	public boolean getJoystickEmulatorButtonSwitch1() { return em_buttonSwitch1; }
+	public boolean getJoystickEmulatorButtonSwitch2() { return em_buttonSwitch2; }
+	public boolean getJoystickEmulatorButtonPressed3() { return em_buttonPressed3; }
 }

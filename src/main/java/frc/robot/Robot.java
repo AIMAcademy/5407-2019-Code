@@ -7,55 +7,85 @@
 
 package frc.robot;
 
+import java.util.Map;
+
+import edu.wpi.cscore.HttpCamera;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
   Actions actions;
   Air air;
-  Limelight currentLimelight;
-  Limelight limelight10;
-  Limelight limelight11;
+  static Limelight backLimelight;
+  static Limelight frontLimelight;
+  LimelightProvider limelightProvider;
   OI oi;
   RobotMap robotmap;
   Sensors sensors;
 
-  public String hostNameTen = "limelight-ten";
-  public String hostNameEleven = "limelight-eleven";
+  // Shuffleboard
+  private boolean selectCodingTab;
+  private ShuffleboardTab driveFrontTab = Shuffleboard.getTab("Front");
+  private ShuffleboardTab driveBackTab = Shuffleboard.getTab("Back");
+  private ShuffleboardTab codeTab = Shuffleboard.getTab("Coding");
+  // Coding tab
+  private NetworkTableEntry defenseModeEntry;
+  private NetworkTableEntry cameraTargetXAxisEntry;
+  private NetworkTableEntry cameraTargetYAxisEntry;
+  private NetworkTableEntry cameraTargetAreaEntry;
+  private NetworkTableEntry cameraTargetSkewEntry;
+  private NetworkTableEntry cameraTargetEntry;
+  private NetworkTableEntry armPotValueEntry;
+  private NetworkTableEntry winchPotValueEntry;
+  private NetworkTableEntry tungOpenEntry;
+  private NetworkTableEntry drivingAdjustEntry;
+  private NetworkTableEntry steeringAdjustEntry;
+  private NetworkTableEntry pixyOutputEntry;
+  private NetworkTableEntry hardMountingAngleEntry;
+  private NetworkTableEntry softMountingAngleEntry;
+  private NetworkTableEntry distanceEntry;
+  private NetworkTableEntry reverseDriveEntry;
+  private NetworkTableEntry gyroEntry;
+  // Front Tab
+  private NetworkTableEntry FRONTdefenseModeEntry;
+  private NetworkTableEntry FRONTtungOpenEntry;
+  private NetworkTableEntry FRONTreverseDriveEntry;
+  // Back tab
+  private NetworkTableEntry BACKdefenseModeEntry;
+  private NetworkTableEntry BACKtungOpenEntry;
+  private NetworkTableEntry BACKreverseDriveEntry;
 
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  private static final String kPipeline0 = "Pipeline 0";
-  private static final String kPipeline1 = "Pipeline 1";
-  private static final String kPipeline2 = "Pipeline 2";
-  private String m_pipelineChoice;
-  private final SendableChooser<String> m_pipeline = new SendableChooser<>();
+  // Shuffleboard values
+  private boolean isDefenseModeEngaged;
+  private double drivingAdjust;
+  private double steeringAdjust;
+  private boolean pixyOutput = false;
+  private boolean isTungOpen;
+  private double armPotValue;
+  private double winchPotValue;
+  private double gryoAngleValue;
 
   // Create Limelight Variables for vision processing
   private double cameraTargetXAxis;
   private double cameraTargetYAxis;
   private double cameraTargetArea;
   private boolean cameraTarget;
+  public double cameraTargetSkew;
 
   // For Range
   double distance;
   double hard_mounting_angle;
   double soft_mounting_angle;
 
-  // For Aim And Range Back
-  double steeringAdjustBack;
-  double drivingAdjustBack;
+  // Reverse drive
+  private boolean isReverseDrive = true;
 
-  // For Aim and Range Front
-  double drivingAdjustFront;
-  double steeringAdjustFront;
-
-  // Potentiometer
-  private double potValue;
+  // Limelight http camera feeds
+  private HttpCamera limelightFeed10;
+  private HttpCamera limelightFeed11;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -64,113 +94,157 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     air = new Air();
-    limelight10 = new Limelight(hostNameTen);
-    limelight11 = new Limelight(hostNameEleven);
     oi = new OI();
     robotmap = new RobotMap();
     sensors = new Sensors();
-    actions = new Actions(air, limelight10, limelight11, oi, robotmap, sensors);
+    actions = new Actions(air, oi, robotmap, sensors);
+
+    // Create Limelight HTTP Cameras feeds
+    limelightFeed10 = new HttpCamera("limelight-ten", "http://limelight-ten.local:5800/stream.mjpg");
+    limelightFeed11 = new HttpCamera("limelight-eleven", "http://limelight-eleven.local:5800/stream.mjpg");
+
+    // Set up shuffleboard
+    // Driving Front tab
+    driveFrontTab.add("eleven", limelightFeed11).withPosition(0, 0).withSize(15, 8).withProperties(Map.of("Show Crosshair", true, "Show Controls", false));
+    FRONTreverseDriveEntry = driveFrontTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 2).getEntry();
+    FRONTtungOpenEntry = driveFrontTab.add("Tung", isTungOpen).withPosition(15, 2).withSize(2, 2).getEntry();
+    FRONTdefenseModeEntry = driveFrontTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
+    // Driving Back tab
+    driveBackTab.add("ten", limelightFeed10).withPosition(0, 0).withSize(15, 8).withProperties(Map.of("Show Crosshair", true, "Show Controls", false));
+    BACKreverseDriveEntry = driveBackTab.add("BACK", isReverseDrive).withPosition(15, 0).withSize(2, 2).getEntry();
+    BACKtungOpenEntry = driveBackTab.add("Tung", isTungOpen).withPosition(15, 2).withSize(2, 2).getEntry();
+    BACKdefenseModeEntry = driveBackTab.add("DEFENSE", isDefenseModeEngaged).withPosition(15, 4).withSize(2, 2).getEntry();
+    // Coding tab
+    codeTab.add("eleven", limelightFeed11).withPosition(0, 0).withSize(6, 8).withProperties(Map.of("Show Crosshair", true, "Show Controls", false));
+    codeTab.add("ten", limelightFeed10).withPosition(6, 0).withSize(6, 8).withProperties(Map.of("Show Crosshair", true, "Show Controls", false));
+    hardMountingAngleEntry = codeTab.add("HardMA", hard_mounting_angle).getEntry();
+    softMountingAngleEntry = codeTab.add("SoftMA", soft_mounting_angle).getEntry();
+    distanceEntry = codeTab.add("Distance", distance).getEntry();
+    drivingAdjustEntry = codeTab.add("DA", drivingAdjust).getEntry();
+    steeringAdjustEntry = codeTab.add("SA", steeringAdjust).getEntry();
+    armPotValueEntry = codeTab.add("ArmPot", armPotValue).getEntry();
+    winchPotValueEntry = codeTab.add("WinchPot", winchPotValue).getEntry();
+    cameraTargetXAxisEntry = codeTab.add("LL X", cameraTargetXAxis).getEntry();
+    cameraTargetYAxisEntry = codeTab.add("LL Y", cameraTargetYAxis).getEntry();
+    cameraTargetAreaEntry = codeTab.add("LL A", cameraTargetArea).getEntry();
+    cameraTargetSkewEntry = codeTab.add("LL S", cameraTargetSkew).getEntry();
+    cameraTargetEntry = codeTab.add("LL T", cameraTarget).getEntry();
+    reverseDriveEntry = codeTab.add("BACK", isReverseDrive).getEntry();
+    tungOpenEntry = codeTab.add("Tung", isTungOpen).getEntry();
+    defenseModeEntry = codeTab.add("DEFENSE", isDefenseModeEngaged).getEntry();
+    gyroEntry = codeTab.add("Gyro", gryoAngleValue).getEntry();
+    pixyOutputEntry = codeTab.add("Pixy", pixyOutput).getEntry();
+    
+    // Instantiate limelights
+    limelightProvider = LimelightProvider.getProvider();
+    backLimelight = limelightProvider.getBackLimelight();
+    frontLimelight = limelightProvider.getFrontLimelight();
+
+    if (!robotmap.getIsFlow()) {
+      air.airInit();
+    }
 
     // Zero the NAVX
     sensors.zeroNAVX();
 
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-
-    m_pipeline.setDefaultOption("Front-Tape", kPipeline2);
-    m_pipeline.addOption("Back-Tape", kPipeline0);
-    m_pipeline.addOption("Ball", kPipeline1);
-    SmartDashboard.putData("Pipeline", m_pipeline);
-
-    // Turn off Limelight LEDs during init
-    // actions.setLightsAndVision(limelight10, true);
-    // actions.setLightsAndVision(limelight11, true);
-
     hard_mounting_angle = Calculations.getHardMountingAngle();
     final int threeFeet = 36; // Assume this distance from camera lens to target
     soft_mounting_angle = Calculations.getSoftMountingAngle(cameraTargetYAxis, threeFeet);
-  }
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for
-   * items like diagnostics that you want ran during disabled, autonomous,
-   * teleoperated and test.
-   *
-   * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow
-   * and SmartDashboard integrated updating.
-   */
+    // Start USB Camera
+    // CameraServer.getInstance().startAutomaticCapture();
+  }
+  
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("Gyro-NAVX", sensors.getPresentAngleNAVX());
     SmartDashboard.updateValues();
 
-    if (oi.getDriveLeftTrigger()) {
-      // Back camera
-      currentLimelight = limelight11;
+    // Get angle of NAVX
+    gryoAngleValue = sensors.getPresentAngleNAVX();
+
+    // Reverse drive when driver toggles the left bumper
+    // This reverses driving motors, switches limelights, and switches shuffleboard tabs
+    if (oi.getDriveLeftBumperPressed()) {
+      isReverseDrive = !isReverseDrive;
+    }
+    Limelight currentLimelight = limelightProvider.getCurrentLimelight(isReverseDrive);
+
+    // Select shuffleboard tab
+    if (oi.getDriveBackButtonPressed()) {
+      selectCodingTab = !selectCodingTab;
+    }
+    if (selectCodingTab) {
+      Shuffleboard.selectTab("Coding");
+    } else if (isReverseDrive) {
+      Shuffleboard.selectTab("Back");
+    } else if (!isReverseDrive) {
+      Shuffleboard.selectTab("Front");
     } else {
-      // Front camera
-      currentLimelight = limelight10;
+      Shuffleboard.selectTab("SmartDashboard");
     }
 
-    // Use front camera to update limelight values
+    // Update limelight values
     cameraTargetXAxis = currentLimelight.getTx();
     cameraTargetYAxis = currentLimelight.getTy();
     cameraTargetArea = currentLimelight.getTa();
     cameraTarget = currentLimelight.isTarget();
+    cameraTargetSkew = currentLimelight.getTs();
 
     // Update arm potentiometer value
-    potValue = sensors.getArmHeight();
+    armPotValue = sensors.getArmHeight();
+    winchPotValue = sensors.getSmallWinchPot();
 
-    // Limelight post to smart dashboard periodically
-    SmartDashboard.putNumber("limelightX", cameraTargetXAxis);
-    SmartDashboard.putNumber("limelightY", cameraTargetYAxis);
-    SmartDashboard.putNumber("limelightArea", cameraTargetArea);
-    SmartDashboard.putBoolean("limelightTarget", cameraTarget);
-    SmartDashboard.putNumber("Distance", distance);
-    SmartDashboard.putNumber("hardMA", hard_mounting_angle);
-    SmartDashboard.putNumber("softMA", soft_mounting_angle);
-    SmartDashboard.putBoolean("visionStatus", actions.visionStatus);
-    SmartDashboard.putNumber("PotVal", potValue);
+    // Tung open or closed
+    if (!robotmap.getIsFlow()) {
+      isTungOpen = air.getSolenoid2();
+      pixyOutput = sensors.getPixyOutput();
+    }
 
-    m_pipelineChoice = m_pipeline.getSelected();
+    // Update values
+    isDefenseModeEngaged = actions.defenseModeToggle.get();
+    drivingAdjust = actions.drivingAdjust;
+    steeringAdjust = actions.steeringAdjust;
+
+    // Update shuffleboard
+    // Driving tabs
+    FRONTreverseDriveEntry.setBoolean(isReverseDrive);
+    FRONTtungOpenEntry.setBoolean(isTungOpen);
+    FRONTdefenseModeEntry.setBoolean(isDefenseModeEngaged);
+    BACKreverseDriveEntry.setBoolean(isReverseDrive);
+    BACKtungOpenEntry.setBoolean(isTungOpen);
+    BACKdefenseModeEntry.setBoolean(isDefenseModeEngaged);
+    // Coding tab
+    pixyOutputEntry.setBoolean(pixyOutput);
+    distanceEntry.setDouble(distance);
+    hardMountingAngleEntry.setDouble(hard_mounting_angle);
+    softMountingAngleEntry.setDouble(soft_mounting_angle);
+    drivingAdjustEntry.setDouble(drivingAdjust);
+    steeringAdjustEntry.setDouble(steeringAdjust);
+    armPotValueEntry.setDouble(armPotValue);
+    winchPotValueEntry.setDouble(winchPotValue);
+    cameraTargetXAxisEntry.setDouble(cameraTargetXAxis);
+    cameraTargetYAxisEntry.setDouble(cameraTargetYAxis);
+    cameraTargetAreaEntry.setDouble(cameraTargetArea);
+    cameraTargetSkewEntry.setDouble(cameraTargetSkew);
+    cameraTargetEntry.setBoolean(cameraTarget);
+    reverseDriveEntry.setBoolean(isReverseDrive);
+    tungOpenEntry.setBoolean(isTungOpen);
+    defenseModeEntry.setBoolean(isDefenseModeEngaged);
+    gyroEntry.setDouble(gryoAngleValue);
   }
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable chooser
-   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-   * remove all of the chooser code and uncomment the getString line to get the
-   * auto name from the text box below the Gyro
-   *
-   * <p>
-   * You can add additional auto modes by adding additional comparisons to the
-   * switch structure below with additional strings. If using the SendableChooser
-   * make sure to add them to the chooser code above as well.
-   */
   @Override
   public void autonomousInit() {
     // Zero the NAVX before auton
     sensors.zeroNAVX();
-
-    m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
+  
+    // Set winch position
+    actions.startGame();
   }
 
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      sensors.setFollowAngleNAVX(0);
-      robotmap.drive.arcadeDrive(0, (sensors.getFollowAngleNAVX() - sensors.getPresentAngleNAVX()) * 0.015);
-      break;
-    }
+    teleopPeriodic();
   }
 
   @Override
@@ -184,26 +258,16 @@ public class Robot extends TimedRobot {
     oi.readValues();
     distance = Calculations.getRange(cameraTargetYAxis);
 
-    if (oi.getJoystickEmulatorButton2()) {
+    // Check if in defense mode and only run defense function
+    if (actions.checkDefenseMode()) {
+      actions.defenseMode();
+      return;
+    }
+    // If not in defense mode run either Game Operations or End Game Operations
+    if (oi.getJoystickEmulatorButtonSwitch2()) {
       actions.endGameOp();
     } else {
       actions.gameOp(cameraTargetXAxis, cameraTargetYAxis, cameraTargetArea, cameraTarget);
     }
-  }
-
-  public void updatePipelineChoice() {
-    int pipeline = 0;
-    switch (m_pipelineChoice) {
-      case kPipeline0:
-        pipeline = 0;
-        break;
-      case kPipeline1:
-        pipeline = 1;
-        break;
-      case kPipeline2:
-        pipeline = 2;
-        break;
-    }
-    currentLimelight.setPipeline(pipeline);
   }
 }
