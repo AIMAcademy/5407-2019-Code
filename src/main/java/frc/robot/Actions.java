@@ -83,7 +83,7 @@ public class Actions {
   private double smallWinchOutput;
   private double smallWinchDesiredHeight;
   private double smallWinchActualHight;
-  private double smallWinchLowerLimit = 440;
+  private double smallWinchLowerLimit = 430;
   private double smallWinchUpperLimit = 575;
 
   public Actions(
@@ -197,25 +197,13 @@ public class Actions {
         robotmap.cargoWheels.set(cargoWheelsThrottle);
         // Fang Servo
         double fangServoPower;
-        if (oi.getOpButtonX()) {
+        if (oi.getOpButtonX() && !oi.getOpLeftBumper()) {
           fangServoPower = 1;
-        } else if (oi.getOpButtonA()) {
+        } else if (oi.getOpButtonA() && !oi.getOpLeftBumper()) {
           fangServoPower = 0;
         } else {
           fangServoPower = 0.5;
         }
-<<<<<<< HEAD
-      } else {
-        armThrottle = 0.0;
-        // Get X Button to control hatch mechanisms
-        if (oi.getOpButtonPressedX()) {
-          if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
-            final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-            air.setSolenoid2(solenoidStatus2);
-          } else {
-            final boolean solenoidStatus0 = !air.getSolenoid0();  // Beak
-            air.setSolenoid0(solenoidStatus0);
-=======
         robotmap.fangServo.set(fangServoPower);
       /** HATCH MODE **/
       } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
@@ -258,7 +246,6 @@ public class Actions {
           if (isRobotDrivingBackwards) { // Returns true if driving backwards
             final boolean fireBackHatchTung = oi.getOpRightTrigger();
             air.setSolenoid3(fireBackHatchTung);
->>>>>>> comp/lehigh-changes
           }
         }
       }
@@ -591,7 +578,7 @@ public class Actions {
         armDesiredHeight = 525; //465;
         break;
       case MidCargo:
-        armDesiredHeight = 340; //315;
+        armDesiredHeight = 330; //315;
         break;
       case LowCargo:
         armDesiredHeight = 145; //175;
@@ -632,34 +619,34 @@ public class Actions {
   private void smallWinchControl(SmallWinchPosition smallWinchPosition) {
     switch (smallWinchPosition) {
       case StowedLeft:
-        smallWinchDesiredHeight = 444;
+        smallWinchDesiredHeight = 430;
         break;
       case CargoUp: //using this for cargo ship cargo deploy
-        smallWinchDesiredHeight = 510;
+        smallWinchDesiredHeight = 490;
         break;
       case HatchRight:
         smallWinchDesiredHeight = 575;
         break;
       case HatchLow:
-        smallWinchDesiredHeight = 555;
+        smallWinchDesiredHeight = 540;
         break;
       case HatchMid:
-        smallWinchDesiredHeight = 560;
+        smallWinchDesiredHeight = 545;
         break;
       case HatchHigh:
         smallWinchDesiredHeight = 555;
         break;
       case CargoPickup:
-        smallWinchDesiredHeight = 500;
+        smallWinchDesiredHeight = 487;
         break;
       case CargoTop:
         smallWinchDesiredHeight = 440;
         break;
       case CargoMiddle:
-        smallWinchDesiredHeight = 450;
+        smallWinchDesiredHeight = 440;
         break;
       case CargoBottom:
-        smallWinchDesiredHeight = 450;
+        smallWinchDesiredHeight = 440;
         break;
     }
 
