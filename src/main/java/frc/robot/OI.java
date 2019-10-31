@@ -71,13 +71,13 @@ public class OI {
 		 * Read Driver joystick axes
 		 */
 		// Driver Left Stick Y Axis 1 for Driver Throttle
-		if (driveStick.getRawAxis(1) < -0.2 || driveStick.getRawAxis(1) > 0.2) {
+		if (driveStick.getRawAxis(1) < -0.1 || driveStick.getRawAxis(1) > 0.1) {
 			drive_throttle = -driveStick.getRawAxis(1);
 		} else {
 			drive_throttle = 0;
 		}
 		// Driver Left Stick R Axis 4 for Driver Turn
-		if (driveStick.getRawAxis(4) < -0.2 || driveStick.getRawAxis(4) > 0.2) {
+		if (driveStick.getRawAxis(4) < -0.1 || driveStick.getRawAxis(4) > 0.1) {
 			drive_turn = driveStick.getRawAxis(4);
 		} else {
 			drive_turn = 0;
