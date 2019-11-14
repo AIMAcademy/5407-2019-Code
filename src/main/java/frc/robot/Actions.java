@@ -204,16 +204,48 @@ public class Actions {
         } else {
           fangServoPower = 0.5;
         }
-      } else {
-        armThrottle = 0.0;
-        // Get X Button to control hatch mechanisms
-        if (oi.getOpButtonPressedX()) {
-          if (oi.getDriveLeftTrigger()) { // Returns true if driving backwards
-            final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
-            air.setSolenoid2(solenoidStatus2);
+        robotmap.fangServo.set(fangServoPower);
+      /** HATCH MODE **/
+      } else if (!oi.getJoystickEmulatorButtonSwitch1()) {
+        if (oi.getOpLeftBumper()) {
+          if (oi.getOpButtonY()) {
+            armControl(ArmPosition.HighHatch);
+            smallWinchControl(SmallWinchPosition.HatchHigh);
+          } else if (oi.getOpButtonX()) {
+            armControl(ArmPosition.MidHatch);
+            smallWinchControl(SmallWinchPosition.HatchMid);
+          } else if (oi.getOpButtonA()) {
+            armControl(ArmPosition.LowHatch);
+            smallWinchControl(SmallWinchPosition.HatchLow);
           } else {
-            final boolean solenoidStatus0 = !air.getSolenoid0();  // Beak
-            air.setSolenoid0(solenoidStatus0);
+            // Set arm motor to operator joystick throttle
+            armThrottle = op_throttle;
+            // Set small winch throttle to zero
+            setSmallWinch(op_throttle, op_rightThrottle);
+            // Set arm limits
+            if (sensors.getArmHeight() < lowerArmLimit && op_throttle < 0) {
+              armThrottle = 0.0;
+            } else if (sensors.getArmHeight() > upperArmLimit && op_throttle > 0){
+              armThrottle = 0.0;
+            }
+          }
+        } else {
+          armThrottle = 0.0;
+          setSmallWinch(op_throttle, op_rightThrottle);
+          // Get X Button to control hatch mechanisms
+          if (oi.getOpButtonPressedX()) {
+            final boolean solenoidStatus0 = !air.getSolenoid0();  // Arm tri-grabber
+            final boolean solenoidStatus2 = !air.getSolenoid2();  // Tung
+            if (isRobotDrivingBackwards) { // Returns true if driving backwards
+              air.setSolenoid2(solenoidStatus2);
+            } else {
+              air.setSolenoid0(solenoidStatus0);
+            }
+          }
+          // Get Right Trigger to fire back hatch tung pistons only if driving backwards
+          if (isRobotDrivingBackwards) { // Returns true if driving backwards
+            final boolean fireBackHatchTung = oi.getOpRightTrigger();
+            air.setSolenoid3(fireBackHatchTung);
           }
         }
       }
@@ -231,7 +263,7 @@ public class Actions {
     /**
      * Driver controls during game operations
      */
-    final double steeringAdjustKp = isFlow ? 1 : 0.5;
+    final double steeringAdjustKp = isFlow ? 1 : .75;
     steeringAdjust = oi.getDriveTurn() * steeringAdjustKp;
     // Drive forwards or backwards
     drivingAdjust = isRobotDrivingBackwards
@@ -275,7 +307,7 @@ public class Actions {
     if (isFlow) {
       drivingAdjust = -drivingAdjust;
     }
-    robotmap.drive.arcadeDrive(drivingAdjust, steeringAdjust);
+    robotmap.drive.arcadeDrive(-drivingAdjust, steeringAdjust);
 
     /**
      * Turn off Limelight lights and vision processing if not being used
