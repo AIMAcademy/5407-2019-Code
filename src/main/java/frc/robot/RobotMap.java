@@ -10,9 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
@@ -33,13 +33,13 @@ public class RobotMap {
      * Motor ports
      */
     // Left Side Speed Controlers
-    private int leftMotorID_0 = 6;  // KCAP CHASSIS
-    private int leftMotorID_1 = 1;  // KCAP CHASSIS
-    private int leftMotorID_2 = 2;  // KCAP CHASSIS
+    private int leftMotorID_0 = 7;  // KCAP CHASSIS
+    // private int leftMotorID_1 = 1;  // KCAP CHASSIS
+    // private int leftMotorID_2 = 2;  // KCAP CHASSIS
     // Right Side Speed Controlers
-    private int rightMotorID_0 = 3;  // KCAP CHASSIS
-    private int rightMotorID_1 = 4;  // KCAP CHASSIS
-    private int rightMotorID_2 = 5;  // KCAP CHASSIS
+    private int rightMotorID_0 = 8;  // KCAP CHASSIS
+    // private int rightMotorID_1 = 4;  // KCAP CHASSIS
+    // private int rightMotorID_2 = 5;  // KCAP CHASSIS
     // Climber Sparks
     private int climberArm_ID = 6; // FRT-DART (CAN)
     private int climberLegs_ID = 7; // LEG-LIFT (CAN)
@@ -63,12 +63,12 @@ public class RobotMap {
      * Motor Controllers
      */
     // Powertrain
-    public CANSparkMax leftMotor_0;  // KCAP CHASSIS
-    public CANSparkMax leftMotor_1;  // KCAP CHASSIS
-    public CANSparkMax leftMotor_2;  // KCAP CHASSIS
-    public CANSparkMax rightMotor_0;  // KCAP CHASSIS
-    public CANSparkMax rightMotor_1;  // KCAP CHASSIS
-    public CANSparkMax rightMotor_2;  // KCAP CHASSIS
+    public Spark leftMotor_0;  // KCAP CHASSIS
+    // public CANSparkMax leftMotor_1;  // KCAP CHASSIS
+    // public CANSparkMax leftMotor_2;  // KCAP CHASSIS
+    public Spark rightMotor_0;  // KCAP CHASSIS
+    // public CANSparkMax rightMotor_1;  // KCAP CHASSIS
+    // public CANSparkMax rightMotor_2;  // KCAP CHASSIS
     // Climbing System
     public WPI_TalonSRX climberArm; // FRT-DART
     public WPI_TalonSRX climberLegs; // LEG-LIFT (Dart)
@@ -137,12 +137,12 @@ public class RobotMap {
         }
         
         // Use Kcap Chassis
-        leftMotor_0 = new CANSparkMax(leftMotorID_0, MotorType.kBrushless);
-        leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
-        leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
-        rightMotor_0 = new CANSparkMax(rightMotorID_0, MotorType.kBrushless);
-        rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
-        rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
+        leftMotor_0 = new Spark(leftMotorID_0);
+        // leftMotor_1 = new CANSparkMax(leftMotorID_1, MotorType.kBrushless);
+        // leftMotor_2 = new CANSparkMax(leftMotorID_2, MotorType.kBrushless);
+        rightMotor_0 = new Spark(rightMotorID_0);
+        // rightMotor_1 = new CANSparkMax(rightMotorID_1, MotorType.kBrushless);
+        // rightMotor_2 = new CANSparkMax(rightMotorID_2, MotorType.kBrushless);
 
         // Climb system
         climberArm = new WPI_TalonSRX(climberArm_ID);
@@ -160,15 +160,15 @@ public class RobotMap {
         blinkin = new Spark(blinkin_ID);
 
         // Speed controller groups
-        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0, leftMotor_1, leftMotor_2);
-        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0, rightMotor_1, rightMotor_2);
+        speedControllerGroupLeft = new SpeedControllerGroup(leftMotor_0); //, leftMotor_1, leftMotor_2);
+        speedControllerGroupRight = new SpeedControllerGroup(rightMotor_0); //, rightMotor_1, rightMotor_2);
 
         // Set motor limits
-        motorSafetyCheck();
-        setMotorCurrentLimit();
-        setOpenLoopRampRate();
-        setClosedLoopRampRate();
-        setIdleMode();
+        //motorSafetyCheck();
+        //setMotorCurrentLimit();
+        //setOpenLoopRampRate();
+        //setClosedLoopRampRate();
+        //setIdleMode();
         
         // Drive
         drive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
@@ -178,57 +178,57 @@ public class RobotMap {
      * Brushed motor setting can be selected manualy on the controlers... maybe this
      * will help save the motor if someone messes with it... or just waste bandwith
      */
-    public void motorSafetyCheck() {
-        if (leftMotor_0.getMotorType() == MotorType.kBrushed
-                || leftMotor_1.getMotorType() == MotorType.kBrushed
-                || leftMotor_2.getMotorType() == MotorType.kBrushed
-                || rightMotor_0.getMotorType() == MotorType.kBrushed
-                || rightMotor_1.getMotorType() == MotorType.kBrushed
-                || rightMotor_2.getMotorType() == MotorType.kBrushed) {
-            System.out.println("Brushed motor selected");
-            System.exit(0);
-        }
-    }
+    // public void motorSafetyCheck() {
+    //     if (leftMotor_0.getMotorType() == MotorType.kBrushed
+    //             || leftMotor_1.getMotorType() == MotorType.kBrushed
+    //             || leftMotor_2.getMotorType() == MotorType.kBrushed
+    //             || rightMotor_0.getMotorType() == MotorType.kBrushed
+    //             || rightMotor_1.getMotorType() == MotorType.kBrushed
+    //             || rightMotor_2.getMotorType() == MotorType.kBrushed) {
+    //         System.out.println("Brushed motor selected");
+    //         System.exit(0);
+    //     }
+    // }
 
     /**
      * Set limits for brushless motors to hopefully stop browning out
      */
-    public void setMotorCurrentLimit() {
-        final int motorCurrentLimit = 40;
-        leftMotor_0.setSmartCurrentLimit(motorCurrentLimit);
-        leftMotor_1.setSmartCurrentLimit(motorCurrentLimit);
-        leftMotor_2.setSmartCurrentLimit(motorCurrentLimit);
-        rightMotor_0.setSmartCurrentLimit(motorCurrentLimit);
-        rightMotor_1.setSmartCurrentLimit(motorCurrentLimit);
-        rightMotor_2.setSmartCurrentLimit(motorCurrentLimit);
-    }
-    public void setOpenLoopRampRate() {
-        final double openLoopRampRate = 0.2;
-        leftMotor_0.setOpenLoopRampRate(openLoopRampRate);
-        leftMotor_1.setOpenLoopRampRate(openLoopRampRate);
-        leftMotor_2.setOpenLoopRampRate(openLoopRampRate);
-        rightMotor_0.setOpenLoopRampRate(openLoopRampRate);
-        rightMotor_1.setOpenLoopRampRate(openLoopRampRate);
-        rightMotor_2.setOpenLoopRampRate(openLoopRampRate);
-    }
-    public void setClosedLoopRampRate() {
-        final double closedLoopRampRate = 0.2;
-        leftMotor_0.setClosedLoopRampRate(closedLoopRampRate);
-        leftMotor_1.setClosedLoopRampRate(closedLoopRampRate);
-        leftMotor_2.setClosedLoopRampRate(closedLoopRampRate);
-        rightMotor_0.setClosedLoopRampRate(closedLoopRampRate);
-        rightMotor_1.setClosedLoopRampRate(closedLoopRampRate);
-        rightMotor_2.setClosedLoopRampRate(closedLoopRampRate);
-    }
-    public void setIdleMode() {
-        final IdleMode idleMode = IdleMode.kBrake;
-        leftMotor_0.setIdleMode(idleMode);
-        leftMotor_1.setIdleMode(idleMode);
-        leftMotor_2.setIdleMode(idleMode);
-        rightMotor_0.setIdleMode(idleMode);
-        rightMotor_1.setIdleMode(idleMode);
-        rightMotor_2.setIdleMode(idleMode);
-    }
+    // public void setMotorCurrentLimit() {
+    //     final int motorCurrentLimit = 40;
+    //     leftMotor_0.setSmartCurrentLimit(motorCurrentLimit);
+    //     // leftMotor_1.setSmartCurrentLimit(motorCurrentLimit);
+    //     // leftMotor_2.setSmartCurrentLimit(motorCurrentLimit);
+    //     rightMotor_0.setSmartCurrentLimit(motorCurrentLimit);
+    //     // rightMotor_1.setSmartCurrentLimit(motorCurrentLimit);
+    //     // rightMotor_2.setSmartCurrentLimit(motorCurrentLimit);
+    // }
+    // public void setOpenLoopRampRate() {
+    //     final double openLoopRampRate = 0.2;
+    //     leftMotor_0.setOpenLoopRampRate(openLoopRampRate);
+    //     // leftMotor_1.setOpenLoopRampRate(openLoopRampRate);
+    //     // leftMotor_2.setOpenLoopRampRate(openLoopRampRate);
+    //     rightMotor_0.setOpenLoopRampRate(openLoopRampRate);
+    //     // rightMotor_1.setOpenLoopRampRate(openLoopRampRate);
+    //     // rightMotor_2.setOpenLoopRampRate(openLoopRampRate);
+    // }
+    // public void setClosedLoopRampRate() {
+    //     final double closedLoopRampRate = 0.2;
+    //     leftMotor_0.setClosedLoopRampRate(closedLoopRampRate);
+    //     leftMotor_1.setClosedLoopRampRate(closedLoopRampRate);
+    //     leftMotor_2.setClosedLoopRampRate(closedLoopRampRate);
+    //     rightMotor_0.setClosedLoopRampRate(closedLoopRampRate);
+    //     rightMotor_1.setClosedLoopRampRate(closedLoopRampRate);
+    //     rightMotor_2.setClosedLoopRampRate(closedLoopRampRate);
+    // }
+    // public void setIdleMode() {
+    //     final IdleMode idleMode = IdleMode.kBrake;
+    //     leftMotor_0.setIdleMode(idleMode);
+    //     leftMotor_1.setIdleMode(idleMode);
+    //     leftMotor_2.setIdleMode(idleMode);
+    //     rightMotor_0.setIdleMode(idleMode);
+    //     rightMotor_1.setIdleMode(idleMode);
+    //     rightMotor_2.setIdleMode(idleMode);
+    // }
 
     /**
      * Returns which robot is being driven. True for Flow, False for Kcap.
