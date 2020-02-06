@@ -8,7 +8,6 @@
 package frc.robot;
 
 import java.util.Map;
-
 import edu.wpi.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;

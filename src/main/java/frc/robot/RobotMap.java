@@ -237,4 +237,5 @@ public class RobotMap {
     public boolean getIsFlow() {
         return !isFlow.get();
     }
+    public int getrpm(){return flowMotorLeft0.getRaw();}
 }
